@@ -93,6 +93,9 @@ export namespace Schemas {
 	/** Scheme used for local chat session content */
 	export const vscodeLocalChatSession = 'vscode-chat-session';
 
+	/** Scheme used for the Kanban board editor */
+	export const vscodeKanban = 'vscode-kanban';
+
 	/**
 	 * Scheme used internally for webviews that aren't linked to a resource (i.e. not custom editors)
 	 */
