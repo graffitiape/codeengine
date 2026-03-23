@@ -10,14 +10,14 @@ sudo apt-get upgrade -y
 sudo apt-get install -y curl apt-transport-https ca-certificates
 
 # Define variables
-SNAP_ROOT="$(pwd)/.build/linux/snap/$VSCODE_ARCH"
+SNAP_ROOT="$(pwd)/.build/linux/snap/$CODEENGINE_ARCH"
 
 # Create snap package
 BUILD_VERSION="$(date +%s)"
-SNAP_FILENAME="code-$VSCODE_QUALITY-$VSCODE_ARCH-$BUILD_VERSION.snap"
+SNAP_FILENAME="code-$CODEENGINE_QUALITY-$CODEENGINE_ARCH-$BUILD_VERSION.snap"
 SNAP_PATH="$SNAP_ROOT/$SNAP_FILENAME"
-case $VSCODE_ARCH in
+case $CODEENGINE_ARCH in
   x64) SNAPCRAFT_TARGET_ARGS="" ;;
-  *) SNAPCRAFT_TARGET_ARGS="--target-arch $VSCODE_ARCH" ;;
+  *) SNAPCRAFT_TARGET_ARGS="--target-arch $CODEENGINE_ARCH" ;;
 esac
 (cd $SNAP_ROOT/code-* && sudo --preserve-env snapcraft snap $SNAPCRAFT_TARGET_ARGS --output "$SNAP_PATH")

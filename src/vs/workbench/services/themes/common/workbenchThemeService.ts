@@ -39,8 +39,8 @@ export enum ThemeSettings {
 }
 
 export namespace ThemeSettingDefaults {
-	export const COLOR_THEME_DARK = 'VS Code Dark';
-	export const COLOR_THEME_LIGHT = 'VS Code Light';
+	export const COLOR_THEME_DARK = 'Code Engine Dark';
+	export const COLOR_THEME_LIGHT = 'Code Engine Light';
 	export const COLOR_THEME_HC_DARK = 'Default High Contrast';
 	export const COLOR_THEME_HC_LIGHT = 'Default High Contrast Light';
 
@@ -51,7 +51,7 @@ export namespace ThemeSettingDefaults {
 /**
  * Migrates legacy theme settings IDs to their current equivalents.
  * Theme IDs were simplified: "Default" prefix was removed from built-in themes,
- * and "Experimental" prefix was replaced when VS Code themes became GA.
+ * and "Experimental" prefix was replaced when Code Engine themes became GA.
  */
 export function migrateThemeSettingsId(settingsId: string): string {
 	switch (settingsId) {
@@ -59,8 +59,10 @@ export function migrateThemeSettingsId(settingsId: string): string {
 		case 'Default Light Modern': return 'Light Modern';
 		case 'Default Dark+': return 'Dark+';
 		case 'Default Light+': return 'Light+';
-		case 'Experimental Dark': return 'VS Code Dark';
-		case 'Experimental Light': return 'VS Code Light';
+		case 'Experimental Dark': return 'Code Engine Dark';
+		case 'Experimental Light': return 'Code Engine Light';
+		case 'VS Code Dark': return 'Code Engine Dark';
+		case 'VS Code Light': return 'Code Engine Light';
 	}
 	return settingsId;
 }

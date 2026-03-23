@@ -9,9 +9,9 @@
 import { fileURLToPath } from 'url';
 
 // This standalone process isn't bootstrapped via bootstrap-esm.ts, so we must
-// set _VSCODE_FILE_ROOT ourselves so that FileAccess can resolve module paths.
+// set _CODEENGINE_FILE_ROOT ourselves so that FileAccess can resolve module paths.
 // This file lives at out/vs/platform/agentHost/node/ - the root is `out/`.
-globalThis._VSCODE_FILE_ROOT = fileURLToPath(new URL('../../../..', import.meta.url));
+globalThis._CODEENGINE_FILE_ROOT = fileURLToPath(new URL('../../../..', import.meta.url));
 
 import * as fs from 'fs';
 import { DisposableStore } from '../../../base/common/lifecycle.js';
@@ -57,7 +57,7 @@ interface IServerOptions {
 
 function parseServerOptions(): IServerOptions {
 	const argv = process.argv.slice(2);
-	const envPort = parseInt(process.env['VSCODE_AGENT_HOST_PORT'] ?? '8081', 10);
+	const envPort = parseInt(process.env['CODEENGINE_AGENT_HOST_PORT'] ?? '8081', 10);
 	const portIdx = argv.indexOf('--port');
 	const port = portIdx >= 0 ? parseInt(argv[portIdx + 1], 10) : envPort;
 	const enableMockAgent = argv.includes('--enable-mock-agent');

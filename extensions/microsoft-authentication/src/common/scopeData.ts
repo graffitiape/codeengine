@@ -15,7 +15,7 @@ export class ScopeData {
 	/**
 	 * The full list of scopes including:
 	 * * the original scopes passed to the constructor
-	 * * internal VS Code scopes (e.g. `VSCODE_CLIENT_ID:...`)
+	 * * internal Code Engine scopes (e.g. `CODEENGINE_CLIENT_ID:...`)
 	 * * the default scopes (`openid`, `email`, `profile`, `offline_access`)
 	 */
 	readonly allScopes: string[];
@@ -26,22 +26,22 @@ export class ScopeData {
 	readonly scopeStr: string;
 
 	/**
-	 * The list of scopes to send to the token endpoint. This is the same as `scopes` but without the internal VS Code scopes.
+	 * The list of scopes to send to the token endpoint. This is the same as `scopes` but without the internal Code Engine scopes.
 	 */
 	readonly scopesToSend: string[];
 
 	/**
-	 * The client ID to use for the token request. This is the value of the `VSCODE_CLIENT_ID:...` scope if present, otherwise the default client ID.
+	 * The client ID to use for the token request. This is the value of the `CODEENGINE_CLIENT_ID:...` scope if present, otherwise the default client ID.
 	 */
 	readonly clientId: string;
 
 	/**
-	 * The tenant ID or `organizations`, `common`, `consumers` to use for the token request. This is the value of the `VSCODE_TENANT:...` scope if present, otherwise it's the default.
+	 * The tenant ID or `organizations`, `common`, `consumers` to use for the token request. This is the value of the `CODEENGINE_TENANT:...` scope if present, otherwise it's the default.
 	 */
 	readonly tenant: string;
 
 	/**
-	 * The tenant ID to use for the token request. This will only ever be a GUID if one was specified via the `VSCODE_TENANT:...` scope, otherwise undefined.
+	 * The tenant ID to use for the token request. This will only ever be a GUID if one was specified via the `CODEENGINE_TENANT:...` scope, otherwise undefined.
 	 */
 	readonly tenantId: string | undefined;
 
@@ -64,8 +64,8 @@ export class ScopeData {
 
 	private getClientId(scopes: string[]): string {
 		return scopes.reduce<string | undefined>((prev, current) => {
-			if (current.startsWith('VSCODE_CLIENT_ID:')) {
-				return current.split('VSCODE_CLIENT_ID:')[1];
+			if (current.startsWith('CODEENGINE_CLIENT_ID:')) {
+				return current.split('CODEENGINE_CLIENT_ID:')[1];
 			}
 			return prev;
 		}, undefined) ?? DEFAULT_CLIENT_ID;
@@ -80,8 +80,8 @@ export class ScopeData {
 			}
 		}
 		return scopes.reduce<string | undefined>((prev, current) => {
-			if (current.startsWith('VSCODE_TENANT:')) {
-				return current.split('VSCODE_TENANT:')[1];
+			if (current.startsWith('CODEENGINE_TENANT:')) {
+				return current.split('CODEENGINE_TENANT:')[1];
 			}
 			return prev;
 		}, undefined) ?? DEFAULT_TENANT;
@@ -100,7 +100,7 @@ export class ScopeData {
 	}
 
 	private getScopesToSend(scopes: string[]): string[] {
-		const scopesToSend = scopes.filter(s => !s.startsWith('VSCODE_'));
+		const scopesToSend = scopes.filter(s => !s.startsWith('CODEENGINE_'));
 
 		const set = new Set(scopesToSend);
 		for (const scope of OIDC_SCOPES) {

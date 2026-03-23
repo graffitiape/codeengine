@@ -102,18 +102,18 @@ export class CopilotAgent extends Disposable implements IAgent {
 		this._clientStarting = (async () => {
 			this._logService.info(`[Copilot] Starting CopilotClient... ${this._githubToken ? '(with token)' : '(no token)'}`);
 
-			// Build a clean env for the CLI subprocess, stripping Electron/VS Code vars
+			// Build a clean env for the CLI subprocess, stripping Electron/Code Engine vars
 			// that can interfere with the Node.js process the SDK spawns.
 			const env: Record<string, string | undefined> = Object.assign({}, process.env, { ELECTRON_RUN_AS_NODE: '1' });
 			delete env['NODE_OPTIONS'];
-			delete env['VSCODE_INSPECTOR_OPTIONS'];
-			delete env['VSCODE_ESM_ENTRYPOINT'];
-			delete env['VSCODE_HANDLES_UNCAUGHT_ERRORS'];
+			delete env['CODEENGINE_INSPECTOR_OPTIONS'];
+			delete env['CODEENGINE_ESM_ENTRYPOINT'];
+			delete env['CODEENGINE_HANDLES_UNCAUGHT_ERRORS'];
 			for (const key of Object.keys(env)) {
 				if (key === 'ELECTRON_RUN_AS_NODE') {
 					continue;
 				}
-				if (key.startsWith('VSCODE_') || key.startsWith('ELECTRON_')) {
+				if (key.startsWith('CODEENGINE_') || key.startsWith('ELECTRON_')) {
 					delete env[key];
 				}
 			}
@@ -125,7 +125,7 @@ export class CopilotAgent extends Disposable implements IAgent {
 			// FileAccess.asFileUri('') points to the `out/` directory; node_modules is one level up.
 			const cliPath = URI.joinPath(FileAccess.asFileUri(''), '..', 'node_modules', '@github', 'copilot', 'index.js').fsPath;
 
-			// Add VS Code's built-in ripgrep to PATH so the CLI subprocess can find it.
+			// Add Code Engine's built-in ripgrep to PATH so the CLI subprocess can find it.
 			// If @vscode/ripgrep is in an .asar file, the binary is unpacked.
 			const rgDiskPath = rgPath.replace(/\bnode_modules\.asar\b/, 'node_modules.asar.unpacked');
 			const rgDir = dirname(rgDiskPath);

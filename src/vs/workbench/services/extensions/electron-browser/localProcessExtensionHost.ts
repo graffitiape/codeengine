@@ -221,8 +221,8 @@ export class NativeLocalProcessExtensionHost extends Disposable implements IExte
 		this._extensionHostProcess = new ExtensionHostProcess(extensionHostCreationResult.id, this._extensionHostStarter);
 
 		const env = objects.mixin(processEnv, {
-			VSCODE_ESM_ENTRYPOINT: 'vs/workbench/api/node/extensionHostProcess',
-			VSCODE_HANDLES_UNCAUGHT_ERRORS: true
+			CODEENGINE_ESM_ENTRYPOINT: 'vs/workbench/api/node/extensionHostProcess',
+			CODEENGINE_HANDLES_UNCAUGHT_ERRORS: true
 		});
 
 		if (this._environmentService.debugExtensionHost.env) {
@@ -232,9 +232,9 @@ export class NativeLocalProcessExtensionHost extends Disposable implements IExte
 		removeDangerousEnvVariables(env);
 
 		if (this._isExtensionDevHost) {
-			// Unset `VSCODE_CODE_CACHE_PATH` when developing extensions because it might
+			// Unset `CODEENGINE_CODE_CACHE_PATH` when developing extensions because it might
 			// be that dependencies, that otherwise would be cached, get modified.
-			delete env['VSCODE_CODE_CACHE_PATH'];
+			delete env['CODEENGINE_CODE_CACHE_PATH'];
 		}
 
 		const opts: IExtensionHostProcessOptions = {
@@ -269,7 +269,7 @@ export class NativeLocalProcessExtensionHost extends Disposable implements IExte
 			opts.execArgv.unshift('--prof');
 		}
 
-		// Refs https://github.com/microsoft/vscode/issues/189805
+		// Refs https://github.com/graffitiape/codeengine/issues/189805
 		//
 		// Enable experimental network inspection
 		// inspector agent is always setup hence add this flag

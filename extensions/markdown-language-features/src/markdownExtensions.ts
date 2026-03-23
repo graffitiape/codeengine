@@ -117,7 +117,7 @@ export interface MarkdownContributionProvider {
 	dispose(): void;
 }
 
-class VSCodeExtensionMarkdownContributionProvider extends Disposable implements MarkdownContributionProvider {
+class CodeEngineExtensionMarkdownContributionProvider extends Disposable implements MarkdownContributionProvider {
 
 	#contributions?: MarkdownContributions;
 	readonly #extensionContext: vscode.ExtensionContext;
@@ -158,5 +158,5 @@ class VSCodeExtensionMarkdownContributionProvider extends Disposable implements 
 }
 
 export function getMarkdownExtensionContributions(context: vscode.ExtensionContext): MarkdownContributionProvider {
-	return new VSCodeExtensionMarkdownContributionProvider(context);
+	return new CodeEngineExtensionMarkdownContributionProvider(context);
 }

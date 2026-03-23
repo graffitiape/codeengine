@@ -61,9 +61,9 @@ export class ElectronAgentHostStarter extends Disposable implements IAgentHostSt
 			args: ['--logsPath', this._environmentMainService.logsHome.with({ scheme: Schemas.file }).fsPath],
 			env: {
 				...deepClone(process.env),
-				VSCODE_ESM_ENTRYPOINT: 'vs/platform/agentHost/node/agentHostMain',
-				VSCODE_PIPE_LOGGING: 'true',
-				VSCODE_VERBOSE_LOGGING: 'true',
+				CODEENGINE_ESM_ENTRYPOINT: 'vs/platform/agentHost/node/agentHostMain',
+				CODEENGINE_PIPE_LOGGING: 'true',
+				CODEENGINE_VERBOSE_LOGGING: 'true',
 			}
 		});
 

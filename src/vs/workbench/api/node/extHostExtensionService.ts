@@ -112,7 +112,7 @@ class NodeModuleESMInterceptor extends RequireInterceptor {
 		};
 	};`;
 
-	private static _vscodeImportFnName = `_VSCODE_IMPORT_VSCODE_API`;
+	private static _vscodeImportFnName = `_CODEENGINE_IMPORT_CODEENGINE_API`;
 
 	private readonly _store = new DisposableStore();
 
@@ -210,7 +210,7 @@ export class ExtHostExtensionService extends AbstractExtHostExtensionService {
 		// Register CLI Server for ipc
 		if (this._initData.remote.isRemote && this._initData.remote.authority) {
 			const cliServer = this._instaService.createInstance(CLIServer);
-			process.env['VSCODE_IPC_HOOK_CLI'] = cliServer.ipcHandlePath;
+			process.env['CODEENGINE_IPC_HOOK_CLI'] = cliServer.ipcHandlePath;
 		}
 
 		// Register local file system shortcut

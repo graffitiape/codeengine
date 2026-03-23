@@ -14,12 +14,12 @@ const diagnosticCollection = vscode.languages.createDiagnosticCollection('selfho
 
 type ContentGetter = (uri: vscode.Uri) => Promise<string>;
 
-export const itemData = new WeakMap<vscode.TestItem, VSCodeTest>();
+export const itemData = new WeakMap<vscode.TestItem, CodeEngineTest>();
 
 export const clearFileDiagnostics = (uri: vscode.Uri) => diagnosticCollection.delete(uri);
 
 /**
- * Tries to guess which workspace folder VS Code is in.
+ * Tries to guess which workspace folder Code Engine is in.
  */
 export const guessWorkspaceFolder = async () => {
 	if (!vscode.workspace.workspaceFolders) {
@@ -43,7 +43,7 @@ export async function isVsCodeWorkspaceFolder(folder: vscode.WorkspaceFolder): P
 	try {
 		const buffer = await vscode.workspace.fs.readFile(vscode.Uri.joinPath(folder.uri, 'package.json'));
 		const pkg = JSON.parse(textDecoder.decode(buffer));
-		return pkg.name === 'code-oss-dev';
+		return pkg.name === 'code-engine-dev';
 	} catch {
 		return false;
 	}
@@ -180,4 +180,4 @@ export class TestSuite extends TestConstruct { }
 
 export class TestCase extends TestConstruct { }
 
-export type VSCodeTest = TestFile | TestSuite | TestCase;
+export type CodeEngineTest = TestFile | TestSuite | TestCase;

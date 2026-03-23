@@ -12,6 +12,23 @@ export const enum KanbanColumn {
 	Done = 'done'
 }
 
+export const enum AgentPipelineStatus {
+	Pending = 'pending',
+	Running = 'running',
+	Completed = 'completed',
+	Failed = 'failed'
+}
+
+export interface IAgentPipelineStep {
+	agentId: string;
+	agentName: string;
+	order: number;
+	status: AgentPipelineStatus;
+	chatSessionResource?: string;
+	startedAt?: number;
+	completedAt?: number;
+}
+
 export interface IKanbanTicket {
 	id: string;
 	title: string;
@@ -19,6 +36,8 @@ export interface IKanbanTicket {
 	column: KanbanColumn;
 	assignedAgentId?: string;
 	assignedAgentName?: string;
+	pipeline?: IAgentPipelineStep[];
+	pipelineCurrentStep?: number;
 	createdAt: number;
 	updatedAt: number;
 	order: number;
@@ -38,4 +57,10 @@ export interface IKanbanService {
 	deleteTicket(id: string): void;
 	assignAgent(ticketId: string, agentId: string, agentName: string): void;
 	unassignAgent(ticketId: string): void;
+
+	// Pipeline methods
+	setPipeline(ticketId: string, steps: Array<{ agentId: string; agentName: string }>): void;
+	startPipeline(ticketId: string): void;
+	advancePipeline(ticketId: string): void;
+	failPipeline(ticketId: string): void;
 }

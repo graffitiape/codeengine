@@ -25,7 +25,7 @@ suite('PolicyExport Integration Tests', () => {
 			this.skip();
 		}
 
-		// This test launches VS Code with --export-policy-data flag, so it takes longer
+		// This test launches Code Engine with --export-policy-data flag, so it takes longer
 		this.timeout(60000);
 
 		// Get the repository root (FileAccess.asFileUri('') points to the 'out' directory)
@@ -42,15 +42,15 @@ suite('PolicyExport Integration Tests', () => {
 		}
 
 		try {
-			// Launch VS Code with --export-policy-data flag
+			// Launch Code Engine with --export-policy-data flag
 			const scriptPath = isWindows
 				? join(rootPath, 'scripts', 'code.bat')
 				: join(rootPath, 'scripts', 'code.sh');
 
-			// Skip prelaunch to avoid redownloading electron while the parent VS Code is using it
+			// Skip prelaunch to avoid redownloading electron while the parent Code Engine is using it
 			await exec(`"${scriptPath}" --export-policy-data="${tempFile}"`, {
 				cwd: rootPath,
-				env: { ...process.env, VSCODE_SKIP_PRELAUNCH: '1' }
+				env: { ...process.env, CODEENGINE_SKIP_PRELAUNCH: '1' }
 			});
 
 			// Read both files

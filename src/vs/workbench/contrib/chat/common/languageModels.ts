@@ -453,7 +453,7 @@ export interface ILanguageModelsService {
 export interface IModelControlEntry {
 	readonly label: string;
 	readonly featured?: boolean;
-	readonly minVSCodeVersion?: string;
+	readonly minCodeEngineVersion?: string;
 	readonly exists: boolean;
 }
 
@@ -557,7 +557,7 @@ interface IChatControlResponse {
 	readonly restrictedChatParticipants: { [name: string]: string[] };
 	readonly models?: {
 		readonly free?: Record<string, { readonly label: string; readonly featured?: boolean }>;
-		readonly paid?: Record<string, { readonly label: string; readonly featured?: boolean; readonly minVSCodeVersion?: string }>;
+		readonly paid?: Record<string, { readonly label: string; readonly featured?: boolean; readonly minCodeEngineVersion?: string }>;
 	};
 }
 
@@ -1750,7 +1750,7 @@ export class LanguageModelsService implements ILanguageModelsService {
 				if (!entry || !isObject(entry)) {
 					continue;
 				}
-				paid[entry.id] = { label: entry.label, featured: entry.featured, minVSCodeVersion: entry.minVSCodeVersion, exists: this._modelCache.has(`copilot/${entry.id}`) };
+				paid[entry.id] = { label: entry.label, featured: entry.featured, minCodeEngineVersion: entry.minCodeEngineVersion, exists: this._modelCache.has(`copilot/${entry.id}`) };
 			}
 		}
 

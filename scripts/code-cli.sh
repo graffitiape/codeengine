@@ -20,7 +20,7 @@ function code() {
 	fi
 
 	# Get electron, compile, built-in extensions
-	if [[ -z "${VSCODE_SKIP_PRELAUNCH}" ]]; then
+	if [[ -z "${CODEENGINE_SKIP_PRELAUNCH}" ]]; then
 		node build/lib/preLaunch.ts
 	fi
 
@@ -38,7 +38,7 @@ function code() {
 
 	ELECTRON_RUN_AS_NODE=1 \
 	NODE_ENV=development \
-	VSCODE_DEV=1 \
+	CODEENGINE_DEV=1 \
 	ELECTRON_ENABLE_LOGGING=1 \
 	ELECTRON_ENABLE_STACK_DUMPING=1 \
 	"$CODE" --inspect=5874 "$ROOT/out/cli.js" . $DISABLE_TEST_EXTENSION "$@"

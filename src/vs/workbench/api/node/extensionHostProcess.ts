@@ -38,7 +38,7 @@ interface ParsedExtHostArgs {
 }
 
 // silence experimental warnings when in development
-if (process.env.VSCODE_DEV) {
+if (process.env.CODEENGINE_DEV) {
 	const warningListeners = process.listeners('warning');
 	process.removeAllListeners('warning');
 	process.on('warning', (warning: any) => {
@@ -51,7 +51,7 @@ if (process.env.VSCODE_DEV) {
 	});
 }
 
-// workaround for https://github.com/microsoft/vscode/issues/85490
+// workaround for https://github.com/graffitiape/codeengine/issues/85490
 // remove --inspect-port=0 after start so that it doesn't trigger LSP debugging
 (function removeInspectPort() {
 	for (let i = 0; i < process.execArgv.length; i++) {
@@ -114,7 +114,7 @@ function patchProcess(allowExit: boolean) {
 	// Set ELECTRON_RUN_AS_NODE environment variable for extensions that use
 	// child_process.spawn with process.execPath and expect to run as node process
 	// on the desktop.
-	// Refs https://github.com/microsoft/vscode/issues/151012#issuecomment-1156593228
+	// Refs https://github.com/graffitiape/codeengine/issues/151012#issuecomment-1156593228
 	process.env['ELECTRON_RUN_AS_NODE'] = '1';
 
 	// eslint-disable-next-line local/code-no-any-casts
@@ -209,16 +209,16 @@ function _createExtHostProtocol(): Promise<IMessagePassingProtocol> {
 			let protocol: PersistentProtocol | null = null;
 
 			const timer = setTimeout(() => {
-				onTerminate('VSCODE_EXTHOST_IPC_SOCKET timeout');
+				onTerminate('CODEENGINE_EXTHOST_IPC_SOCKET timeout');
 			}, 60000);
 
-			const reconnectionGraceTime = readReconnectionValue('VSCODE_RECONNECTION_GRACE_TIME', ProtocolConstants.ReconnectionGraceTime);
+			const reconnectionGraceTime = readReconnectionValue('CODEENGINE_RECONNECTION_GRACE_TIME', ProtocolConstants.ReconnectionGraceTime);
 			const reconnectionShortGraceTime = reconnectionGraceTime > 0 ? Math.min(ProtocolConstants.ReconnectionShortGraceTime, reconnectionGraceTime) : 0;
 			const disconnectRunner1 = new ProcessTimeRunOnceScheduler(() => onTerminate('renderer disconnected for too long (1)'), reconnectionGraceTime);
 			const disconnectRunner2 = new ProcessTimeRunOnceScheduler(() => onTerminate('renderer disconnected for too long (2)'), reconnectionShortGraceTime);
 
 			process.on('message', (msg: IExtHostSocketMessage | IExtHostReduceGraceTimeMessage, handle: net.Socket) => {
-				if (msg && msg.type === 'VSCODE_EXTHOST_IPC_SOCKET') {
+				if (msg && msg.type === 'CODEENGINE_EXTHOST_IPC_SOCKET') {
 					// Disable Nagle's algorithm. We also do this on the server process,
 					// but nodejs doesn't document if this option is transferred with the socket
 					handle.setNoDelay(true);
@@ -252,7 +252,7 @@ function _createExtHostProtocol(): Promise<IMessagePassingProtocol> {
 						});
 					}
 				}
-				if (msg && msg.type === 'VSCODE_EXTHOST_IPC_REDUCE_GRACE_TIME') {
+				if (msg && msg.type === 'CODEENGINE_EXTHOST_IPC_REDUCE_GRACE_TIME') {
 					if (disconnectRunner2.isScheduled()) {
 						// we are disconnected and already running the short reconnection timer
 						return;
@@ -265,7 +265,7 @@ function _createExtHostProtocol(): Promise<IMessagePassingProtocol> {
 			});
 
 			// Now that we have managed to install a message listener, ask the other side to send us the socket
-			const req: IExtHostReadyMessage = { type: 'VSCODE_EXTHOST_IPC_READY' };
+			const req: IExtHostReadyMessage = { type: 'CODEENGINE_EXTHOST_IPC_READY' };
 			process.send?.(req);
 		});
 
@@ -442,7 +442,7 @@ async function startExtensionHostProcess(): Promise<void> {
 	performance.mark(`code/extHost/didWaitForInitData`);
 	const { initData } = renderer;
 	// setup things
-	patchProcess(!!initData.environment.extensionTestsLocationURI); // to support other test frameworks like Jasmin that use process.exit (https://github.com/microsoft/vscode/issues/37708)
+	patchProcess(!!initData.environment.extensionTestsLocationURI); // to support other test frameworks like Jasmin that use process.exit (https://github.com/graffitiape/codeengine/issues/37708)
 	initData.environment.useHostProxy = args.useHostProxy !== undefined ? args.useHostProxy !== 'false' : undefined;
 	initData.environment.skipWorkspaceStorageLock = boolean(args.skipWorkspaceStorageLock, false);
 

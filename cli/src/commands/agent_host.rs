@@ -17,7 +17,7 @@ use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::sync::Mutex;
 
 use crate::async_pipe::{get_socket_name, get_socket_rw_stream, AsyncPipe};
-use crate::constants::VSCODE_CLI_QUALITY;
+use crate::constants::CODEENGINE_CLI_QUALITY;
 use crate::download_cache::DownloadCache;
 use crate::log;
 use crate::options::Quality;
@@ -45,7 +45,7 @@ const UPDATE_POLL_INTERVAL: Duration = Duration::from_secs(10 * 60);
 /// How long to wait for the server to signal readiness.
 const STARTUP_TIMEOUT: Duration = Duration::from_secs(30);
 
-/// Runs a local agent host server. Downloads the latest VS Code server on
+/// Runs a local agent host server. Downloads the latest Code Engine server on
 /// demand, starts it with `--enable-remote-auto-shutdown`, and proxies
 /// WebSocket connections from a local TCP port to the server's agent host
 /// socket. The server auto-shuts down when idle; the CLI checks for updates
@@ -73,7 +73,7 @@ pub async fn agent_host(ctx: CommandContext, mut args: AgentHostArgs) -> Result<
 
 	// Eagerly resolve the latest version so the first connection is fast.
 	// Skip when using a dev override since updates don't apply.
-	if option_env!("VSCODE_CLI_OVERRIDE_SERVER_PATH").is_none() {
+	if option_env!("CODEENGINE_CLI_OVERRIDE_SERVER_PATH").is_none() {
 		match manager.get_latest_release().await {
 			Ok(release) => {
 				if let Err(e) = manager.ensure_downloaded(&release).await {
@@ -131,13 +131,13 @@ pub async fn agent_host(ctx: CommandContext, mut args: AgentHostArgs) -> Result<
 
 // ---- AgentHostManager -------------------------------------------------------
 
-/// State of the running VS Code server process.
+/// State of the running Code Engine server process.
 struct RunningServer {
 	child: tokio::process::Child,
 	commit: String,
 }
 
-/// Manages the VS Code server lifecycle: on-demand start, auto-restart
+/// Manages the Code Engine server lifecycle: on-demand start, auto-restart
 /// after idle shutdown, and background update checking.
 struct AgentHostManager {
 	log: log::Logger,
@@ -244,7 +244,7 @@ impl AgentHostManager {
 		server_dir: PathBuf,
 		opener: BarrierOpener<Result<PathBuf, String>>,
 	) {
-		let executable = if let Some(p) = option_env!("VSCODE_CLI_OVERRIDE_SERVER_PATH") {
+		let executable = if let Some(p) = option_env!("CODEENGINE_CLI_OVERRIDE_SERVER_PATH") {
 			PathBuf::from(p)
 		} else {
 			server_dir
@@ -279,7 +279,7 @@ impl AgentHostManager {
 			cmd.arg("--connection-token-file");
 			cmd.arg(ct);
 		}
-		cmd.env_remove("VSCODE_DEV");
+		cmd.env_remove("CODEENGINE_DEV");
 
 		let mut child = match cmd.spawn() {
 			Ok(c) => c,
@@ -389,7 +389,7 @@ impl AgentHostManager {
 	async fn get_cached_or_download(&self) -> Result<(Release, PathBuf), CodeError> {
 		// When using a dev override, skip the update service entirely -
 		// the override path is used directly by run_server().
-		if option_env!("VSCODE_CLI_OVERRIDE_SERVER_PATH").is_some() {
+		if option_env!("CODEENGINE_CLI_OVERRIDE_SERVER_PATH").is_some() {
 			let release = Release {
 				name: String::new(),
 				commit: String::from("dev"),
@@ -408,7 +408,7 @@ impl AgentHostManager {
 			}
 		}
 
-		let quality = VSCODE_CLI_QUALITY
+		let quality = CODEENGINE_CLI_QUALITY
 			.ok_or_else(|| CodeError::UpdatesNotConfigured("no configured quality"))
 			.and_then(|q| {
 				Quality::try_from(q).map_err(|_| CodeError::UpdatesNotConfigured("unknown quality"))
@@ -479,7 +479,7 @@ impl AgentHostManager {
 		let mut latest = self.latest_release.lock().await;
 		let now = Instant::now();
 
-		let quality = VSCODE_CLI_QUALITY
+		let quality = CODEENGINE_CLI_QUALITY
 			.ok_or_else(|| CodeError::UpdatesNotConfigured("no configured quality"))
 			.and_then(|q| {
 				Quality::try_from(q).map_err(|_| CodeError::UpdatesNotConfigured("unknown quality"))

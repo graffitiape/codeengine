@@ -126,12 +126,12 @@ export class LaunchMainService implements ILaunchMainService {
 			 * When opening a new window from a second instance that sent args and env
 			 * over to this instance, we want to preserve the environment only if that second
 			 * instance was spawned from the CLI or used the `--preserve-env` flag (example:
-			 * when using `open -n "VSCode.app" --args --preserve-env WORKSPACE_FOLDER`).
+			 * when using `open -n "CodeEngine.app" --args --preserve-env WORKSPACE_FOLDER`).
 			 *
 			 * This is done to ensure that the second window gets treated exactly the same
 			 * as the first window, for example, it gets the same resolved user shell environment.
 			 *
-			 * https://github.com/microsoft/vscode/issues/194736
+			 * https://github.com/graffitiape/codeengine/issues/194736
 			 */
 			userEnv: (args['preserve-env'] || context === OpenContext.CLI) ? userEnv : undefined,
 			waitMarkerFileURI,

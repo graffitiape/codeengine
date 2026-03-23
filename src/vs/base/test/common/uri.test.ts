@@ -283,7 +283,7 @@ suite('URI', () => {
 		}
 	});
 
-	test('VSCode URI module\'s driveLetterPath regex is incorrect, #32961', function () {
+	test('CodeEngine URI module\'s driveLetterPath regex is incorrect, #32961', function () {
 		const uri = URI.parse('file:///_:/path');
 		assert.strictEqual(uri.fsPath, isWindows ? '\\_:\\path' : '/_:/path');
 	});
@@ -625,7 +625,7 @@ suite('URI', () => {
 		assertJoined(('file://ser/foo/'), '../../bazz', 'file://ser/foo/bazz', false);
 		assertJoined(('file://ser/foo'), '../../bazz', 'file://ser/foo/bazz', false);
 
-		//https://github.com/microsoft/vscode/issues/93831
+		//https://github.com/graffitiape/codeengine/issues/93831
 		assertJoined('file:///c:/foo/bar', './other/foo.img', 'file:///c:/foo/bar/other/foo.img', false);
 	});
 

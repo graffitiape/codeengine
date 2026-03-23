@@ -291,7 +291,7 @@
 
 		// Compute base URL and set as global
 		const baseUrl = new URL(`${fileUriFromPath(configuration.appRoot, { isWindows: safeProcess.platform === 'win32', scheme: 'vscode-file', fallbackAuthority: 'vscode-app' })}/out/`);
-		globalThis._VSCODE_FILE_ROOT = baseUrl.toString();
+		globalThis._CODEENGINE_FILE_ROOT = baseUrl.toString();
 
 		// Dev only: CSS import map tricks
 		setupCSSImportMaps<T>(configuration, baseUrl);
@@ -299,7 +299,7 @@
 		// ESM Import
 		try {
 			let workbenchUrl: string;
-			if (!!safeProcess.env['VSCODE_DEV'] && globalThis._VSCODE_USE_RELATIVE_IMPORTS) {
+			if (!!safeProcess.env['CODEENGINE_DEV'] && globalThis._CODEENGINE_USE_RELATIVE_IMPORTS) {
 				workbenchUrl = '../../../workbench/workbench.desktop.main.js'; // for dev purposes only
 			} else {
 				workbenchUrl = new URL(`vs/workbench/workbench.desktop.main.js`, baseUrl).href;
@@ -343,7 +343,7 @@
 			forceDisableShowDevtoolsOnError: false
 		};
 
-		const isDev = !!safeProcess.env['VSCODE_DEV'];
+		const isDev = !!safeProcess.env['CODEENGINE_DEV'];
 		const enableDeveloperKeybindings = Boolean(isDev || forceEnableDeveloperKeybindings);
 		let developerDeveloperKeybindingsDisposable: Function | undefined = undefined;
 		if (enableDeveloperKeybindings) {
@@ -397,8 +397,8 @@
 	}
 
 	function setupNLS<T extends ISandboxConfiguration>(configuration: T): void {
-		globalThis._VSCODE_NLS_MESSAGES = configuration.nls.messages;
-		globalThis._VSCODE_NLS_LANGUAGE = configuration.nls.language;
+		globalThis._CODEENGINE_NLS_MESSAGES = configuration.nls.messages;
+		globalThis._CODEENGINE_NLS_LANGUAGE = configuration.nls.language;
 
 		let language = configuration.nls.language || 'en';
 		if (language === 'zh-tw') {
@@ -457,14 +457,14 @@
 		// DEV: a blob URL that loads the CSS via a dynamic @import-rule.
 		// DEV ---------------------------------------------------------------------------------------
 
-		if (globalThis._VSCODE_DISABLE_CSS_IMPORT_MAP) {
+		if (globalThis._CODEENGINE_DISABLE_CSS_IMPORT_MAP) {
 			return; // disabled in certain development setups
 		}
 
 		if (Array.isArray(configuration.cssModules) && configuration.cssModules.length > 0) {
 			performance.mark('code/willAddCssLoader');
 
-			globalThis._VSCODE_CSS_LOAD = function (url) {
+			globalThis._CODEENGINE_CSS_LOAD = function (url) {
 				const link = document.createElement('link');
 				link.setAttribute('rel', 'stylesheet');
 				link.setAttribute('type', 'text/css');
@@ -476,7 +476,7 @@
 			const importMap: { imports: Record<string, string> } = { imports: {} };
 			for (const cssModule of configuration.cssModules) {
 				const cssUrl = new URL(cssModule, baseUrl).href;
-				const jsSrc = `globalThis._VSCODE_CSS_LOAD('${cssUrl}');\n`;
+				const jsSrc = `globalThis._CODEENGINE_CSS_LOAD('${cssUrl}');\n`;
 				const blob = new Blob([jsSrc], { type: 'application/javascript' });
 				importMap.imports[cssUrl] = URL.createObjectURL(blob);
 			}

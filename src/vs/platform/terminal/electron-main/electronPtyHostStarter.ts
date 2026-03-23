@@ -87,20 +87,20 @@ export class ElectronPtyHostStarter extends Disposable implements IPtyHostStarte
 		this._environmentMainService.unsetSnapExportedVariables();
 		const config: { [key: string]: string } = {
 			...deepClone(process.env),
-			VSCODE_ESM_ENTRYPOINT: 'vs/platform/terminal/node/ptyHostMain',
-			VSCODE_PIPE_LOGGING: 'true',
-			VSCODE_VERBOSE_LOGGING: 'true', // transmit console logs from server to client,
-			VSCODE_RECONNECT_GRACE_TIME: String(this._reconnectConstants.graceTime),
-			VSCODE_RECONNECT_SHORT_GRACE_TIME: String(this._reconnectConstants.shortGraceTime),
-			VSCODE_RECONNECT_SCROLLBACK: String(this._reconnectConstants.scrollback),
+			CODEENGINE_ESM_ENTRYPOINT: 'vs/platform/terminal/node/ptyHostMain',
+			CODEENGINE_PIPE_LOGGING: 'true',
+			CODEENGINE_VERBOSE_LOGGING: 'true', // transmit console logs from server to client,
+			CODEENGINE_RECONNECT_GRACE_TIME: String(this._reconnectConstants.graceTime),
+			CODEENGINE_RECONNECT_SHORT_GRACE_TIME: String(this._reconnectConstants.shortGraceTime),
+			CODEENGINE_RECONNECT_SCROLLBACK: String(this._reconnectConstants.scrollback),
 		};
 		const simulatedLatency = this._configurationService.getValue(TerminalSettingId.DeveloperPtyHostLatency);
 		if (simulatedLatency && isNumber(simulatedLatency)) {
-			config.VSCODE_LATENCY = String(simulatedLatency);
+			config.CODEENGINE_LATENCY = String(simulatedLatency);
 		}
 		const startupDelay = this._configurationService.getValue(TerminalSettingId.DeveloperPtyHostStartupDelay);
 		if (startupDelay && isNumber(startupDelay)) {
-			config.VSCODE_STARTUP_DELAY = String(startupDelay);
+			config.CODEENGINE_STARTUP_DELAY = String(startupDelay);
 		}
 		this._environmentMainService.restoreSnapExportedVariables();
 		return config;

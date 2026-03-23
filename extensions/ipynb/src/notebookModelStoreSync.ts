@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Disposable, ExtensionContext, NotebookCellKind, NotebookDocument, NotebookDocumentChangeEvent, NotebookEdit, workspace, WorkspaceEdit, type NotebookCell, type NotebookDocumentWillSaveEvent } from 'vscode';
-import { getCellMetadata, getVSCodeCellLanguageId, removeVSCodeCellLanguageId, setVSCodeCellLanguageId, sortObjectPropertiesRecursively, getNotebookMetadata } from './serializers';
+import { getCellMetadata, getCodeEngineCellLanguageId, removeCodeEngineCellLanguageId, setCodeEngineCellLanguageId, sortObjectPropertiesRecursively, getNotebookMetadata } from './serializers';
 import { CellMetadata } from './common';
 import type * as nbformat from '@jupyterlab/nbformat';
 import { generateUuid } from './helper';
@@ -137,13 +137,13 @@ function onDidChangeNotebookCells(e: NotebookDocumentChangeEventEx) {
 	const updates: { cell: NotebookCell; metadata: CellMetadata & { vscode?: { languageId: string } } }[] = [];
 	// When we change the language of a cell,
 	// Ensure the metadata in the notebook cell has been updated as well,
-	// Else model will be out of sync with ipynb https://github.com/microsoft/vscode/issues/207968#issuecomment-2002858596
+	// Else model will be out of sync with ipynb https://github.com/graffitiape/codeengine/issues/207968#issuecomment-2002858596
 	e.cellChanges.forEach(e => {
 		if (!preferredCellLanguage || e.cell.kind !== NotebookCellKind.Code) {
 			return;
 		}
 		const currentMetadata = e.metadata ? getCellMetadata({ metadata: e.metadata }) : getCellMetadata({ cell: e.cell });
-		const languageIdInMetadata = getVSCodeCellLanguageId(currentMetadata);
+		const languageIdInMetadata = getCodeEngineCellLanguageId(currentMetadata);
 		const metadata: CellMetadata = JSON.parse(JSON.stringify(currentMetadata));
 		metadata.metadata = metadata.metadata || {};
 		let metadataUpdated = false;
@@ -175,13 +175,13 @@ function onDidChangeNotebookCells(e: NotebookDocumentChangeEventEx) {
 		}
 
 		if (e.document?.languageId && e.document?.languageId !== preferredCellLanguage && e.document?.languageId !== languageIdInMetadata) {
-			setVSCodeCellLanguageId(metadata, e.document.languageId);
+			setCodeEngineCellLanguageId(metadata, e.document.languageId);
 			metadataUpdated = true;
 		} else if (e.document?.languageId && e.document.languageId === preferredCellLanguage && languageIdInMetadata) {
-			removeVSCodeCellLanguageId(metadata);
+			removeCodeEngineCellLanguageId(metadata);
 			metadataUpdated = true;
 		} else if (e.document?.languageId && e.document.languageId === preferredCellLanguage && e.document.languageId === languageIdInMetadata) {
-			removeVSCodeCellLanguageId(metadata);
+			removeCodeEngineCellLanguageId(metadata);
 			metadataUpdated = true;
 		}
 

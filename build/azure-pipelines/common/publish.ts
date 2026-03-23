@@ -440,21 +440,21 @@ class ESRPReleaseService {
 			owners: [{ owner: { userPrincipalName: 'jomo@microsoft.com' } }],
 			approvers: [{ approver: { userPrincipalName: 'jomo@microsoft.com' }, isAutoApproved: true, isMandatory: false }],
 			releaseInfo: {
-				title: 'VS Code',
+				title: 'Code Engine',
 				properties: {
 					'ReleaseContentType': 'InstallPackage'
 				},
 				minimumNumberOfApprovers: 1
 			},
 			productInfo: {
-				name: 'VS Code',
+				name: 'Code Engine',
 				version,
-				description: 'VS Code'
+				description: 'Code Engine'
 			},
 			accessPermissionsInfo: {
-				mainPublisher: 'VSCode',
+				mainPublisher: 'CodeEngine',
 				channelDownloadEntityDetails: {
-					AllDownloadEntities: ['VSCode']
+					AllDownloadEntities: ['CodeEngine']
 				}
 			},
 			routingInfo: {
@@ -879,11 +879,11 @@ async function processArtifact(
 	}
 
 	const { cosmosDBAccessToken, blobServiceAccessToken } = JSON.parse(e('PUBLISH_AUTH_TOKENS'));
-	const quality = e('VSCODE_QUALITY');
+	const quality = e('CODEENGINE_QUALITY');
 	const version = e('BUILD_SOURCEVERSION');
 	const friendlyFileName = `${quality}/${version}/${path.basename(filePath)}`;
 
-	const blobServiceClient = new BlobServiceClient(`https://${e('VSCODE_STAGING_BLOB_STORAGE_ACCOUNT_NAME')}.blob.core.windows.net/`, { getToken: async () => blobServiceAccessToken });
+	const blobServiceClient = new BlobServiceClient(`https://${e('CODEENGINE_STAGING_BLOB_STORAGE_ACCOUNT_NAME')}.blob.core.windows.net/`, { getToken: async () => blobServiceAccessToken });
 	const leasesContainerClient = blobServiceClient.getContainerClient('leases');
 	await leasesContainerClient.createIfNotExists();
 	const leaseBlobClient = leasesContainerClient.getBlockBlobClient(friendlyFileName);
@@ -908,7 +908,7 @@ async function processArtifact(
 			const oneHourFromNow = new Date(now + oneHour);
 			const userDelegationKey = await blobServiceClient.getUserDelegationKey(oneHourAgo, oneHourFromNow);
 			const sasOptions = { containerName: 'staging', permissions: ContainerSASPermissions.from({ read: true }), startsOn: oneHourAgo, expiresOn: oneHourFromNow };
-			const stagingSasToken = generateBlobSASQueryParameters(sasOptions, userDelegationKey, e('VSCODE_STAGING_BLOB_STORAGE_ACCOUNT_NAME')).toString();
+			const stagingSasToken = generateBlobSASQueryParameters(sasOptions, userDelegationKey, e('CODEENGINE_STAGING_BLOB_STORAGE_ACCOUNT_NAME')).toString();
 
 			const releaseService = await ESRPReleaseService.create(
 				log,
@@ -972,11 +972,11 @@ async function main() {
 
 	const stages = new Set<string>(['Quality']);
 
-	if (e('VSCODE_BUILD_STAGE_WINDOWS') === 'True') { stages.add('Windows'); }
-	if (e('VSCODE_BUILD_STAGE_LINUX') === 'True') { stages.add('Linux'); }
-	if (e('VSCODE_BUILD_STAGE_ALPINE') === 'True') { stages.add('Alpine'); }
-	if (e('VSCODE_BUILD_STAGE_MACOS') === 'True') { stages.add('macOS'); }
-	if (e('VSCODE_BUILD_STAGE_WEB') === 'True') { stages.add('Web'); }
+	if (e('CODEENGINE_BUILD_STAGE_WINDOWS') === 'True') { stages.add('Windows'); }
+	if (e('CODEENGINE_BUILD_STAGE_LINUX') === 'True') { stages.add('Linux'); }
+	if (e('CODEENGINE_BUILD_STAGE_ALPINE') === 'True') { stages.add('Alpine'); }
+	if (e('CODEENGINE_BUILD_STAGE_MACOS') === 'True') { stages.add('macOS'); }
+	if (e('CODEENGINE_BUILD_STAGE_WEB') === 'True') { stages.add('Web'); }
 
 	let timeline: Timeline;
 	let artifacts: Artifact[];

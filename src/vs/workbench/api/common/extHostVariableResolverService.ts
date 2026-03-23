@@ -78,7 +78,7 @@ class ExtHostVariableResolverService extends AbstractVariableResolverService {
 				return process.cwd();
 			},
 			getExecPath: (): string | undefined => {
-				return process.env['VSCODE_EXEC_PATH'];
+				return process.env['CODEENGINE_EXEC_PATH'];
 			},
 			getFilePath: (): string | undefined => {
 				const activeUri = getActiveUri();

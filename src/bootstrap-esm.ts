@@ -30,9 +30,9 @@ if (process.env['ELECTRON_RUN_AS_NODE'] || process.versions['electron']) {
 }
 
 // Prepare globals that are needed for running
-globalThis._VSCODE_PRODUCT_JSON = { ...product };
-globalThis._VSCODE_PACKAGE_JSON = { ...pkg };
-globalThis._VSCODE_FILE_ROOT = import.meta.dirname;
+globalThis._CODEENGINE_PRODUCT_JSON = { ...product };
+globalThis._CODEENGINE_PACKAGE_JSON = { ...pkg };
+globalThis._CODEENGINE_FILE_ROOT = import.meta.dirname;
 
 //#region NLS helpers
 
@@ -52,30 +52,30 @@ async function doSetupNLS(): Promise<INLSConfiguration | undefined> {
 	let nlsConfig: INLSConfiguration | undefined = undefined;
 
 	let messagesFile: string | undefined;
-	if (process.env['VSCODE_NLS_CONFIG']) {
+	if (process.env['CODEENGINE_NLS_CONFIG']) {
 		try {
-			nlsConfig = JSON.parse(process.env['VSCODE_NLS_CONFIG']);
+			nlsConfig = JSON.parse(process.env['CODEENGINE_NLS_CONFIG']);
 			if (nlsConfig?.languagePack?.messagesFile) {
 				messagesFile = nlsConfig.languagePack.messagesFile;
 			} else if (nlsConfig?.defaultMessagesFile) {
 				messagesFile = nlsConfig.defaultMessagesFile;
 			}
 
-			globalThis._VSCODE_NLS_LANGUAGE = nlsConfig?.resolvedLanguage;
+			globalThis._CODEENGINE_NLS_LANGUAGE = nlsConfig?.resolvedLanguage;
 		} catch (e) {
-			console.error(`Error reading VSCODE_NLS_CONFIG from environment: ${e}`);
+			console.error(`Error reading CODEENGINE_NLS_CONFIG from environment: ${e}`);
 		}
 	}
 
 	if (
-		process.env['VSCODE_DEV'] ||	// no NLS support in dev mode
+		process.env['CODEENGINE_DEV'] ||	// no NLS support in dev mode
 		!messagesFile					// no NLS messages file
 	) {
 		return undefined;
 	}
 
 	try {
-		globalThis._VSCODE_NLS_MESSAGES = JSON.parse((await fs.promises.readFile(messagesFile)).toString());
+		globalThis._CODEENGINE_NLS_MESSAGES = JSON.parse((await fs.promises.readFile(messagesFile)).toString());
 	} catch (error) {
 		console.error(`Error reading NLS messages file ${messagesFile}: ${error}`);
 
@@ -91,7 +91,7 @@ async function doSetupNLS(): Promise<INLSConfiguration | undefined> {
 		// Fallback to the default message file to ensure english translation at least
 		if (nlsConfig?.defaultMessagesFile && nlsConfig.defaultMessagesFile !== messagesFile) {
 			try {
-				globalThis._VSCODE_NLS_MESSAGES = JSON.parse((await fs.promises.readFile(nlsConfig.defaultMessagesFile)).toString());
+				globalThis._CODEENGINE_NLS_MESSAGES = JSON.parse((await fs.promises.readFile(nlsConfig.defaultMessagesFile)).toString());
 			} catch (error) {
 				console.error(`Error reading default NLS messages file ${nlsConfig.defaultMessagesFile}: ${error}`);
 			}

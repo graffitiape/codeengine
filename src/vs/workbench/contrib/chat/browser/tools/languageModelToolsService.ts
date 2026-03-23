@@ -49,7 +49,7 @@ import { ChatToolInvocation } from '../../common/model/chatProgressTypes/chatToo
 import { chatSessionResourceToId, getChatSessionType } from '../../common/model/chatUri.js';
 import { HookType } from '../../common/promptSyntax/hookTypes.js';
 import { ILanguageModelToolsConfirmationService } from '../../common/tools/languageModelToolsConfirmationService.js';
-import { CountTokensCallback, createToolSchemaUri, IBeginToolCallOptions, IExternalPreToolUseHookResult, ILanguageModelToolsService, IPreparedToolInvocation, isToolSet, IToolAndToolSetEnablementMap, IToolData, IToolImpl, IToolInvocation, IToolInvokedEvent, IToolResult, IToolResultInputOutputDetails, IToolSet, SpecedToolAliases, stringifyPromptTsxPart, ToolDataSource, ToolInvocationPresentation, toolMatchesModel, ToolSet, ToolSetForModel, VSCodeToolReference } from '../../common/tools/languageModelToolsService.js';
+import { CountTokensCallback, createToolSchemaUri, IBeginToolCallOptions, IExternalPreToolUseHookResult, ILanguageModelToolsService, IPreparedToolInvocation, isToolSet, IToolAndToolSetEnablementMap, IToolData, IToolImpl, IToolInvocation, IToolInvokedEvent, IToolResult, IToolResultInputOutputDetails, IToolSet, SpecedToolAliases, stringifyPromptTsxPart, ToolDataSource, ToolInvocationPresentation, toolMatchesModel, ToolSet, ToolSetForModel, CodeEngineToolReference } from '../../common/tools/languageModelToolsService.js';
 import { getToolConfirmationAlert } from '../accessibility/chatAccessibilityProvider.js';
 import { IChatWidgetService } from '../chat.js';
 
@@ -83,12 +83,12 @@ export const globalAutoApproveDescription = localize2(
 		comment: [
 			'{Locked=\'](https://github.com/features/codespaces)\'}',
 			'{Locked=\'](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)\'}',
-			'{Locked=\'](https://code.visualstudio.com/docs/copilot/security)\'}',
+			'{Locked=\'](https://github.com/graffitiape/codeengine/docs/copilot/security)\'}',
 			'{Locked=\'**\'}',
 			'{Locked=\'[`chat.autoReply`](command:workbench.action.openSettings?%5B%22chat.autoReply%22%5D)\'}',
 		]
 	},
-	'Global auto approve also known as "YOLO mode" disables manual approval completely for _all tools in all workspaces_, allowing the agent to act fully autonomously. This is extremely dangerous and is *never* recommended, even containerized environments like [Codespaces](https://github.com/features/codespaces) and [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) have user keys forwarded into the container that could be compromised.\n\n**This feature disables [critical security protections](https://code.visualstudio.com/docs/copilot/security) and makes it much easier for an attacker to compromise the machine.**\n\nNote: This setting only controls tool approval and does not prevent the agent from asking questions. To automatically answer agent questions, use the [`chat.autoReply`](command:workbench.action.openSettings?%5B%22chat.autoReply%22%5D) setting.'
+	'Global auto approve also known as "YOLO mode" disables manual approval completely for _all tools in all workspaces_, allowing the agent to act fully autonomously. This is extremely dangerous and is *never* recommended, even containerized environments like [Codespaces](https://github.com/features/codespaces) and [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) have user keys forwarded into the container that could be compromised.\n\n**This feature disables [critical security protections](https://github.com/graffitiape/codeengine/docs/copilot/security) and makes it much easier for an attacker to compromise the machine.**\n\nNote: This setting only controls tool approval and does not prevent the agent from asking questions. To automatically answer agent questions, use the [`chat.autoReply`](command:workbench.action.openSettings?%5B%22chat.autoReply%22%5D) setting.'
 );
 
 export class LanguageModelToolsService extends Disposable implements ILanguageModelToolsService {
@@ -165,14 +165,14 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 
 		this._ctxToolsCount = ChatContextKeys.Tools.toolsCount.bindTo(_contextKeyService);
 
-		// Create the internal VS Code tool set
+		// Create the internal Code Engine tool set
 		this.vscodeToolSet = this._register(this.createToolSet(
 			ToolDataSource.Internal,
 			'vscode',
-			VSCodeToolReference.vscode,
+			CodeEngineToolReference.vscode,
 			{
 				icon: ThemeIcon.fromId(Codicon.vscode.id),
-				description: localize('copilot.toolSet.vscode.description', 'Use VS Code features'),
+				description: localize('copilot.toolSet.vscode.description', 'Use Code Engine features'),
 			}
 		));
 
@@ -1324,7 +1324,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 				yield 'shell'; // legacy alias
 				break;
 			case SpecedToolAliases.agent: // 'agent'
-				yield VSCodeToolReference.runSubagent; // prefer the tool set over th old tool name
+				yield CodeEngineToolReference.runSubagent; // prefer the tool set over th old tool name
 				yield 'custom-agent'; // legacy alias
 				break;
 		}
@@ -1332,7 +1332,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 
 	private * getToolAliases(toolSet: IToolData, fullReferenceName: string): Iterable<string> {
 		const referenceName = toolSet.toolReferenceName ?? toolSet.displayName;
-		if (fullReferenceName !== referenceName && referenceName !== VSCodeToolReference.runSubagent) {
+		if (fullReferenceName !== referenceName && referenceName !== CodeEngineToolReference.runSubagent) {
 			yield referenceName; // simple name, without toolset name
 		}
 		if (toolSet.legacyToolReferenceFullNames) {

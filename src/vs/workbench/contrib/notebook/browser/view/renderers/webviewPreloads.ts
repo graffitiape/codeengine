@@ -683,7 +683,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 				deltaX: event.deltaX,
 				deltaY: event.deltaY,
 				deltaZ: event.deltaZ,
-				// Refs https://github.com/microsoft/vscode/issues/146403#issuecomment-1854538928
+				// Refs https://github.com/graffitiape/codeengine/issues/146403#issuecomment-1854538928
 				wheelDelta: event.wheelDelta && isChrome ? (event.wheelDelta / window.devicePixelRatio) : event.wheelDelta,
 				wheelDeltaX: event.wheelDeltaX && isChrome ? (event.wheelDeltaX / window.devicePixelRatio) : event.wheelDeltaX,
 				wheelDeltaY: event.wheelDeltaY && isChrome ? (event.wheelDeltaY / window.devicePixelRatio) : event.wheelDeltaY,
@@ -2469,7 +2469,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 				return;
 			}
 			const trustedHtml = ttPolicy?.createHTML(html) ?? html;
-			el.innerHTML = trustedHtml as string; // CodeQL [SM03712] The rendered content comes from VS Code's tokenizer and is considered safe
+			el.innerHTML = trustedHtml as string; // CodeQL [SM03712] The rendered content comes from Code Engine's tokenizer and is considered safe
 			const root = el.getRootNode();
 			if (root instanceof ShadowRoot) {
 				if (!root.adoptedStyleSheets.includes(tokenizationStyle)) {

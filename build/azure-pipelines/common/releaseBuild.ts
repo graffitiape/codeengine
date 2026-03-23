@@ -43,7 +43,7 @@ async function getConfig(client: CosmosClient, quality: string): Promise<Config>
 
 async function main(force: boolean): Promise<void> {
 	const commit = getEnv('BUILD_SOURCEVERSION');
-	const quality = getEnv('VSCODE_QUALITY');
+	const quality = getEnv('CODEENGINE_QUALITY');
 
 	// Check Copilot Chat compatibility before releasing insider builds
 	if (quality === 'insider') {

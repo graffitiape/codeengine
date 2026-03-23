@@ -57,10 +57,10 @@ class CustomVariableResolver extends AbstractVariableResolverService {
 				return resolvedVariables[`config:${section}`];
 			},
 			getExecPath: (): string | undefined => {
-				return env['VSCODE_EXEC_PATH'];
+				return env['CODEENGINE_EXEC_PATH'];
 			},
 			getAppRoot: (): string | undefined => {
-				return env['VSCODE_CWD'];
+				return env['CODEENGINE_CWD'];
 			},
 			getFilePath: (): string | undefined => {
 				if (activeFileResource) {
@@ -260,7 +260,7 @@ export class RemoteTerminalChannel extends Disposable implements IServerChannel<
 
 		// Setup the CLI server to support forwarding commands run from the CLI
 		const ipcHandlePath = createRandomIPCHandle();
-		env.VSCODE_IPC_HOOK_CLI = ipcHandlePath;
+		env.CODEENGINE_IPC_HOOK_CLI = ipcHandlePath;
 
 		const persistentProcessId = await this._ptyHostService.createProcess(shellLaunchConfig, initialCwd, args.cols, args.rows, args.unicodeVersion, env, baseEnv, args.options, args.shouldPersistTerminal, args.workspaceId, args.workspaceName);
 		const commandsExecuter: ICommandsExecuter = {

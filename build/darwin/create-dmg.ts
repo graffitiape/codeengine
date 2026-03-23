@@ -140,38 +140,38 @@ async function runDmgBuild(settingsFile: string, volumeName: string, artifactPat
 }
 
 async function main(buildDir?: string, outDir?: string): Promise<void> {
-	const arch = process.env['VSCODE_ARCH'];
-	const quality = process.env['VSCODE_QUALITY'];
+	const arch = process.env['CODEENGINE_ARCH'];
+	const quality = process.env['CODEENGINE_QUALITY'];
 
 	if (!buildDir) {
 		throw new Error('Build directory argument is required');
 	}
 
 	if (!arch) {
-		throw new Error('$VSCODE_ARCH not set');
+		throw new Error('$CODEENGINE_ARCH not set');
 	}
 
 	if (!outDir) {
 		throw new Error('Output directory argument is required');
 	}
 
-	const appRoot = path.join(buildDir, `VSCode-darwin-${arch}`);
+	const appRoot = path.join(buildDir, `CodeEngine-darwin-${arch}`);
 	const appName = product.nameLong + '.app';
 	const appPath = path.join(appRoot, appName);
-	const dmgName = `VSCode-darwin-${arch}`;
+	const dmgName = `CodeEngine-darwin-${arch}`;
 	const artifactPath = path.join(outDir, `${dmgName}.dmg`);
 	const backgroundPath = path.join(import.meta.dirname, `dmg-background-${quality}.tiff`);
 	const diskIconPath = path.join(root, 'resources', 'darwin', 'code.icns');
 	let title = 'Code OSS';
 	switch (quality) {
 		case 'stable':
-			title = 'VS Code';
+			title = 'Code Engine';
 			break;
 		case 'insider':
-			title = 'VS Code Insiders';
+			title = 'Code Engine Insiders';
 			break;
 		case 'exploration':
-			title = 'VS Code Exploration';
+			title = 'Code Engine Exploration';
 			break;
 	}
 

@@ -65,7 +65,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await instantiationService.invokeFunction(showConfigureHooksQuickPick);
 		}));
@@ -76,7 +76,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await commandService.executeCommand(OpenModelPickerAction.ID);
 		}));
@@ -87,7 +87,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await commandService.executeCommand(ConfigureToolsAction.ID);
 		}));
@@ -98,7 +98,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await commandService.executeCommand(ManagePluginsAction.ID);
 		}));
@@ -121,7 +121,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await commandService.executeCommand(OpenModePickerAction.ID);
 		}));
@@ -132,7 +132,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await commandService.executeCommand(CONFIGURE_SKILLS_ACTION_ID);
 		}));
@@ -143,7 +143,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await commandService.executeCommand(CONFIGURE_INSTRUCTIONS_ACTION_ID);
 		}));
@@ -154,7 +154,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async () => {
 			await commandService.executeCommand(CONFIGURE_PROMPTS_ACTION_ID);
 		}));
@@ -179,7 +179,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: false,
 			silent: true,
 			locations: [ChatAgentLocation.Chat],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async (prompt, _progress, _history, _location, sessionResource) => {
 			const title = prompt.trim();
 			if (title) {
@@ -264,7 +264,7 @@ export class ChatSlashCommandsContribution extends Disposable {
 			executeImmediately: true,
 			locations: [ChatAgentLocation.Chat],
 			modes: [ChatModeKind.Ask],
-			targets: [Target.VSCode]
+			targets: [Target.CodeEngine]
 		}, async (prompt, progress, _history, _location, sessionResource) => {
 			const defaultAgent = chatAgentService.getDefaultAgent(ChatAgentLocation.Chat);
 			const agents = chatAgentService.getAgents();

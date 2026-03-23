@@ -57,24 +57,24 @@ export class NodeAgentHostStarter extends Disposable implements IAgentHostStarte
 
 	start(): IAgentHostConnection {
 		const env: Record<string, string> = {
-			VSCODE_ESM_ENTRYPOINT: 'vs/platform/agentHost/node/agentHostMain',
-			VSCODE_PIPE_LOGGING: 'true',
-			VSCODE_VERBOSE_LOGGING: 'true',
+			CODEENGINE_ESM_ENTRYPOINT: 'vs/platform/agentHost/node/agentHostMain',
+			CODEENGINE_PIPE_LOGGING: 'true',
+			CODEENGINE_VERBOSE_LOGGING: 'true',
 		};
 
 		// Forward WebSocket server configuration to the child process via env vars
 		if (this._wsConfig) {
 			if (this._wsConfig.port) {
-				env['VSCODE_AGENT_HOST_PORT'] = this._wsConfig.port;
+				env['CODEENGINE_AGENT_HOST_PORT'] = this._wsConfig.port;
 			}
 			if (this._wsConfig.socketPath) {
-				env['VSCODE_AGENT_HOST_SOCKET_PATH'] = this._wsConfig.socketPath;
+				env['CODEENGINE_AGENT_HOST_SOCKET_PATH'] = this._wsConfig.socketPath;
 			}
 			if (this._wsConfig.host) {
-				env['VSCODE_AGENT_HOST_HOST'] = this._wsConfig.host;
+				env['CODEENGINE_AGENT_HOST_HOST'] = this._wsConfig.host;
 			}
 			if (this._wsConfig.connectionToken) {
-				env['VSCODE_AGENT_HOST_CONNECTION_TOKEN'] = this._wsConfig.connectionToken;
+				env['CODEENGINE_AGENT_HOST_CONNECTION_TOKEN'] = this._wsConfig.connectionToken;
 			}
 		}
 

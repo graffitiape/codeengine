@@ -7,15 +7,15 @@ import { printBanner, spawnCodesignProcess, streamProcessOutputAndCheckResult } 
 import { e } from '../common/publish.ts';
 
 async function main() {
-	const arch = e('VSCODE_ARCH');
+	const arch = e('CODEENGINE_ARCH');
 	const esrpCliDLLPath = e('EsrpCliDllPath');
 	const pipelineWorkspace = e('PIPELINE_WORKSPACE');
 	const buildSourcesDirectory = e('BUILD_SOURCESDIRECTORY');
 
 	const clientFolder = `${pipelineWorkspace}/vscode_client_darwin_${arch}_archive`;
 	const dmgFolder = `${pipelineWorkspace}/vscode_client_darwin_${arch}_dmg`;
-	const clientGlob = `VSCode-darwin-${arch}.zip`;
-	const dmgGlob = `VSCode-darwin-${arch}.dmg`;
+	const clientGlob = `CodeEngine-darwin-${arch}.zip`;
+	const dmgGlob = `CodeEngine-darwin-${arch}.dmg`;
 
 	const serverFolder = `${buildSourcesDirectory}/.build/darwin/server`;
 	const serverGlob = `vscode-server-darwin-${arch}.zip`;

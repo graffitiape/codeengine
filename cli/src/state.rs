@@ -15,7 +15,7 @@ use std::{
 use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
-	constants::{DEFAULT_DATA_PARENT_DIR, VSCODE_CLI_QUALITY},
+	constants::{DEFAULT_DATA_PARENT_DIR, CODEENGINE_CLI_QUALITY},
 	download_cache::DownloadCache,
 	util::errors::{wrap, AnyError, NoHomeForLauncherError, WrappedError},
 };
@@ -145,7 +145,7 @@ impl LauncherPaths {
 			Some(d) => d,
 		};
 
-		let old_dir = home_dir.join(".vscode-cli");
+		let old_dir = home_dir.join(".codeengine-cli");
 		let mut new_dir = home_dir;
 		new_dir.push(DEFAULT_DATA_PARENT_DIR);
 		new_dir.push("cli");
@@ -207,7 +207,7 @@ impl LauncherPaths {
 	pub fn tunnel_lockfile(&self) -> PathBuf {
 		self.root.join(format!(
 			"tunnel-{}.lock",
-			VSCODE_CLI_QUALITY.unwrap_or("oss")
+			CODEENGINE_CLI_QUALITY.unwrap_or("oss")
 		))
 	}
 
@@ -215,7 +215,7 @@ impl LauncherPaths {
 	pub fn forwarding_lockfile(&self) -> PathBuf {
 		self.root.join(format!(
 			"forwarding-{}.lock",
-			VSCODE_CLI_QUALITY.unwrap_or("oss")
+			CODEENGINE_CLI_QUALITY.unwrap_or("oss")
 		))
 	}
 

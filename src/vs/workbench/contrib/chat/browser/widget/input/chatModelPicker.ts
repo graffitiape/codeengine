@@ -45,14 +45,14 @@ function getUpdateHoverContent(updateState: StateType): MarkdownString {
 	const hoverContent = new MarkdownString('', { isTrusted: true, supportThemeIcons: true });
 	switch (updateState) {
 		case StateType.AvailableForDownload:
-			hoverContent.appendMarkdown(localize('chat.modelPicker.downloadUpdateHover', "This model requires a newer version of VS Code. [Download Update](command:update.downloadUpdate) to access it."));
+			hoverContent.appendMarkdown(localize('chat.modelPicker.downloadUpdateHover', "This model requires a newer version of Code Engine. [Download Update](command:update.downloadUpdate) to access it."));
 			break;
 		case StateType.Downloaded:
 		case StateType.Ready:
-			hoverContent.appendMarkdown(localize('chat.modelPicker.restartUpdateHover', "This model requires a newer version of VS Code. [Restart to Update](command:update.restartToUpdate) to access it."));
+			hoverContent.appendMarkdown(localize('chat.modelPicker.restartUpdateHover', "This model requires a newer version of Code Engine. [Restart to Update](command:update.restartToUpdate) to access it."));
 			break;
 		default:
-			hoverContent.appendMarkdown(localize('chat.modelPicker.checkUpdateHover', "This model requires a newer version of VS Code. [Update VS Code](command:update.checkForUpdate) to access it."));
+			hoverContent.appendMarkdown(localize('chat.modelPicker.checkUpdateHover', "This model requires a newer version of Code Engine. [Update Code Engine](command:update.checkForUpdate) to access it."));
 			break;
 	}
 	return hoverContent;
@@ -203,7 +203,7 @@ export function buildModelPickerItems(
 	selectedModelId: string | undefined,
 	recentModelIds: string[],
 	controlModels: IStringDictionary<IModelControlEntry>,
-	currentVSCodeVersion: string,
+	currentCodeEngineVersion: string,
 	updateStateType: StateType,
 	onSelect: (model: ILanguageModelChatMetadataAndIdentifier) => void,
 	manageSettingsUrl: string | undefined,
@@ -255,7 +255,7 @@ export function buildModelPickerItems(
 				if (!isBusinessOrEnterpriseUser) {
 					return 'upgrade';
 				}
-				if (entry.minVSCodeVersion && !isVersionAtLeast(currentVSCodeVersion, entry.minVSCodeVersion)) {
+				if (entry.minCodeEngineVersion && !isVersionAtLeast(currentCodeEngineVersion, entry.minCodeEngineVersion)) {
 					return 'update';
 				}
 				return 'admin';
@@ -284,7 +284,7 @@ export function buildModelPickerItems(
 				if (model && !placed.has(model.identifier)) {
 					markPlaced(model.identifier, model.metadata.id);
 					const entry = controlModels[model.metadata.id];
-					if (entry?.minVSCodeVersion && !isVersionAtLeast(currentVSCodeVersion, entry.minVSCodeVersion)) {
+					if (entry?.minCodeEngineVersion && !isVersionAtLeast(currentCodeEngineVersion, entry.minCodeEngineVersion)) {
 						promotedItems.push({ kind: 'unavailable', id: model.metadata.id, entry, reason: 'update' });
 					} else {
 						promotedItems.push({ kind: 'available', model });
@@ -320,7 +320,7 @@ export function buildModelPickerItems(
 					}
 					const model = resolveModel(entryId);
 					if (model && !placed.has(model.identifier)) {
-						if (entry.minVSCodeVersion && !isVersionAtLeast(currentVSCodeVersion, entry.minVSCodeVersion)) {
+						if (entry.minCodeEngineVersion && !isVersionAtLeast(currentCodeEngineVersion, entry.minCodeEngineVersion)) {
 							if (showUnavailableFeatured) {
 								markPlaced(model.identifier, model.metadata.id);
 								promotedItems.push({ kind: 'unavailable', id: entryId, entry, reason: 'update' });
@@ -366,8 +366,8 @@ export function buildModelPickerItems(
 				.sort((a, b) => {
 					const aEntry = controlModels[a.metadata.id] ?? controlModels[a.identifier];
 					const bEntry = controlModels[b.metadata.id] ?? controlModels[b.identifier];
-					const aAvail = aEntry?.minVSCodeVersion && !isVersionAtLeast(currentVSCodeVersion, aEntry.minVSCodeVersion) ? 1 : 0;
-					const bAvail = bEntry?.minVSCodeVersion && !isVersionAtLeast(currentVSCodeVersion, bEntry.minVSCodeVersion) ? 1 : 0;
+					const aAvail = aEntry?.minCodeEngineVersion && !isVersionAtLeast(currentCodeEngineVersion, aEntry.minCodeEngineVersion) ? 1 : 0;
+					const bAvail = bEntry?.minCodeEngineVersion && !isVersionAtLeast(currentCodeEngineVersion, bEntry.minCodeEngineVersion) ? 1 : 0;
 					if (aAvail !== bAvail) {
 						return aAvail - bAvail;
 					}
@@ -403,7 +403,7 @@ export function buildModelPickerItems(
 				});
 				for (const model of otherModels) {
 					const entry = controlModels[model.metadata.id] ?? controlModels[model.identifier];
-					if (entry?.minVSCodeVersion && !isVersionAtLeast(currentVSCodeVersion, entry.minVSCodeVersion)) {
+					if (entry?.minCodeEngineVersion && !isVersionAtLeast(currentCodeEngineVersion, entry.minCodeEngineVersion)) {
 						items.push(createUnavailableModelItem(model.metadata.id, entry, 'update', manageSettingsUrl, updateStateType, ModelPickerSection.Other, hoverPosition));
 					} else {
 						items.push(createModelItem(createModelAction(model, selectedModelId, onSelect, languageModelsService!, ModelPickerSection.Other), model, hoverPosition, languageModelsService));
@@ -474,7 +474,7 @@ function createUnavailableModelItem(
 	if (reason === 'upgrade') {
 		description = new MarkdownString(localize('chat.modelPicker.upgradeLink', "[Upgrade](command:workbench.action.chat.upgradePlan \" \")"), { isTrusted: true });
 	} else if (reason === 'update') {
-		description = localize('chat.modelPicker.updateDescription', "Update VS Code");
+		description = localize('chat.modelPicker.updateDescription', "Update Code Engine");
 	} else {
 		description = manageSettingsUrl
 			? new MarkdownString(localize('chat.modelPicker.adminLink', "[Contact your admin]({0})", manageSettingsUrl), { isTrusted: true })

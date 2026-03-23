@@ -3,9 +3,9 @@
 set -e
 
 TRIPLE="x86_64-linux-gnu"
-if [ "$VSCODE_ARCH" == "arm64" ]; then
+if [ "$CODEENGINE_ARCH" == "arm64" ]; then
   TRIPLE="aarch64-linux-gnu"
-elif [ "$VSCODE_ARCH" == "armhf" ]; then
+elif [ "$CODEENGINE_ARCH" == "armhf" ]; then
   TRIPLE="arm-rpi-linux-gnueabihf"
 fi
 
@@ -31,7 +31,7 @@ for file in $files; do
         glibcxx_version=$version
       fi
     fi
-  done < <("$VSCODE_SYSROOT_DIR/$TRIPLE/$TRIPLE/bin/objdump" -T "$file")
+  done < <("$CODEENGINE_SYSROOT_DIR/$TRIPLE/$TRIPLE/bin/objdump" -T "$file")
 
   if [[ "$glibc_version" != "$EXPECTED_GLIBC_VERSION" ]]; then
     echo "Error: File $file has dependency on GLIBC > $EXPECTED_GLIBC_VERSION, found $glibc_version"

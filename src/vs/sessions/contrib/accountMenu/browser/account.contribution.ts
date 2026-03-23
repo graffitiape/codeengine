@@ -197,14 +197,14 @@ export class AccountWidget extends ActionViewItem {
 		const state = this.updateService.state;
 
 		// In the embedded app, updates are detected but cannot be installed directly.
-		// Show a hint button to update via VS Code only when an update is actually available.
+		// Show a hint button to update via Code Engine only when an update is actually available.
 		if (state.type === StateType.AvailableForDownload && state.canInstall === false) {
 			this.updateButton.element.classList.remove('hidden');
 			this.updateButton.element.classList.remove('account-widget-update-button-ready');
 			this.updateButton.element.classList.add('account-widget-update-button-hint');
 			this.updateButton.enabled = true;
 			this.updateButton.label = localize('updateAvailable', "Update Available");
-			this.updateButton.element.title = localize('updateInVSCodeHover', "Updates are managed by VS Code. Click to open VS Code.");
+			this.updateButton.element.title = localize('updateInCodeEngineHover', "Updates are managed by Code Engine. Click to open Code Engine.");
 			return;
 		}
 
@@ -262,12 +262,12 @@ export class AccountWidget extends ActionViewItem {
 		const state = this.updateService.state;
 		if (state.type === StateType.AvailableForDownload && state.canInstall === false) {
 			const { confirmed } = await this.dialogService.confirm({
-				message: localize('updateFromVSCode.title', "Update from VS Code"),
-				detail: localize('updateFromVSCode.detail', "This will close the Sessions app and open VS Code so you can install the update.\n\nLaunch Sessions again after the update is complete."),
-				primaryButton: localize('updateFromVSCode.open', "Close and Open VS Code"),
+				message: localize('updateFromCodeEngine.title', "Update from Code Engine"),
+				detail: localize('updateFromCodeEngine.detail', "This will close the Sessions app and open Code Engine so you can install the update.\n\nLaunch Sessions again after the update is complete."),
+				primaryButton: localize('updateFromCodeEngine.open', "Close and Open Code Engine"),
 			});
 			if (confirmed) {
-				await this.openVSCode();
+				await this.openCodeEngine();
 				await this.hostService.close();
 			}
 			return;
@@ -275,7 +275,7 @@ export class AccountWidget extends ActionViewItem {
 		await this.updateService.quitAndInstall();
 	}
 
-	private async openVSCode(): Promise<void> {
+	private async openCodeEngine(): Promise<void> {
 		await this.openerService.open(URI.from({
 			scheme: this.productService.urlProtocol,
 			query: 'windowId=_blank',

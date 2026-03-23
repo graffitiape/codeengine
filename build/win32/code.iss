@@ -8,14 +8,14 @@
 AppId={#AppId}
 AppName={#NameLong}
 AppVerName={#NameVersion}
-AppPublisher=Microsoft Corporation
-AppPublisherURL=https://code.visualstudio.com/
-AppSupportURL=https://code.visualstudio.com/
-AppUpdatesURL=https://code.visualstudio.com/
+AppPublisher=Graffiti Ape
+AppPublisherURL=https://github.com/graffitiape/codeengine
+AppSupportURL=https://github.com/graffitiape/codeengine
+AppUpdatesURL=https://github.com/graffitiape/codeengine
 DefaultGroupName={#NameLong}
 AllowNoIcons=yes
 OutputDir={#OutputDir}
-OutputBaseFilename=VSCodeSetup
+OutputBaseFilename=CodeEngineSetup
 Compression=lzma
 SolidCompression=yes
 AppMutex={code:GetAppMutex}
@@ -36,8 +36,8 @@ ArchitecturesInstallIn64BitMode={#ArchitecturesInstallIn64BitMode}
 WizardStyle=modern
 
 // We've seen an uptick on broken installations from updates which were unable
-// to shutdown VS Code. We rely on the fact that the update signals
-// that VS Code is ready to be shutdown, so we're good to use `force` here.
+// to shutdown Code Engine. We rely on the fact that the update signals
+// that Code Engine is ready to be shutdown, so we're good to use `force` here.
 CloseApplications=force
 
 #ifdef Sign
@@ -1349,7 +1349,7 @@ begin
 
   #if "user" == InstallTarget
     if not WizardSilent() and IsAdmin() then begin
-      if MsgBox('This User Installer is not meant to be run as an Administrator. If you would like to install VS Code for all users in this system, download the System Installer instead from https://code.visualstudio.com. Are you sure you want to continue?', mbError, MB_OKCANCEL) = IDCANCEL then begin
+      if MsgBox('This User Installer is not meant to be run as an Administrator. If you would like to install Code Engine for all users in this system, download the System Installer instead from https://github.com/graffitiape/codeengine. Are you sure you want to continue?', mbError, MB_OKCANCEL) = IDCANCEL then begin
         Result := False;
       end;
     end;
@@ -1480,7 +1480,7 @@ begin
   	Result := '';
 end;
 
-// VS Code will create a flag file before the update starts (/update=C:\foo\bar)
+// Code Engine will create a flag file before the update starts (/update=C:\foo\bar)
 // - if the file exists at this point, the user quit Code before the update finished, so don't start Code after update
 // - otherwise, the user has accepted to apply the update and Code should start
 function LockFileExists(): Boolean;
@@ -1488,7 +1488,7 @@ begin
   Result := FileExists(ExpandConstant('{param:update}'))
 end;
 
-// Check if VS Code created a session-end flag file to indicate OS is shutting down
+// Check if Code Engine created a session-end flag file to indicate OS is shutting down
 // This prevents calling inno_updater.exe during system shutdown
 function SessionEndFileExists(): Boolean;
 begin
@@ -1500,7 +1500,7 @@ begin
   Result := not (IsBackgroundUpdate() and FileExists(Path));
 end;
 
-// Check if VS Code created a cancel file to signal that the update should be aborted
+// Check if Code Engine created a cancel file to signal that the update should be aborted
 function CancelFileExists(): Boolean;
 begin
   Result := FileExists(ExpandConstant('{param:cancel}'))
@@ -1609,7 +1609,7 @@ end;
 function GetSetupMutex(Value: string): string;
 begin
   // Always create the base setup mutex to prevent multiple installers running.
-  // During background updates, also create a -updating mutex that VS Code checks
+  // During background updates, also create a -updating mutex that Code Engine checks
   // to avoid launching while an update is in progress.
   if IsBackgroundUpdate() then
     Result := '{#AppMutex}setup,{#AppMutex}-updating'
@@ -1743,7 +1743,7 @@ var
 begin
   // Remove the old context menu package
   // Following condition can be removed in v1.111.
-  if QualityIsInsiders() and not SessionEndFileExists() and AppxPackageInstalled('Microsoft.VSCodeInsiders', RemoveAppxPackageResultCode) then begin
+  if QualityIsInsiders() and not SessionEndFileExists() and AppxPackageInstalled('Microsoft.CodeEngineInsiders', RemoveAppxPackageResultCode) then begin
     Log('Deleting old appx ' + AppxPackageFullname + ' installation...');
     ShellExec('', 'powershell.exe', '-NoLogo -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -Command ' + AddQuotes('Remove-AppxPackage -Package ''' + AppxPackageFullname + ''''), '', SW_HIDE, ewWaitUntilTerminated, RemoveAppxPackageResultCode);
     Log('Remove-AppxPackage for old appx completed with result code ' + IntToStr(RemoveAppxPackageResultCode) + '.');
@@ -1860,7 +1860,7 @@ begin
   until Length(Text)=0;
 end;
 
-function NeedsAddToPath(VSCode: string): boolean;
+function NeedsAddToPath(CodeEngine: string): boolean;
 var
   OrigPath: string;
 begin
@@ -1869,25 +1869,25 @@ begin
     Result := True;
     exit;
   end;
-  Result := Pos(';' + VSCode + ';', ';' + OrigPath + ';') = 0;
+  Result := Pos(';' + CodeEngine + ';', ';' + OrigPath + ';') = 0;
 end;
 
-function AddToPath(VSCode: string): string;
+function AddToPath(CodeEngine: string): string;
 var
   OrigPath: string;
 begin
   RegQueryStringValue({#EnvironmentRootKey}, '{#EnvironmentKey}', 'Path', OrigPath)
 
   if (Length(OrigPath) > 0) and (OrigPath[Length(OrigPath)] = ';') then
-    Result := OrigPath + VSCode
+    Result := OrigPath + CodeEngine
   else
-    Result := OrigPath + ';' + VSCode
+    Result := OrigPath + ';' + CodeEngine
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
   Path: string;
-  VSCodePath: string;
+  CodeEnginePath: string;
   Parts: TArrayOfString;
   NewPath: string;
   i: Integer;
@@ -1904,10 +1904,10 @@ begin
     exit;
   end;
   NewPath := '';
-  VSCodePath := ExpandConstant('{app}\bin')
+  CodeEnginePath := ExpandConstant('{app}\bin')
   Explode(Parts, Path, ';');
   for i:=0 to GetArrayLength(Parts)-1 do begin
-    if CompareText(Parts[i], VSCodePath) <> 0 then begin
+    if CompareText(Parts[i], CodeEnginePath) <> 0 then begin
       NewPath := NewPath + Parts[i];
 
       if i < GetArrayLength(Parts) - 1 then begin

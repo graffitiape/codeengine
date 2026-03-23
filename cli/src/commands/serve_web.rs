@@ -20,7 +20,7 @@ use tokio::{pin, time};
 use crate::async_pipe::{
 	get_socket_name, get_socket_rw_stream, listen_socket_rw_stream, AsyncPipe,
 };
-use crate::constants::VSCODE_CLI_QUALITY;
+use crate::constants::CODEENGINE_CLI_QUALITY;
 use crate::download_cache::DownloadCache;
 use crate::log;
 use crate::options::Quality;
@@ -43,7 +43,7 @@ use super::{args::ServeWebArgs, CommandContext};
 
 /// Length of a commit hash, for validation
 const COMMIT_HASH_LEN: usize = 40;
-/// Number of seconds where, if there's no connections to a VS Code server,
+/// Number of seconds where, if there's no connections to a Code Engine server,
 /// the server is shut down.
 const SERVER_IDLE_TIMEOUT_SECS: u64 = 60 * 60;
 /// Number of seconds in which the server times out when there is a connection
@@ -55,17 +55,17 @@ const RELEASE_CHECK_INTERVAL: u64 = 60 * 60;
 /// Number of bytes for the secret keys. See workbench.ts for their usage.
 const SECRET_KEY_BYTES: usize = 32;
 /// Path to mint the key combining server and client parts.
-const SECRET_KEY_MINT_PATH: &str = "_vscode-cli/mint-key";
+const SECRET_KEY_MINT_PATH: &str = "_codeengine-cli/mint-key";
 /// Cookie set to the `SECRET_KEY_MINT_PATH`
-const PATH_COOKIE_NAME: &str = "vscode-secret-key-path";
+const PATH_COOKIE_NAME: &str = "codeengine-secret-key-path";
 /// HTTP-only cookie where the client's secret half is stored.
-const SECRET_KEY_COOKIE_NAME: &str = "vscode-cli-secret-half";
+const SECRET_KEY_COOKIE_NAME: &str = "codeengine-cli-secret-half";
 
-/// Implements the vscode "server of servers". Clients who go to the URI get
-/// served the latest version of the VS Code server whenever they load the
-/// page. The VS Code server prefixes all assets and connections it loads with
+/// Implements the codeengine "server of servers". Clients who go to the URI get
+/// served the latest version of the Code Engine server whenever they load the
+/// page. The Code Engine server prefixes all assets and connections it loads with
 /// its version string, so existing clients can continue to get served even
-/// while new clients get new VS Code Server versions.
+/// while new clients get new Code Engine Server versions.
 pub async fn serve_web(ctx: CommandContext, mut args: ServeWebArgs) -> Result<i32, AnyError> {
 	legal::require_consent(&ctx.paths, args.accept_server_license_terms)?;
 
@@ -249,7 +249,7 @@ fn append_secret_headers(
 	);
 }
 
-/// Gets the release info from the VS Code path prefix, which is in the
+/// Gets the release info from the Code Engine path prefix, which is in the
 /// format `/<quality>-<commit>/...`
 fn get_release_from_path(path: &str, platform: Platform) -> Option<(Release, String)> {
 	if !path.starts_with('/') {
@@ -553,7 +553,7 @@ impl ConnectionManager {
 		let cache = DownloadCache::new(ctx.paths.web_server_storage());
 		let target_kind = TargetKind::Web;
 
-		let quality = VSCODE_CLI_QUALITY.map_or(Quality::Stable, |q| match Quality::try_from(q) {
+		let quality = CODEENGINE_CLI_QUALITY.map_or(Quality::Stable, |q| match Quality::try_from(q) {
 			Ok(q) => q,
 			Err(_) => Quality::Stable,
 		});
@@ -633,7 +633,7 @@ impl ConnectionManager {
 		let now = Instant::now();
 		let target_kind = TargetKind::Web;
 
-		let quality = VSCODE_CLI_QUALITY
+		let quality = CODEENGINE_CLI_QUALITY
 			.ok_or_else(|| CodeError::UpdatesNotConfigured("no configured quality"))
 			.and_then(|q| {
 				Quality::try_from(q).map_err(|_| CodeError::UpdatesNotConfigured("unknown quality"))
@@ -675,7 +675,7 @@ impl ConnectionManager {
 		Ok(release)
 	}
 
-	/// Gets the StartData for the a version of the VS Code server, triggering
+	/// Gets the StartData for the a version of the Code Engine server, triggering
 	/// download/start if necessary. It returns `CodeError::ServerNotYetDownloaded`
 	/// while the server is downloading, which is used to have a refresh loop on the page.
 	async fn get_version_data(&self, release: Release) -> Result<StartData, CodeError> {
@@ -815,7 +815,7 @@ impl ConnectionManager {
 		}
 
 		// removed, otherwise the workbench will not be usable when running the CLI from sources.
-		cmd.env_remove("VSCODE_DEV");
+		cmd.env_remove("CODEENGINE_DEV");
 
 		let mut child = match cmd.spawn() {
 			Ok(c) => c,

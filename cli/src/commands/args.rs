@@ -42,11 +42,11 @@ const INTEGRATED_TEMPLATE: &str = concatcp!(
 {all-args}"
 );
 
-const COMMIT_IN_VERSION: &str = match constants::VSCODE_CLI_COMMIT {
+const COMMIT_IN_VERSION: &str = match constants::CODEENGINE_CLI_COMMIT {
 	Some(c) => c,
 	None => "unknown",
 };
-const NUMBER_IN_VERSION: &str = match constants::VSCODE_CLI_VERSION {
+const NUMBER_IN_VERSION: &str = match constants::CODEENGINE_CLI_VERSION {
 	Some(c) => c,
 	None => "dev",
 };
@@ -164,7 +164,7 @@ pub struct StandaloneUpdateArgs {
 #[derive(Subcommand, Debug, Clone)]
 
 pub enum Commands {
-	/// Create a tunnel that's accessible on vscode.dev from anywhere.
+	/// Create a tunnel that's accessible on codeengine.dev from anywhere.
 	/// Run `code tunnel --help` for more usage info.
 	Tunnel(TunnelArgs),
 
@@ -178,7 +178,7 @@ pub enum Commands {
 	/// Changes the version of the editor you're using.
 	Version(VersionArgs),
 
-	/// Runs a local web version of VS Code.
+	/// Runs a local web version of Code Engine.
 	#[clap(about = concatcp!("Runs a local web version of ", constants::PRODUCT_NAME_LONG))]
 	ServeWeb(ServeWebArgs),
 
@@ -265,7 +265,7 @@ pub struct CommandShellArgs {
 	#[clap[long]]
 	pub on_host: Option<String>,
 	/// Require the given token string to be given in the handshake.
-	#[clap(long, env = "VSCODE_CLI_REQUIRE_TOKEN")]
+	#[clap(long, env = "CODEENGINE_CLI_REQUIRE_TOKEN")]
 	pub require_token: Option<String>,
 	/// Optional parent process id. If provided, the server will be stopped when the process of the given pid no longer exists
 	#[clap(long, hide = true)]
@@ -524,7 +524,7 @@ impl DesktopCodeOptions {
 #[derive(Args, Debug, Default, Clone)]
 pub struct GlobalOptions {
 	/// Directory where CLI metadata should be stored.
-	#[clap(long, env = "VSCODE_CLI_DATA_DIR", global = true)]
+	#[clap(long, env = "CODEENGINE_CLI_DATA_DIR", global = true)]
 	pub cli_data_dir: Option<String>,
 
 	/// Print verbose output (implies --wait).
@@ -839,11 +839,11 @@ pub enum TunnelUserSubCommands {
 #[derive(Args, Debug, Clone)]
 pub struct LoginArgs {
 	/// An access token to store for authentication.
-	#[clap(long, requires = "provider", env = "VSCODE_CLI_ACCESS_TOKEN")]
+	#[clap(long, requires = "provider", env = "CODEENGINE_CLI_ACCESS_TOKEN")]
 	pub access_token: Option<String>,
 
 	/// An access token to store for authentication.
-	#[clap(long, requires = "access_token", env = "VSCODE_CLI_REFRESH_TOKEN")]
+	#[clap(long, requires = "access_token", env = "CODEENGINE_CLI_REFRESH_TOKEN")]
 	pub refresh_token: Option<String>,
 
 	/// The auth provider to use. If not provided, a prompt will be shown.

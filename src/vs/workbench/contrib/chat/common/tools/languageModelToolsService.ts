@@ -620,7 +620,7 @@ export namespace SpecedToolAliases {
 	export const todo = 'todo';
 }
 
-export namespace VSCodeToolReference {
+export namespace CodeEngineToolReference {
 	export const runSubagent = 'runSubagent';
 	export const vscode = 'vscode';
 

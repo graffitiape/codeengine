@@ -923,7 +923,7 @@ class RenameAdapter {
 
 class NewSymbolNamesAdapter {
 
-	private static languageTriggerKindToVSCodeTriggerKind: Record<languages.NewSymbolNameTriggerKind, vscode.NewSymbolNameTriggerKind> = {
+	private static languageTriggerKindToCodeEngineTriggerKind: Record<languages.NewSymbolNameTriggerKind, vscode.NewSymbolNameTriggerKind> = {
 		[languages.NewSymbolNameTriggerKind.Invoke]: NewSymbolNameTriggerKind.Invoke,
 		[languages.NewSymbolNameTriggerKind.Automatic]: NewSymbolNameTriggerKind.Automatic,
 	};
@@ -944,7 +944,7 @@ class NewSymbolNamesAdapter {
 		const pos = typeConvert.Range.to(range);
 
 		try {
-			const kind = NewSymbolNamesAdapter.languageTriggerKindToVSCodeTriggerKind[triggerKind];
+			const kind = NewSymbolNamesAdapter.languageTriggerKindToCodeEngineTriggerKind[triggerKind];
 			const value = await this._provider.provideNewSymbolNames(doc, pos, kind, token);
 			if (!value) {
 				return undefined;
@@ -1170,7 +1170,7 @@ class CompletionsAdapter {
 
 		// The default insert/replace ranges. It's important to compute them
 		// before asynchronously asking the provider for its results. See
-		// https://github.com/microsoft/vscode/issues/83400#issuecomment-546851421
+		// https://github.com/graffitiape/codeengine/issues/83400#issuecomment-546851421
 		const replaceRange = doc.getWordRangeAtPosition(pos) || new Range(pos, pos);
 		const insertRange = replaceRange.with({ end: pos });
 
@@ -1373,7 +1373,7 @@ class InlineCompletionAdapter {
 			&& typeof this._provider.setProviderOptionValue === 'function';
 	}
 
-	private readonly languageTriggerKindToVSCodeTriggerKind: Record<languages.InlineCompletionTriggerKind, InlineCompletionTriggerKind> = {
+	private readonly languageTriggerKindToCodeEngineTriggerKind: Record<languages.InlineCompletionTriggerKind, InlineCompletionTriggerKind> = {
 		[languages.InlineCompletionTriggerKind.Automatic]: InlineCompletionTriggerKind.Automatic,
 		[languages.InlineCompletionTriggerKind.Explicit]: InlineCompletionTriggerKind.Invoke,
 	};
@@ -1426,7 +1426,7 @@ class InlineCompletionAdapter {
 						text: context.selectedSuggestionInfo.text
 					}
 					: undefined,
-			triggerKind: this.languageTriggerKindToVSCodeTriggerKind[context.triggerKind],
+			triggerKind: this.languageTriggerKindToCodeEngineTriggerKind[context.triggerKind],
 			requestUuid: context.requestUuid,
 			requestIssuedDateTime: context.requestIssuedDateTime,
 			earliestShownDateTime: context.earliestShownDateTime,

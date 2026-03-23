@@ -1,6 +1,6 @@
 ---
 name: unit-tests
-description: Use when running unit tests in the VS Code repo. Covers the runTests tool, scripts/test.sh (macOS/Linux) and scripts/test.bat (Windows), and their supported arguments for filtering, globbing, and debugging tests.
+description: Use when running unit tests in the Code Engine repo. Covers the runTests tool, scripts/test.sh (macOS/Linux) and scripts/test.bat (Windows), and their supported arguments for filtering, globbing, and debugging tests.
 ---
 
 # Running Unit Tests
@@ -84,4 +84,4 @@ Integration tests (files ending in `.integrationTest.ts` or located in `extensio
 
 ### Compilation requirement
 
-Tests run against compiled JavaScript output. Ensure the `VS Code - Build` watch task is running or that compilation has completed before running tests. Test failures caused by stale output are a common pitfall.
+Tests run against compiled JavaScript output. Ensure the `Code Engine - Build` watch task is running or that compilation has completed before running tests. Test failures caused by stale output are a common pitfall.

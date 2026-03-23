@@ -24,7 +24,7 @@ function getEnv(name: string): string {
 
 async function main(): Promise<void> {
 	const [, , _version] = process.argv;
-	const quality = getEnv('VSCODE_QUALITY');
+	const quality = getEnv('CODEENGINE_QUALITY');
 	const commit = getEnv('BUILD_SOURCEVERSION');
 	const queuedBy = getEnv('BUILD_QUEUEDBY');
 	const sourceBranch = getEnv('BUILD_SOURCEBRANCH');
@@ -41,7 +41,7 @@ async function main(): Promise<void> {
 		timestamp,
 		version,
 		isReleased: false,
-		private: process.env['VSCODE_PRIVATE_BUILD']?.toLowerCase() === 'true',
+		private: process.env['CODEENGINE_PRIVATE_BUILD']?.toLowerCase() === 'true',
 		sourceBranch,
 		queuedBy,
 		assets: [],

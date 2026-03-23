@@ -24,7 +24,7 @@ import { TextDirection } from '../../../common/model.js';
 
 const canUseFastRenderedViewLine = (function () {
 	if (platform.isNative) {
-		// In VSCode we know very well when the zoom level changes
+		// In CodeEngine we know very well when the zoom level changes
 		return true;
 	}
 
@@ -345,7 +345,7 @@ const enum Constants {
 	 * method is only viable for short lines. For longer lines, we look up the real position of
 	 * every 300th character and use multiplication based on that.
 	 *
-	 * See https://github.com/microsoft/vscode/issues/33178
+	 * See https://github.com/graffitiape/codeengine/issues/33178
 	 */
 	MaxMonospaceDistance = 300
 }

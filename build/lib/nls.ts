@@ -68,7 +68,7 @@ export function nls(options: { preserveEnglish: boolean }): NodeJS.ReadWriteStre
 					contents: Buffer.from(`/*---------------------------------------------------------
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
-globalThis._VSCODE_NLS_MESSAGES=${JSON.stringify(_nls.allNLSMessages)};`),
+globalThis._CODEENGINE_NLS_MESSAGES=${JSON.stringify(_nls.allNLSMessages)};`),
 					base,
 					path: `${base}/nls.messages.js`
 				})

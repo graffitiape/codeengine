@@ -518,16 +518,16 @@ export class MainThreadAuthentication extends Disposable implements MainThreadAu
 	// Remove this in a few iterations.
 	private _sentClientIdUsageEvents = new Set<string>();
 	private sendClientIdUsageTelemetry(extensionId: string, providerId: string, scopes: readonly string[]): void {
-		const containsVSCodeClientIdScope = scopes.some(scope => scope.startsWith('VSCODE_CLIENT_ID:'));
-		const key = `${extensionId}|${providerId}|${containsVSCodeClientIdScope}`;
+		const containsCodeEngineClientIdScope = scopes.some(scope => scope.startsWith('CODEENGINE_CLIENT_ID:'));
+		const key = `${extensionId}|${providerId}|${containsCodeEngineClientIdScope}`;
 		if (this._sentClientIdUsageEvents.has(key)) {
 			return;
 		}
 		this._sentClientIdUsageEvents.add(key);
-		if (containsVSCodeClientIdScope) {
+		if (containsCodeEngineClientIdScope) {
 			type ClientIdUsageClassification = {
 				owner: 'TylerLeonhardt';
-				comment: 'Used to see which extensions are using the VSCode client id override';
+				comment: 'Used to see which extensions are using the CodeEngine client id override';
 				extensionId: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'The extension id.' };
 			};
 			this.telemetryService.publicLog2<{ extensionId: string }, ClientIdUsageClassification>('authentication.clientIdUsage', { extensionId });

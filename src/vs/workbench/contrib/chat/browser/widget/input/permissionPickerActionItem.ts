@@ -23,7 +23,7 @@ import Severity from '../../../../../../base/common/severity.js';
 import { MarkdownString } from '../../../../../../base/common/htmlContent.js';
 import { ChatInputPickerActionViewItem, IChatInputPickerOptions } from './chatInputPickerActionItem.js';
 
-// Track whether warnings have been shown this VS Code session
+// Track whether warnings have been shown this Code Engine session
 const shownWarnings = new Set<ChatPermissionLevel>();
 
 function hasShownElevatedWarning(level: ChatPermissionLevel): boolean {

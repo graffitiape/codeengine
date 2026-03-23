@@ -47,7 +47,7 @@ export async function getResolvedShellEnv(configurationService: IConfigurationSe
 
 	// Skip if running from CLI already
 	else if (isLaunchedFromCli(env) && !args['force-user-env']) {
-		logService.trace('resolveShellEnv(): skipped (VSCODE_CLI is set)');
+		logService.trace('resolveShellEnv(): skipped (CODEENGINE_CLI is set)');
 
 		return {};
 	}
@@ -113,7 +113,7 @@ async function doResolveUnixShellEnv(logService: ILogService, token: Cancellatio
 		...process.env,
 		ELECTRON_RUN_AS_NODE: '1',
 		ELECTRON_NO_ATTACH_CONSOLE: '1',
-		VSCODE_RESOLVING_ENVIRONMENT: '1'
+		CODEENGINE_RESOLVING_ENVIRONMENT: '1'
 	};
 
 	logService.trace('getUnixShellEnvironment#env', env);
@@ -206,9 +206,9 @@ async function doResolveUnixShellEnv(logService: ILogService, token: Cancellatio
 					delete env['ELECTRON_NO_ATTACH_CONSOLE'];
 				}
 
-				delete env['VSCODE_RESOLVING_ENVIRONMENT'];
+				delete env['CODEENGINE_RESOLVING_ENVIRONMENT'];
 
-				// https://github.com/microsoft/vscode/issues/22593#issuecomment-336050758
+				// https://github.com/graffitiape/codeengine/issues/22593#issuecomment-336050758
 				delete env['XDG_RUNTIME_DIR'];
 
 				logService.trace('getUnixShellEnvironment#result', env);

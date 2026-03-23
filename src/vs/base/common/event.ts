@@ -26,7 +26,7 @@ const _enableDisposeWithListenerWarning = false
 
 // -----------------------------------------------------------------------------------------------------------------------
 // Uncomment the next line to print warnings whenever a snapshotted event is used repeatedly without cleanup.
-// See https://github.com/microsoft/vscode/issues/142851
+// See https://github.com/graffitiape/codeengine/issues/142851
 // -----------------------------------------------------------------------------------------------------------------------
 const _enableSnapshotPotentialLeakWarning = false
 	// || Boolean("TRUE") // causes a linter warning so that it cannot be pushed
@@ -37,7 +37,7 @@ const _bufferLeakWarnCountThreshold = 100;
 const _bufferLeakWarnTimeThreshold = 60_000; // 1 minute
 
 function _isBufferLeakWarningEnabled(): boolean {
-	return !!env['VSCODE_DEV'];
+	return !!env['CODEENGINE_DEV'];
 }
 
 /**

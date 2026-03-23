@@ -24,7 +24,7 @@ namespace SchemaAssociationNotification {
 	export const type: NotificationType<ISchemaAssociations | SchemaConfiguration[]> = new NotificationType('json/schemaAssociations');
 }
 
-namespace VSCodeContentRequest {
+namespace CodeEngineContentRequest {
 	export const type: RequestType<string, string, any> = new RequestType('vscode/content');
 }
 
@@ -104,7 +104,7 @@ export function startServer(connection: Connection, runtime: RuntimeEnvironment)
 			if (builtInHandler) {
 				return builtInHandler.getContent(uri);
 			}
-			return connection.sendRequest(VSCodeContentRequest.type, uri).then(responseText => {
+			return connection.sendRequest(CodeEngineContentRequest.type, uri).then(responseText => {
 				return responseText;
 			}, (error: ResponseError<any>) => {
 				return Promise.reject(error);
@@ -412,7 +412,7 @@ export function startServer(connection: Connection, runtime: RuntimeEnvironment)
 	}
 
 	connection.onDidChangeWatchedFiles((change) => {
-		// Monitored files have changed in VSCode
+		// Monitored files have changed in CodeEngine
 		let hasChanges = false;
 		for (const c of change.changes) {
 			if (languageService.resetSchema(c.uri)) {

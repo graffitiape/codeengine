@@ -269,7 +269,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 	/**
 	 * We maintain a map containing both the path and the canonical path of the
 	 * workspace folders. We are doing this as `git.exe` expands the symbolic links
-	 * while there are scenarios in which VS Code does not.
+	 * while there are scenarios in which Code Engine does not.
 	 *
 	 * Key   - path of the workspace folder
 	 * Value - canonical path of the workspace folder
@@ -712,7 +712,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 			const rawRoot = await this.git.getRepositoryRoot(repoPath);
 
 			// This can happen whenever `path` has the wrong case sensitivity in case
-			// insensitive file systems https://github.com/microsoft/vscode/issues/33498
+			// insensitive file systems https://github.com/graffitiape/codeengine/issues/33498
 			return { repositoryRoot: Uri.file(rawRoot).fsPath, unsafeRepositoryMatch: null };
 		} catch (err) {
 			// Handle unsafe repository

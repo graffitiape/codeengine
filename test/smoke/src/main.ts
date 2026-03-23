@@ -165,11 +165,11 @@ function parseVersion(version: string): { major: number; minor: number; patch: n
 }
 
 function parseQuality(): Quality {
-	if (process.env.VSCODE_DEV === '1') {
+	if (process.env.CODEENGINE_DEV === '1') {
 		return Quality.Dev;
 	}
 
-	const quality = process.env.VSCODE_QUALITY ?? '';
+	const quality = process.env.CODEENGINE_QUALITY ?? '';
 
 	switch (quality) {
 		case 'stable':
@@ -198,13 +198,13 @@ if (!opts.web) {
 	} else {
 		testCodePath = getDevElectronPath();
 		electronPath = testCodePath;
-		process.env.VSCODE_REPOSITORY = rootPath;
-		process.env.VSCODE_DEV = '1';
-		process.env.VSCODE_CLI = '1';
+		process.env.CODEENGINE_REPOSITORY = rootPath;
+		process.env.CODEENGINE_DEV = '1';
+		process.env.CODEENGINE_CLI = '1';
 	}
 
 	if (!fs.existsSync(electronPath || '')) {
-		fail(`Cannot find VSCode at ${electronPath}. Please run VSCode once first (scripts/code.sh, scripts\\code.bat) and try again.`);
+		fail(`Cannot find CodeEngine at ${electronPath}. Please run CodeEngine once first (scripts/code.sh, scripts\\code.bat) and try again.`);
 	}
 
 	quality = parseQuality();
@@ -220,7 +220,7 @@ if (!opts.web) {
 // #### Web Smoke Tests ####
 //
 else {
-	const testCodeServerPath = opts.build || process.env.VSCODE_REMOTE_SERVER_PATH;
+	const testCodeServerPath = opts.build || process.env.CODEENGINE_REMOTE_SERVER_PATH;
 
 	if (typeof testCodeServerPath === 'string') {
 		if (!fs.existsSync(testCodeServerPath)) {
@@ -231,9 +231,9 @@ else {
 	}
 
 	if (!testCodeServerPath) {
-		process.env.VSCODE_REPOSITORY = rootPath;
-		process.env.VSCODE_DEV = '1';
-		process.env.VSCODE_CLI = '1';
+		process.env.CODEENGINE_REPOSITORY = rootPath;
+		process.env.CODEENGINE_DEV = '1';
+		process.env.CODEENGINE_CLI = '1';
 
 		logger.log(`Running web smoke out of sources`);
 	}
@@ -241,7 +241,7 @@ else {
 	quality = parseQuality();
 }
 
-logger.log(`VS Code product quality: ${quality}.`);
+logger.log(`Code Engine product quality: ${quality}.`);
 
 const userDataDir = path.join(testDataPath, 'd');
 
@@ -275,7 +275,7 @@ async function ensureStableCode(): Promise<void> {
 	let stableCodePath = opts['stable-build'];
 	if (!stableCodePath) {
 		const current = parseVersion(version!);
-		const versionsReq = await retry(() => measureAndLog(() => fetch('https://update.code.visualstudio.com/api/releases/stable'), 'versionReq', logger), 1000, 20);
+		const versionsReq = await retry(() => measureAndLog(() => fetch('https://update.github.com/graffitiape/codeengine/api/releases/stable'), 'versionReq', logger), 1000, 20);
 
 		if (!versionsReq.ok) {
 			throw new Error('Could not fetch releases from update server');
@@ -291,7 +291,7 @@ async function ensureStableCode(): Promise<void> {
 			throw new Error(`Could not find suitable stable version for ${version}`);
 		}
 
-		logger.log(`Found VS Code v${version}, downloading previous VS Code version ${stableVersion}...`);
+		logger.log(`Found Code Engine v${version}, downloading previous Code Engine version ${stableVersion}...`);
 
 		let lastProgressMessage: string | undefined = undefined;
 		let lastProgressReportedAt = 0;
@@ -322,10 +322,10 @@ async function ensureStableCode(): Promise<void> {
 		});
 
 		if (process.platform === 'darwin') {
-			// Visual Studio Code.app/Contents/MacOS/Code
+			// Code Engine.app/Contents/MacOS/Code
 			stableCodePath = path.dirname(path.dirname(path.dirname(stableCodeExecutable)));
 		} else {
-			// VSCode/Code.exe (Windows) | VSCode/code (Linux)
+			// CodeEngine/Code.exe (Windows) | CodeEngine/code (Linux)
 			stableCodePath = path.dirname(stableCodeExecutable);
 		}
 
@@ -333,7 +333,7 @@ async function ensureStableCode(): Promise<void> {
 	}
 
 	if (!fs.existsSync(stableCodePath)) {
-		throw new Error(`Cannot find Stable VSCode at ${stableCodePath}.`);
+		throw new Error(`Cannot find Stable CodeEngine at ${stableCodePath}.`);
 	}
 
 	logger.log(`Using stable build ${stableCodePath} for migration tests`);
@@ -366,7 +366,7 @@ async function setup(): Promise<void> {
 
 // Before all tests run setup
 before(async function () {
-	this.timeout(5 * 60 * 1000); // increase since we download VSCode
+	this.timeout(5 * 60 * 1000); // increase since we download CodeEngine
 
 	const options: ApplicationOptions = {
 		quality,
@@ -403,7 +403,7 @@ after(async function () {
 	}
 });
 
-describe(`VSCode Smoke Tests (${opts.web ? 'Web' : 'Electron'})`, () => {
+describe(`CodeEngine Smoke Tests (${opts.web ? 'Web' : 'Electron'})`, () => {
 	if (!opts.web) { setupDataLossTests(() => { return { stableCodePath: opts['stable-build'], stableCodeVersion: opts['stable-version'] } /* Do not change, deferred for a reason! */; }, logger); }
 	setupPreferencesTests(logger);
 	setupSearchTests(logger);

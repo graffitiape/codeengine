@@ -20,7 +20,7 @@ import { IRemoteAgentService } from '../../../../services/remote/common/remoteAg
 import { ITelemetryService } from '../../../../../platform/telemetry/common/telemetry.js';
 import { IWorkspaceContextService } from '../../../../../platform/workspace/common/workspace.js';
 import { ChatRequestVariableSet, IChatRequestVariableEntry, isPromptFileVariableEntry, toPromptFileVariableEntry, toPromptTextVariableEntry, PromptFileVariableKind, IPromptTextVariableEntry, ChatRequestToolReferenceEntry, toToolVariableEntry } from '../attachments/chatVariableEntries.js';
-import { ILanguageModelToolsService, IToolData, VSCodeToolReference } from '../tools/languageModelToolsService.js';
+import { ILanguageModelToolsService, IToolData, CodeEngineToolReference } from '../tools/languageModelToolsService.js';
 import { PromptsConfig } from './config/config.js';
 import { isInClaudeAgentsFolder, isInClaudeRulesFolder, isPromptOrInstructionsFile } from './config/promptFileLocations.js';
 import { ParsedPromptFile, PromptHeader } from './promptFileParser.js';
@@ -283,7 +283,7 @@ export class ComputeAutomaticInstructions {
 
 	private async _getCustomizationsIndex(instructionFiles: readonly IPromptPath[], _existingVariables: ChatRequestVariableSet, telemetryEvent: InstructionsCollectionEvent, token: CancellationToken): Promise<IPromptTextVariableEntry | undefined> {
 		const readTool = this._getTool('readFile');
-		const runSubagentTool = this._getTool(VSCodeToolReference.runSubagent);
+		const runSubagentTool = this._getTool(CodeEngineToolReference.runSubagent);
 
 		const remoteEnv = await this._remoteAgentService.getEnvironment();
 		const remoteOS = remoteEnv?.os;

@@ -48,7 +48,7 @@ export async function readFromStdin(targetPath: string, verbose: boolean, onEnd?
 	let [encoding, iconv] = await Promise.all([
 		resolveTerminalEncoding(verbose),		// respect terminal encoding when piping into file
 		import('@vscode/iconv-lite-umd'),		// lazy load encoding module for usage
-		createStdInFile(targetPath) 			// make sure file exists right away (https://github.com/microsoft/vscode/issues/155341)
+		createStdInFile(targetPath) 			// make sure file exists right away (https://github.com/graffitiape/codeengine/issues/155341)
 	]);
 
 	if (!iconv.default.encodingExists(encoding)) {
@@ -60,7 +60,7 @@ export async function readFromStdin(targetPath: string, verbose: boolean, onEnd?
 	// which helps file watchers to be aware of the
 	// changes because each append closes the underlying
 	// file descriptor.
-	// (https://github.com/microsoft/vscode/issues/148952)
+	// (https://github.com/graffitiape/codeengine/issues/148952)
 
 	const appendFileQueue = new Queue();
 

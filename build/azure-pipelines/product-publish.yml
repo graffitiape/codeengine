@@ -1,7 +1,7 @@
 parameters:
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     type: string
-  - name: VSCODE_SCHEDULEDBUILD
+  - name: CODEENGINE_SCHEDULEDBUILD
     type: boolean
 
 jobs:
@@ -114,7 +114,7 @@ jobs:
         displayName: Process artifacts
         retryCountOnTaskFailure: 3
 
-      - ${{ if and(in(parameters.VSCODE_QUALITY, 'insider', 'exploration'), eq(parameters.VSCODE_SCHEDULEDBUILD, true)) }}:
+      - ${{ if and(in(parameters.CODEENGINE_QUALITY, 'insider', 'exploration'), eq(parameters.CODEENGINE_SCHEDULEDBUILD, true)) }}:
         - script: node build/azure-pipelines/common/releaseBuild.ts
           env:
             PUBLISH_AUTH_TOKENS: "$(PUBLISH_AUTH_TOKENS)"

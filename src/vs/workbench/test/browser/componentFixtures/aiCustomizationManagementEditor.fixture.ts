@@ -27,7 +27,7 @@ import { IPathService } from '../../../services/path/common/pathService.js';
 import { IWorkingCopyService } from '../../../services/workingCopy/common/workingCopyService.js';
 import { IWebviewService } from '../../../contrib/webview/browser/webview.js';
 import { IAICustomizationWorkspaceService, AICustomizationManagementSection } from '../../../contrib/chat/common/aiCustomizationWorkspaceService.js';
-import { CustomizationHarness, ICustomizationHarnessService, IHarnessDescriptor, createVSCodeHarnessDescriptor, createClaudeHarnessDescriptor, createCliHarnessDescriptor, getCliUserRoots, getClaudeUserRoots } from '../../../contrib/chat/common/customizationHarnessService.js';
+import { CustomizationHarness, ICustomizationHarnessService, IHarnessDescriptor, createCodeEngineHarnessDescriptor, createClaudeHarnessDescriptor, createCliHarnessDescriptor, getCliUserRoots, getClaudeUserRoots } from '../../../contrib/chat/common/customizationHarnessService.js';
 import { PromptsType } from '../../../contrib/chat/common/promptSyntax/promptTypes.js';
 import { IPromptsService, IResolvedAgentFile, AgentFileType, PromptsStorage } from '../../../contrib/chat/common/promptSyntax/service/promptsService.js';
 import { ParsedPromptFile } from '../../../contrib/chat/common/promptSyntax/promptFileParser.js';
@@ -203,7 +203,7 @@ async function renderEditor(ctx: ComponentFixtureContext, options: IRenderEditor
 		AICustomizationManagementSection.Plugins,
 	];
 	const availableHarnesses = options.availableHarnesses ?? [
-		createVSCodeHarnessDescriptor([PromptsStorage.extension]),
+		createCodeEngineHarnessDescriptor([PromptsStorage.extension]),
 		createCliHarnessDescriptor(getCliUserRoots(userHome), []),
 		createClaudeHarnessDescriptor(getClaudeUserRoots(userHome), []),
 	];
@@ -308,11 +308,11 @@ async function renderEditor(ctx: ComponentFixtureContext, options: IRenderEditor
 
 export default defineThemedFixtureGroup({ path: 'chat/aiCustomizations/' }, {
 
-	// Full editor with Local (VS Code) harness — all sections visible, harness dropdown,
+	// Full editor with Local (Code Engine) harness — all sections visible, harness dropdown,
 	// Generate buttons, AGENTS.md shortcut, all storage groups
 	LocalHarness: defineComponentFixture({
 		labels: { kind: 'screenshot' },
-		render: ctx => renderEditor(ctx, { harness: CustomizationHarness.VSCode }),
+		render: ctx => renderEditor(ctx, { harness: CustomizationHarness.CodeEngine }),
 	}),
 
 	// Full editor with Copilot CLI harness — no prompts section, CLI-specific

@@ -5,7 +5,7 @@
 
 declare module 'vscode' {
 
-	// https://github.com/microsoft/vscode/issues/73524
+	// https://github.com/graffitiape/codeengine/issues/73524
 
 	/**
 	 * Options that apply to file search.

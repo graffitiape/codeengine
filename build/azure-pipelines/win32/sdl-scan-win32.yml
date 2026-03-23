@@ -1,7 +1,7 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     type: string
 
 steps:
@@ -84,7 +84,7 @@ steps:
       $ErrorActionPreference = "Stop"
       exec { npm ci }
     env:
-      npm_config_arch: ${{ parameters.VSCODE_ARCH }}
+      npm_config_arch: ${{ parameters.CODEENGINE_ARCH }}
       npm_config_foreground_scripts: "true"
       ELECTRON_SKIP_BINARY_DOWNLOAD: 1
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
@@ -98,7 +98,7 @@ steps:
   - script: node build/azure-pipelines/distro/mixin-quality.ts
     displayName: Mixin distro quality
     env:
-      VSCODE_QUALITY: ${{ parameters.VSCODE_QUALITY }}
+      CODEENGINE_QUALITY: ${{ parameters.CODEENGINE_QUALITY }}
 
   - template: ../common/install-builtin-extensions.yml@self
 
@@ -107,7 +107,7 @@ steps:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Compile
 
-  - powershell: npm run gulp "vscode-symbols-win32-${{ parameters.VSCODE_ARCH }}"
+  - powershell: npm run gulp "vscode-symbols-win32-${{ parameters.CODEENGINE_ARCH }}"
     env:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Download Symbols

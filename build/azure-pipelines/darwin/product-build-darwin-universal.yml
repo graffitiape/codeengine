@@ -3,23 +3,23 @@ jobs:
     displayName: macOS (UNIVERSAL)
     timeoutInMinutes: 90
     variables:
-      VSCODE_ARCH: universal
+      CODEENGINE_ARCH: universal
       BUILDS_API_URL: $(System.CollectionUri)$(System.TeamProject)/_apis/build/builds/$(Build.BuildId)/
     templateContext:
       outputs:
         - output: pipelineArtifact
-          targetPath: $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(VSCODE_ARCH)_archive/VSCode-darwin-universal.zip
-          artifactName: vscode_client_darwin_$(VSCODE_ARCH)_archive
+          targetPath: $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(CODEENGINE_ARCH)_archive/VSCode-darwin-universal.zip
+          artifactName: vscode_client_darwin_$(CODEENGINE_ARCH)_archive
           displayName: Publish client archive
-          sbomBuildDropPath: $(Build.ArtifactStagingDirectory)/VSCode-darwin-$(VSCODE_ARCH)
-          sbomPackageName: "VS Code macOS $(VSCODE_ARCH)"
+          sbomBuildDropPath: $(Build.ArtifactStagingDirectory)/VSCode-darwin-$(CODEENGINE_ARCH)
+          sbomPackageName: "Code Engine macOS $(CODEENGINE_ARCH)"
           sbomPackageVersion: $(Build.SourceVersion)
         - output: pipelineArtifact
-          targetPath: $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(VSCODE_ARCH)_dmg/VSCode-darwin-$(VSCODE_ARCH).dmg
-          artifactName: vscode_client_darwin_$(VSCODE_ARCH)_dmg
+          targetPath: $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(CODEENGINE_ARCH)_dmg/VSCode-darwin-$(CODEENGINE_ARCH).dmg
+          artifactName: vscode_client_darwin_$(CODEENGINE_ARCH)_dmg
           displayName: Publish client DMG
-          sbomBuildDropPath: $(Build.ArtifactStagingDirectory)/VSCode-darwin-$(VSCODE_ARCH)
-          sbomPackageName: "VS Code macOS $(VSCODE_ARCH)"
+          sbomBuildDropPath: $(Build.ArtifactStagingDirectory)/VSCode-darwin-$(CODEENGINE_ARCH)
+          sbomPackageName: "Code Engine macOS $(CODEENGINE_ARCH)"
           sbomPackageVersion: $(Build.SourceVersion)
     steps:
       - template: ../common/checkout.yml@self
@@ -100,7 +100,7 @@ jobs:
 
       - script: |
           set -e
-          APP_ROOT="$(Agent.BuildDirectory)/VSCode-darwin-$(VSCODE_ARCH)"
+          APP_ROOT="$(Agent.BuildDirectory)/VSCode-darwin-$(CODEENGINE_ARCH)"
           APP_NAME="`ls $APP_ROOT | head -n 1`"
           APP_PATH="$APP_ROOT/$APP_NAME"
           EXEC_NAME=$(node -p "require(\"$APP_PATH/Contents/Resources/app/product.json\").nameShort")
@@ -114,7 +114,7 @@ jobs:
 
       - script: |
           set -e
-          APP_ROOT="$(Agent.BuildDirectory)/VSCode-darwin-$(VSCODE_ARCH)"
+          APP_ROOT="$(Agent.BuildDirectory)/VSCode-darwin-$(CODEENGINE_ARCH)"
           APP_NAME="`ls $APP_ROOT | head -n 1`"
           APP_PATH="$APP_ROOT/$APP_NAME" node build/darwin/verify-macho.ts universal
         displayName: Verify arch of Mach-O objects
@@ -133,17 +133,17 @@ jobs:
 
       - script: |
           set -e
-          DMG_OUT="$(Pipeline.Workspace)/vscode_client_darwin_$(VSCODE_ARCH)_dmg"
+          DMG_OUT="$(Pipeline.Workspace)/vscode_client_darwin_$(CODEENGINE_ARCH)_dmg"
           mkdir -p $DMG_OUT
           node build/darwin/create-dmg.ts $(agent.builddirectory) $DMG_OUT
-          python3 build/darwin/patch-dmg.py $DMG_OUT/VSCode-darwin-$(VSCODE_ARCH).dmg resources/darwin/disk.icns
-          echo "##vso[task.setvariable variable=DMG_PATH]$DMG_OUT/VSCode-darwin-$(VSCODE_ARCH).dmg"
+          python3 build/darwin/patch-dmg.py $DMG_OUT/VSCode-darwin-$(CODEENGINE_ARCH).dmg resources/darwin/disk.icns
+          echo "##vso[task.setvariable variable=DMG_PATH]$DMG_OUT/VSCode-darwin-$(CODEENGINE_ARCH).dmg"
         displayName: Create DMG installer
 
       - script: |
           set -e
-          mkdir -p $(Pipeline.Workspace)/vscode_client_darwin_$(VSCODE_ARCH)_archive
-          pushd $(agent.builddirectory)/VSCode-darwin-$(VSCODE_ARCH) && zip -r -X -y $(Pipeline.Workspace)/vscode_client_darwin_$(VSCODE_ARCH)_archive/VSCode-darwin-$(VSCODE_ARCH).zip * && popd
+          mkdir -p $(Pipeline.Workspace)/vscode_client_darwin_$(CODEENGINE_ARCH)_archive
+          pushd $(agent.builddirectory)/VSCode-darwin-$(CODEENGINE_ARCH) && zip -r -X -y $(Pipeline.Workspace)/vscode_client_darwin_$(CODEENGINE_ARCH)_archive/VSCode-darwin-$(CODEENGINE_ARCH).zip * && popd
         displayName: Archive build
 
       - task: UseDotNet@2
@@ -176,12 +176,12 @@ jobs:
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
         displayName: ✍️ Codesign & Notarize
 
-      - script: unzip $(Pipeline.Workspace)/vscode_client_darwin_$(VSCODE_ARCH)_archive/VSCode-darwin-$(VSCODE_ARCH).zip -d $(Build.ArtifactStagingDirectory)/VSCode-darwin-$(VSCODE_ARCH)
+      - script: unzip $(Pipeline.Workspace)/vscode_client_darwin_$(CODEENGINE_ARCH)_archive/VSCode-darwin-$(CODEENGINE_ARCH).zip -d $(Build.ArtifactStagingDirectory)/VSCode-darwin-$(CODEENGINE_ARCH)
         displayName: Extract signed app
 
       - script: |
           set -e
-          APP_ROOT="$(Build.ArtifactStagingDirectory)/VSCode-darwin-$(VSCODE_ARCH)"
+          APP_ROOT="$(Build.ArtifactStagingDirectory)/VSCode-darwin-$(CODEENGINE_ARCH)"
           APP_NAME="`ls $APP_ROOT | head -n 1`"
           APP_PATH="$APP_ROOT/$APP_NAME"
           codesign -dv --deep --verbose=4 "$APP_PATH"
@@ -190,9 +190,9 @@ jobs:
 
       - script: |
           set -e
-          mkdir -p $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(VSCODE_ARCH)_archive
-          mv $(Pipeline.Workspace)/vscode_client_darwin_$(VSCODE_ARCH)_archive/VSCode-darwin-$(VSCODE_ARCH).zip $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(VSCODE_ARCH)_archive/VSCode-darwin-$(VSCODE_ARCH).zip
+          mkdir -p $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(CODEENGINE_ARCH)_archive
+          mv $(Pipeline.Workspace)/vscode_client_darwin_$(CODEENGINE_ARCH)_archive/VSCode-darwin-$(CODEENGINE_ARCH).zip $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(CODEENGINE_ARCH)_archive/VSCode-darwin-$(CODEENGINE_ARCH).zip
 
-          mkdir -p $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(VSCODE_ARCH)_dmg
-          mv $(DMG_PATH) $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(VSCODE_ARCH)_dmg/VSCode-darwin-$(VSCODE_ARCH).dmg
+          mkdir -p $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(CODEENGINE_ARCH)_dmg
+          mv $(DMG_PATH) $(Build.ArtifactStagingDirectory)/out/vscode_client_darwin_$(CODEENGINE_ARCH)_dmg/VSCode-darwin-$(CODEENGINE_ARCH).dmg
         displayName: Move artifact to out directory

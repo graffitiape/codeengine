@@ -141,7 +141,7 @@ const policies: ExportedPolicyDataDto = {
 			localization: {
 				description: {
 					key: 'extensions.allowed.policy',
-					value: 'Specify a list of extensions that are allowed to use. This helps maintain a secure and consistent development environment by restricting the use of unauthorized extensions. More information: https://code.visualstudio.com/docs/setup/enterprise#_configure-allowed-extensions'
+					value: 'Specify a list of extensions that are allowed to use. This helps maintain a secure and consistent development environment by restricting the use of unauthorized extensions. More information: https://github.com/graffitiape/codeengine/docs/setup/enterprise#_configure-allowed-extensions'
 				}
 			},
 			type: 'object',
@@ -178,7 +178,7 @@ const policies: ExportedPolicyDataDto = {
 					},
 					{
 						key: 'chat.mcp.access.registry',
-						value: 'Allows access to MCP servers installed from the registry that VS Code is connected to.'
+						value: 'Allows access to MCP servers installed from the registry that Code Engine is connected to.'
 					},
 					{
 						key: 'chat.mcp.access.any',
@@ -344,11 +344,11 @@ const policies: ExportedPolicyDataDto = {
 };
 
 const mockProduct: ProductJson = {
-	nameLong: 'Code - OSS',
-	darwinBundleIdentifier: 'com.visualstudio.code.oss',
+	nameLong: 'Code Engine',
+	darwinBundleIdentifier: 'com.codeengine.app',
 	darwinProfilePayloadUUID: 'CF808BE7-53F3-46C6-A7E2-7EDB98A5E959',
 	darwinProfileUUID: '47827DD9-4734-49A0-AF80-7E19B11495CC',
-	win32RegValueName: 'CodeOSS'
+	win32RegValueName: 'CodeEngine'
 };
 
 const frenchTranslations = [
@@ -370,9 +370,9 @@ const frenchTranslations = [
 				'chat.promptFiles.policy': 'Active les fichiers d’instruction et de requête réutilisables dans les sessions Conversation.',
 				'autoApprove2.description': `L’approbation automatique globale, également appelée « mode YOLO », désactive complètement l’approbation manuelle pour tous les outils dans tous les espaces de travail, permettant à l’agent d’agir de manière totalement autonome. Ceci est extrêmement dangereux et est *jamais* recommandé, même dans des environnements conteneurisés comme [Codespaces](https://github.com/features/codespaces) et [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), où des clés utilisateur sont transférées dans le conteneur et pourraient être compromises.
 
-Cette fonctionnalité désactive [les protections de sécurité critiques](https://code.visualstudio.com/docs/copilot/security) et facilite considérablement la compromission de la machine par un attaquant.`,
+Cette fonctionnalité désactive [les protections de sécurité critiques](https://github.com/graffitiape/codeengine/docs/copilot/security) et facilite considérablement la compromission de la machine par un attaquant.`,
 				'mcp.gallery.serviceUrl': 'Configurer l’URL du service de la galerie MCP à laquelle se connecter',
-				'extensions.allowed.policy': 'Spécifiez une liste d’extensions autorisées. Cela permet de maintenir un environnement de développement sécurisé et cohérent en limitant l’utilisation d’extensions non autorisées. Plus d’informations : https://code.visualstudio.com/docs/setup/enterprise#_configure-allowed-extensions',
+				'extensions.allowed.policy': 'Spécifiez une liste d’extensions autorisées. Cela permet de maintenir un environnement de développement sécurisé et cohérent en limitant l’utilisation d’extensions non autorisées. Plus d’informations : https://github.com/graffitiape/codeengine/docs/setup/enterprise#_configure-allowed-extensions',
 				'extensions.gallery.serviceUrl': 'Configurer l’URL du service Place de marché à laquelle se connecter',
 				'autoApproveMode.description': 'Contrôle s’il faut autoriser l’approbation automatique lors de l’exécution dans l’outil terminal.',
 				'telemetry.feedback.enabled': 'Activez les mécanismes de commentaires tels que le système de rapport de problèmes, les sondages et autres options de commentaires.',
@@ -398,7 +398,7 @@ suite('Policy E2E conversion', () => {
 		const result = renderMacOSPolicy(mockProduct, parsedPolicies, []);
 
 		// Load the expected fixture file
-		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'darwin', 'com.visualstudio.code.oss.mobileconfig');
+		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'darwin', 'com.codeengine.app.mobileconfig');
 		const expectedContent = await fs.readFile(fixturePath, 'utf-8');
 
 		// Compare the rendered profile with the fixture
@@ -410,7 +410,7 @@ suite('Policy E2E conversion', () => {
 		const result = renderMacOSPolicy(mockProduct, parsedPolicies, []);
 
 		// Load the expected fixture file
-		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'darwin', 'en-us', 'com.visualstudio.code.oss.plist');
+		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'darwin', 'en-us', 'com.codeengine.app.plist');
 		const expectedContent = await fs.readFile(fixturePath, 'utf-8');
 
 		// Find the en-us manifest
@@ -432,7 +432,7 @@ suite('Policy E2E conversion', () => {
 		const result = renderGP(mockProduct, parsedPolicies, []);
 
 		// Load the expected fixture file
-		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'win32', 'CodeOSS.admx');
+		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'win32', 'CodeEngine.admx');
 		const expectedContent = await fs.readFile(fixturePath, 'utf-8');
 
 		// Compare the rendered ADMX with the fixture
@@ -444,7 +444,7 @@ suite('Policy E2E conversion', () => {
 		const result = renderGP(mockProduct, parsedPolicies, []);
 
 		// Load the expected fixture file
-		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'win32', 'en-us', 'CodeOSS.adml');
+		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'win32', 'en-us', 'CodeEngine.adml');
 		const expectedContent = await fs.readFile(fixturePath, 'utf-8');
 
 		// Find the en-us ADML
@@ -460,7 +460,7 @@ suite('Policy E2E conversion', () => {
 		const result = renderMacOSPolicy(mockProduct, parsedPolicies, frenchTranslations);
 
 		// Load the expected fixture file
-		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'darwin', 'fr-fr', 'com.visualstudio.code.oss.plist');
+		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'darwin', 'fr-fr', 'com.codeengine.app.plist');
 		const expectedContent = await fs.readFile(fixturePath, 'utf-8');
 
 		// Find the fr-fr manifest
@@ -481,7 +481,7 @@ suite('Policy E2E conversion', () => {
 		const result = renderGP(mockProduct, parsedPolicies, frenchTranslations);
 
 		// Load the expected fixture file
-		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'win32', 'fr-fr', 'CodeOSS.adml');
+		const fixturePath = path.join(import.meta.dirname, 'fixtures', 'policies', 'win32', 'fr-fr', 'CodeEngine.adml');
 		const expectedContent = await fs.readFile(fixturePath, 'utf-8');
 
 		// Find the fr-fr ADML

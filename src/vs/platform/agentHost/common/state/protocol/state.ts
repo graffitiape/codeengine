@@ -214,7 +214,7 @@ export interface ISessionState {
 export interface ISessionActiveClient {
 	/** Client identifier (matches `clientId` from `initialize`) */
 	clientId: string;
-	/** Human-readable client name (e.g. `"VS Code"`) */
+	/** Human-readable client name (e.g. `"Code Engine"`) */
 	displayName?: string;
 	/** Tools this client provides to the session */
 	tools: IToolDefinition[];

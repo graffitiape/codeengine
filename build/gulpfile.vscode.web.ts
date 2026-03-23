@@ -121,7 +121,7 @@ const vscodeWebEntryPoints = [
  * @param extensionsRoot The location where extension will be read from
  * @param product The parsed product.json file contents
  */
-export const createVSCodeWebFileContentMapper = (extensionsRoot: string, product: typeof import('../product.json')) => {
+export const createCodeEngineWebFileContentMapper = (extensionsRoot: string, product: typeof import('../product.json')) => {
 	return (path: string): ((content: string) => string) | undefined => {
 		if (path.endsWith('vs/platform/product/common/product.js')) {
 			return content => {
@@ -144,7 +144,7 @@ export const createVSCodeWebFileContentMapper = (extensionsRoot: string, product
 	};
 };
 
-const bundleVSCodeWebTask = task.define('bundle-vscode-web-OLD', task.series(
+const bundleCodeEngineWebTask = task.define('bundle-vscode-web-OLD', task.series(
 	util.rimraf('out-vscode-web'),
 	optimize.bundleTask(
 		{
@@ -153,23 +153,23 @@ const bundleVSCodeWebTask = task.define('bundle-vscode-web-OLD', task.series(
 				src: 'out-build',
 				entryPoints: vscodeWebEntryPoints,
 				resources: vscodeWebResources,
-				fileContentMapper: createVSCodeWebFileContentMapper('.build/web/extensions', product)
+				fileContentMapper: createCodeEngineWebFileContentMapper('.build/web/extensions', product)
 			}
 		}
 	)
 ));
 
-const minifyVSCodeWebTask = task.define('minify-vscode-web-OLD', task.series(
-	bundleVSCodeWebTask,
+const minifyCodeEngineWebTask = task.define('minify-vscode-web-OLD', task.series(
+	bundleCodeEngineWebTask,
 	util.rimraf('out-vscode-web-min'),
 	optimize.minifyTask('out-vscode-web', `https://main.vscode-cdn.net/sourcemaps/${commit}/core`)
 ));
-gulp.task(minifyVSCodeWebTask);
+gulp.task(minifyCodeEngineWebTask);
 
 // esbuild-based tasks (new)
 const sourceMappingURLBase = `https://main.vscode-cdn.net/sourcemaps/${commit}`;
-const esbuildBundleVSCodeWebTask = task.define('esbuild-vscode-web', () => runEsbuildBundle('out-vscode-web', false, true));
-const esbuildBundleVSCodeWebMinTask = task.define('esbuild-vscode-web-min', () => runEsbuildBundle('out-vscode-web-min', true, true, `${sourceMappingURLBase}/core`));
+const esbuildBundleCodeEngineWebTask = task.define('esbuild-vscode-web', () => runEsbuildBundle('out-vscode-web', false, true));
+const esbuildBundleCodeEngineWebMinTask = task.define('esbuild-vscode-web-min', () => runEsbuildBundle('out-vscode-web-min', true, true, `${sourceMappingURLBase}/core`));
 
 function packageTask(sourceFolderName: string, destinationFolderName: string) {
 	const destination = path.join(BUILD_ROOT, destinationFolderName);
@@ -238,7 +238,7 @@ const dashed = (str: string) => (str ? `-${str}` : ``);
 	const vscodeWebTaskCI = task.define(`vscode-web${dashed(minified)}-ci`, task.series(
 		copyCodiconsTask,
 		compileWebExtensionsBuildTask,
-		minified ? esbuildBundleVSCodeWebMinTask : esbuildBundleVSCodeWebTask,
+		minified ? esbuildBundleCodeEngineWebMinTask : esbuildBundleCodeEngineWebTask,
 		util.rimraf(path.join(BUILD_ROOT, destinationFolderName)),
 		packageTask(sourceFolderName, destinationFolderName)
 	));

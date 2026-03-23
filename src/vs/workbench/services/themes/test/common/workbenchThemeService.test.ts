@@ -26,17 +26,17 @@ suite('WorkbenchThemeService', () => {
 			);
 		});
 
-		test('migrates Experimental theme IDs to VS Code themes', () => {
+		test('migrates Experimental theme IDs to Code Engine themes', () => {
 			assert.deepStrictEqual(
 				['Experimental Dark', 'Experimental Light'].map(migrateThemeSettingsId),
-				['VS Code Dark', 'VS Code Light']
+				['Code Engine Dark', 'Code Engine Light']
 			);
 		});
 
 		test('returns unknown IDs unchanged', () => {
 			assert.deepStrictEqual(
-				['Dark Modern', 'VS Code Dark', 'Some Custom Theme', ''].map(migrateThemeSettingsId),
-				['Dark Modern', 'VS Code Dark', 'Some Custom Theme', '']
+				['Dark Modern', 'Code Engine Dark', 'Some Custom Theme', ''].map(migrateThemeSettingsId),
+				['Dark Modern', 'Code Engine Dark', 'Some Custom Theme', '']
 			);
 		});
 	});

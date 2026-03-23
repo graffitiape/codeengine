@@ -1,6 +1,6 @@
 ---
 name: azure-pipelines
-description: Use when validating Azure DevOps pipeline changes for the VS Code build. Covers queueing builds, checking build status, viewing logs, and iterating on pipeline YAML changes without waiting for full CI runs.
+description: Use when validating Azure DevOps pipeline changes for the Code Engine build. Covers queueing builds, checking build status, viewing logs, and iterating on pipeline YAML changes without waiting for full CI runs.
 ---
 
 # Validating Azure Pipeline Changes
@@ -42,15 +42,15 @@ When modifying Azure DevOps pipeline files (YAML files in `build/azure-pipelines
    az devops configure --defaults organization=https://dev.azure.com/monacotools project=Monaco
    ```
 
-## VS Code Main Build
+## Code Engine Main Build
 
-The main VS Code build pipeline:
+The main Code Engine build pipeline:
 - **Organization**: `monacotools`
 - **Project**: `Monaco`
 - **Definition ID**: `111`
 - **URL**: https://dev.azure.com/monacotools/Monaco/_build?definitionId=111
 
-## VS Code Insider Scheduled Builds
+## Code Engine Insider Scheduled Builds
 
 Two Insider builds run automatically on a scheduled basis:
 - **Morning build**: ~7:00 AM CET
@@ -116,7 +116,7 @@ node .github/skills/azure-pipelines/azure-pipeline.ts queue --parameter "VSCODE_
 | `VSCODE_BUILD_MACOS_ARM64` | boolean | `true` | `true`, `false` | Build macOS arm64 |
 | `VSCODE_BUILD_MACOS_UNIVERSAL` | boolean | `true` | `true`, `false` | Build macOS universal (requires both macOS arches) |
 | `VSCODE_BUILD_WEB` | boolean | `true` | `true`, `false` | Build Web artifacts |
-| `VSCODE_PUBLISH` | boolean | `true` | `true`, `false` | Publish to builds.code.visualstudio.com |
+| `VSCODE_PUBLISH` | boolean | `true` | `true`, `false` | Publish to builds.github.com/graffitiape/codeengine |
 | `VSCODE_RELEASE` | boolean | `false` | `true`, `false` | Trigger release flow if successful |
 | `VSCODE_STEP_ON_IT` | boolean | `false` | `true`, `false` | Skip tests |
 

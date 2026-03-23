@@ -497,7 +497,7 @@ export class ChatService extends Disposable implements IChatService {
 
 		// Await activation of the extension provided agent
 		// Using `activateById` as workaround for the issue
-		// https://github.com/microsoft/vscode/issues/250590
+		// https://github.com/graffitiape/codeengine/issues/250590
 		if (!defaultAgentData.isCore) {
 			await this.extensionService.activateById(defaultAgentData.extensionId, {
 				activationEvent: `onChatParticipant:${defaultAgentData.id}`,
@@ -1212,7 +1212,7 @@ export class ChatService extends Disposable implements IChatService {
 						progressCallback([{ kind: 'disabledClaudeHooks' }]);
 					}
 
-					// MCP autostart: only run for native VS Code sessions (sidebar, new editors) but not for extension contributed sessions that have inputType set.
+					// MCP autostart: only run for native Code Engine sessions (sidebar, new editors) but not for extension contributed sessions that have inputType set.
 					if (model.canUseTools) {
 						const autostartResult = new ChatMcpServersStarting(this.mcpService.autostart(token));
 						if (!autostartResult.isEmpty) {

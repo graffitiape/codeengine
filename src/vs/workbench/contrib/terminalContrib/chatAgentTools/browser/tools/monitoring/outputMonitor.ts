@@ -229,12 +229,12 @@ export class OutputMonitor extends Disposable implements IOutputMonitor {
 			return { shouldContinuePollling: false, output };
 		}
 
-		// Check for VS Code's task finish messages (like "press any key to close the terminal").
-		// If the execution is a task and the output contains a VS Code task finish message,
+		// Check for Code Engine's task finish messages (like "press any key to close the terminal").
+		// If the execution is a task and the output contains a Code Engine task finish message,
 		// always treat it as a stop signal regardless of task active state (which can be stale).
 		const isTask = this._execution.task !== undefined;
-		if (isTask && detectsVSCodeTaskFinishMessage(output)) {
-			this._logService.trace('OutputMonitor: Idle -> VS Code task finish message detected, stopping');
+		if (isTask && detectsCodeEngineTaskFinishMessage(output)) {
+			this._logService.trace('OutputMonitor: Idle -> Code Engine task finish message detected, stopping');
 			// Task is finished, ignore the "press any key to close" message
 			return { shouldContinuePollling: false, output };
 		}
@@ -1059,7 +1059,7 @@ export function detectsNonInteractiveHelpPattern(cursorLine: string): boolean {
 }
 
 /**
- * Localized task finish messages from VS Code's terminalTaskSystem.
+ * Localized task finish messages from Code Engine's terminalTaskSystem.
  * These are the same strings used when tasks complete.
  */
 const taskFinishMessages = [
@@ -1078,26 +1078,26 @@ const normalizedTaskFinishMessages = taskFinishMessages.map(msg =>
 );
 
 /**
- * Detects VS Code's specific task completion messages like:
+ * Detects Code Engine's specific task completion messages like:
  * - "Press any key to close the terminal."
  * - "Terminal will be reused by tasks, press any key to close it."
  * These appear when a task finishes and should be ignored if the task is done.
- * Note: These messages may be prefixed with " * " by VS Code and may have line wrapping
+ * Note: These messages may be prefixed with " * " by Code Engine and may have line wrapping
  * that can split words across lines (e.g., "t\no" instead of "to").
  */
-export function detectsVSCodeTaskFinishMessage(cursorLine: string): boolean {
+export function detectsCodeEngineTaskFinishMessage(cursorLine: string): boolean {
 	// Be tolerant to whitespace, punctuation, and line wrapping that can split words mid-word.
 	const compact = cursorLine.replace(/[\s.,:;!?"'`()[\]{}<>\-_/\\]+/g, '').toLowerCase();
 	return normalizedTaskFinishMessages.some(msg => compact.includes(msg));
 }
 
 /**
- * Detects generic "press any key" prompts from scripts (not VS Code task messages).
+ * Detects generic "press any key" prompts from scripts (not Code Engine task messages).
  * These should prompt the user to interact with the terminal.
  */
 export function detectsGenericPressAnyKeyPattern(cursorLine: string): boolean {
-	// Match "press any key" but exclude VS Code task-specific messages
-	if (detectsVSCodeTaskFinishMessage(cursorLine)) {
+	// Match "press any key" but exclude Code Engine task-specific messages
+	if (detectsCodeEngineTaskFinishMessage(cursorLine)) {
 		return false;
 	}
 	return /press a(?:ny)? key/i.test(cursorLine);

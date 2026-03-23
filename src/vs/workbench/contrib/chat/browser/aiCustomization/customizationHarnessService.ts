@@ -12,7 +12,7 @@ import {
 	IHarnessDescriptor,
 	createCliHarnessDescriptor,
 	createClaudeHarnessDescriptor,
-	createVSCodeHarnessDescriptor,
+	createCodeEngineHarnessDescriptor,
 	getCliUserRoots,
 	getClaudeUserRoots,
 } from '../../common/customizationHarnessService.js';
@@ -23,7 +23,7 @@ import { IChatAgentService } from '../../common/participants/chatAgents.js';
 
 /**
  * Core implementation of the customization harness service.
- * Exposes VS Code, CLI, and Claude harnesses for filtering customizations.
+ * Exposes Code Engine, CLI, and Claude harnesses for filtering customizations.
  * CLI and Claude harnesses are only shown when their respective agents are registered.
  */
 class CustomizationHarnessService extends CustomizationHarnessServiceBase {
@@ -38,7 +38,7 @@ class CustomizationHarnessService extends CustomizationHarnessServiceBase {
 		const localExtras = [PromptsStorage.extension, BUILTIN_STORAGE];
 		const restrictedExtras: readonly string[] = [];
 		const allHarnesses: readonly IHarnessDescriptor[] = [
-			createVSCodeHarnessDescriptor(localExtras),
+			createCodeEngineHarnessDescriptor(localExtras),
 			createCliHarnessDescriptor(getCliUserRoots(userHome), restrictedExtras),
 			createClaudeHarnessDescriptor(getClaudeUserRoots(userHome), restrictedExtras),
 		];
@@ -61,7 +61,7 @@ class CustomizationHarnessService extends CustomizationHarnessServiceBase {
 
 		super(
 			allHarnesses,
-			CustomizationHarness.VSCode,
+			CustomizationHarness.CodeEngine,
 			available,
 		);
 	}

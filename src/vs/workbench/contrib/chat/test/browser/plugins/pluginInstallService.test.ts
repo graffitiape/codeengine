@@ -311,7 +311,7 @@ suite('PluginInstallService', () => {
 				sourceDescriptor: { kind: PluginSourceKind.RelativePath, path: 'plugins/myPlugin' },
 			});
 			const uri = service.getPluginInstallUri(plugin);
-			assert.strictEqual(uri.path, '/cache/agentPlugins/github.com/microsoft/vscode/plugins/myPlugin');
+			assert.strictEqual(uri.path, '/cache/agentPlugins/github.com/graffitiape/codeengine/plugins/myPlugin');
 		});
 
 		test('delegates to getPluginSourceInstallUri for npm plugins', () => {

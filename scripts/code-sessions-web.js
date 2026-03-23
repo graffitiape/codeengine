@@ -36,7 +36,7 @@ async function main() {
 
 	// Collect CSS module paths from the compiled output (same as @vscode/test-web does).
 	// These are turned into an import map so the browser can load `import './foo.css'`
-	// statements as JavaScript shims that inject the CSS via `_VSCODE_CSS_LOAD`.
+	// statements as JavaScript shims that inject the CSS via `_CODEENGINE_CSS_LOAD`.
 	let cssModules = [];
 	try {
 		const { glob } = require('tinyglobby');
@@ -108,7 +108,7 @@ function getSessionsHTML(host, port, cssModules, useMock) {
 	const imports = {};
 	for (const cssModule of cssModules) {
 		const cssUrl = `${fileRoot}/${cssModule}`;
-		const jsSrc = `globalThis._VSCODE_CSS_LOAD('${cssUrl}');\n`;
+		const jsSrc = `globalThis._CODEENGINE_CSS_LOAD('${cssUrl}');\n`;
 		const encoded = Buffer.from(jsSrc).toString('base64');
 		imports[cssUrl] = `data:application/javascript;base64,${encoded}`;
 	}
@@ -127,9 +127,9 @@ function getSessionsHTML(host, port, cssModules, useMock) {
 	<title>Sessions</title>
 	<style id="vscode-css-modules"></style>
 	<script>
-		globalThis._VSCODE_FILE_ROOT = '${fileRoot}';
+		globalThis._CODEENGINE_FILE_ROOT = '${fileRoot}';
 		const sheet = document.getElementById('vscode-css-modules').sheet;
-		globalThis._VSCODE_CSS_LOAD = function (url) { sheet.insertRule(\`@import url(\${url});\`); };
+		globalThis._CODEENGINE_CSS_LOAD = function (url) { sheet.insertRule(\`@import url(\${url});\`); };
 	</script>
 	<script type="importmap">
 ${importMapJson}

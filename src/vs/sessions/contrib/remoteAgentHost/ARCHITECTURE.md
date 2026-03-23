@@ -5,7 +5,7 @@ sessions are created, and the URI/target conventions used throughout the system.
 
 ## Overview
 
-A **remote agent host** is a VS Code agent host process running on another
+A **remote agent host** is a Code Engine agent host process running on another
 machine, connected over WebSocket. The user configures remote addresses in the
 `chat.remoteAgentHosts` setting. Each remote host may expose one or more agent
 backends (currently only the `copilot` provider is supported). The system
@@ -14,7 +14,7 @@ creates sessions that stream turns via the agent host protocol.
 
 ```
 ┌─────────────┐    WebSocket     ┌───────────────────┐
-│  VS Code    │ ◄──────────────► │ Remote Agent Host │
+│  Code Engine    │ ◄──────────────► │ Remote Agent Host │
 │  (client)   │   AHP protocol   │  (server)         │
 └─────────────┘                  └───────────────────┘
 ```

@@ -55,7 +55,7 @@ export interface IAgentDescriptor {
  * Describes the agent host as an OAuth 2.0 protected resource.
  * Uses {@link IAuthorizationProtectedResourceMetadata} from RFC 9728
  * to describe auth requirements, enabling clients to resolve tokens
- * using the standard VS Code authentication service.
+ * using the standard Code Engine authentication service.
  *
  * Returned from the server via {@link IAgentService.getResourceMetadata}.
  */

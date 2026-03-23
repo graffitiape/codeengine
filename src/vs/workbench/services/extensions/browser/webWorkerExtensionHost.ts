@@ -197,7 +197,7 @@ export class WebWorkerExtensionHost extends Disposable implements IExtensionHost
 					type: event.data.type,
 					data: {
 						workerUrl: this._webWorkerService.getWorkerUrl(extensionHostWorkerMainDescriptor),
-						fileRoot: globalThis._VSCODE_FILE_ROOT,
+						fileRoot: globalThis._CODEENGINE_FILE_ROOT,
 						nls: {
 							messages: getNLSMessages(),
 							language: getNLSLanguage()

@@ -1,5 +1,5 @@
 parameters:
-  - name: VSCODE_RELEASE
+  - name: CODEENGINE_RELEASE
     type: boolean
 
 steps:
@@ -40,7 +40,7 @@ steps:
       AZURE_ID_TOKEN: "$(AZURE_ID_TOKEN)"
     displayName: Get publish auth tokens
 
-  - script: node build/azure-pipelines/common/releaseBuild.ts ${{ parameters.VSCODE_RELEASE }}
+  - script: node build/azure-pipelines/common/releaseBuild.ts ${{ parameters.CODEENGINE_RELEASE }}
     displayName: Release build
     env:
       PUBLISH_AUTH_TOKENS: "$(PUBLISH_AUTH_TOKENS)"

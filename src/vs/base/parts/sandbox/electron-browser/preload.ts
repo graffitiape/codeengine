@@ -71,7 +71,7 @@
 	//#region Resolve Shell Environment
 
 	/**
-	 * If VSCode is not run from a terminal, we should resolve additional
+	 * If CodeEngine is not run from a terminal, we should resolve additional
 	 * shell specific environment from the OS shell to ensure we are seeing
 	 * all development related environment variables. We do this from the
 	 * main process because it may involve spawning a shell.
@@ -204,7 +204,7 @@
 			get execPath() { return process.execPath; },
 
 			cwd(): string {
-				return process.env['VSCODE_CWD'] || process.execPath.substr(0, process.execPath.lastIndexOf(process.platform === 'win32' ? '\\' : '/'));
+				return process.env['CODEENGINE_CWD'] || process.execPath.substr(0, process.execPath.lastIndexOf(process.platform === 'win32' ? '\\' : '/'));
 			},
 
 			shellEnv(): Promise<typeof process.env> {
@@ -247,7 +247,7 @@
 	};
 
 	try {
-		// Use `contextBridge` APIs to expose globals to VSCode
+		// Use `contextBridge` APIs to expose globals to CodeEngine
 		contextBridge.exposeInMainWorld('vscode', globals);
 	} catch (error) {
 		console.error(error);

@@ -108,11 +108,11 @@ export class IPCServer implements IIPCServer, ITerminalEnvironmentProvider, Disp
 	}
 
 	getEnv(): { [key: string]: string } {
-		return { VSCODE_GIT_IPC_HANDLE: this.ipcHandlePath };
+		return { CODEENGINE_GIT_IPC_HANDLE: this.ipcHandlePath };
 	}
 
 	getTerminalEnv(): { [key: string]: string } {
-		return { VSCODE_GIT_IPC_HANDLE: this.ipcHandlePath };
+		return { CODEENGINE_GIT_IPC_HANDLE: this.ipcHandlePath };
 	}
 
 	dispose(): void {

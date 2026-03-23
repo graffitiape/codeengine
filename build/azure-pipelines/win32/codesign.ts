@@ -10,7 +10,7 @@ import { e } from '../common/publish.ts';
 async function main() {
 	usePwsh();
 
-	const arch = e('VSCODE_ARCH');
+	const arch = e('CODEENGINE_ARCH');
 	const esrpCliDLLPath = e('EsrpCliDllPath');
 	const codeSigningFolderPath = e('CodeSigningFolderPath');
 
@@ -20,7 +20,7 @@ async function main() {
 	// 3. Codesign context menu appx package (insiders only)
 	const codesignTask1 = spawnCodesignProcess(esrpCliDLLPath, 'sign-windows', codeSigningFolderPath, '*.dll,*.exe,*.node');
 	const codesignTask2 = spawnCodesignProcess(esrpCliDLLPath, 'sign-windows-appx', codeSigningFolderPath, '*.ps1,*.psm1,*.psd1,*.ps1xml');
-	const codesignTask3 = process.env['VSCODE_QUALITY'] !== 'exploration'
+	const codesignTask3 = process.env['CODEENGINE_QUALITY'] !== 'exploration'
 		? spawnCodesignProcess(esrpCliDLLPath, 'sign-windows-appx', codeSigningFolderPath, '*.appx')
 		: undefined;
 
@@ -44,8 +44,8 @@ async function main() {
 	// Package client
 	if (process.env['BUILT_CLIENT']) {
 		printBanner('Package client');
-		const clientArchivePath = `.build/win32-${arch}/VSCode-win32-${arch}.zip`;
-		await $`7z.exe a -tzip ${clientArchivePath} ../VSCode-win32-${arch}/* "-xr!CodeSignSummary*.md"`.pipe(process.stdout);
+		const clientArchivePath = `.build/win32-${arch}/CodeEngine-win32-${arch}.zip`;
+		await $`7z.exe a -tzip ${clientArchivePath} ../CodeEngine-win32-${arch}/* "-xr!CodeSignSummary*.md"`.pipe(process.stdout);
 		await $`7z.exe l ${clientArchivePath}`.pipe(process.stdout);
 	}
 

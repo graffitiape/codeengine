@@ -217,7 +217,7 @@ export class RemoteAgentHostProtocolClient extends Disposable implements IAgentC
 		} else if (isJsonRpcNotification(msg)) {
 			switch (msg.method) {
 				case 'action': {
-					// Protocol envelope → VS Code envelope (superset of action types)
+					// Protocol envelope → Code Engine envelope (superset of action types)
 					const envelope = msg.params as unknown as IActionEnvelope;
 					this._serverSeq = Math.max(this._serverSeq, envelope.serverSeq);
 					this._onDidAction.fire(envelope);
@@ -256,7 +256,7 @@ export class RemoteAgentHostProtocolClient extends Disposable implements IAgentC
 		return deferred.p as Promise<ICommandMap[M]['result']>;
 	}
 
-	/** Send a JSON-RPC request for a VS Code extension method (not in the protocol spec). */
+	/** Send a JSON-RPC request for a Code Engine extension method (not in the protocol spec). */
 	private _sendExtensionRequest(method: string, params?: unknown): Promise<unknown> {
 		const id = this._nextRequestId++;
 		const deferred = new DeferredPromise<unknown>();

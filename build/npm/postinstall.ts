@@ -62,7 +62,7 @@ async function npmInstallAsync(dir: string, opts?: child_process.SpawnOptions): 
 
 	const command = process.env['npm_command'] || 'install';
 
-	if (process.env['VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME'] && /^(.build\/distro\/npm\/)?remote$/.test(dir)) {
+	if (process.env['CODEENGINE_REMOTE_DEPENDENCIES_CONTAINER_NAME'] && /^(.build\/distro\/npm\/)?remote$/.test(dir)) {
 		const syncOpts: child_process.SpawnSyncOptions = {
 			env: finalOpts.env,
 			cwd: root,
@@ -70,7 +70,7 @@ async function npmInstallAsync(dir: string, opts?: child_process.SpawnOptions): 
 			shell: true,
 		};
 		const userinfo = os.userInfo();
-		log(dir, `Installing dependencies inside container ${process.env['VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME']}...`);
+		log(dir, `Installing dependencies inside container ${process.env['CODEENGINE_REMOTE_DEPENDENCIES_CONTAINER_NAME']}...`);
 
 		if (process.env['npm_config_arch'] === 'arm64') {
 			run('sudo', ['docker', 'run', '--rm', '--privileged', 'multiarch/qemu-user-static', '--reset', '-p', 'yes'], syncOpts);
@@ -78,11 +78,11 @@ async function npmInstallAsync(dir: string, opts?: child_process.SpawnOptions): 
 		run('sudo', [
 			'docker', 'run',
 			'-e', 'GITHUB_TOKEN',
-			'-v', `${process.env['VSCODE_HOST_MOUNT']}:/root/vscode`,
-			'-v', `${process.env['VSCODE_HOST_MOUNT']}/.build/.netrc:/root/.netrc`,
-			'-v', `${process.env['VSCODE_NPMRC_PATH']}:/root/.npmrc`,
+			'-v', `${process.env['CODEENGINE_HOST_MOUNT']}:/root/vscode`,
+			'-v', `${process.env['CODEENGINE_HOST_MOUNT']}/.build/.netrc:/root/.netrc`,
+			'-v', `${process.env['CODEENGINE_NPMRC_PATH']}:/root/.npmrc`,
 			'-w', path.resolve('/root/vscode', dir),
-			process.env['VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME'],
+			process.env['CODEENGINE_REMOTE_DEPENDENCIES_CONTAINER_NAME'],
 			'sh', '-c', `\"chown -R root:root ${path.resolve('/root/vscode', dir)} && export PATH="/root/vscode/.build/nodejs-musl/usr/local/bin:$PATH" && npm i -g node-gyp-build && npm ci\"`
 		], syncOpts);
 		run('sudo', ['chown', '-R', `${userinfo.uid}:${userinfo.gid}`, `${path.resolve(root, dir)}`], syncOpts);
@@ -208,7 +208,7 @@ async function runWithConcurrency(tasks: (() => Promise<void>)[], concurrency: n
 }
 
 async function main() {
-	if (!process.env['VSCODE_FORCE_INSTALL'] && isUpToDate()) {
+	if (!process.env['CODEENGINE_FORCE_INSTALL'] && isUpToDate()) {
 		log('.', 'All dependencies up to date, skipping postinstall.');
 		child_process.execSync('git config pull.rebase merges');
 		child_process.execSync('git config blame.ignoreRevsFile .git-blame-ignore-revs');
@@ -243,22 +243,22 @@ async function main() {
 			const remoteDir = dir;
 			nativeTasks.push(() => {
 				const env: NodeJS.ProcessEnv = { ...process.env };
-				if (process.env['VSCODE_REMOTE_CC']) {
-					env['CC'] = process.env['VSCODE_REMOTE_CC'];
+				if (process.env['CODEENGINE_REMOTE_CC']) {
+					env['CC'] = process.env['CODEENGINE_REMOTE_CC'];
 				} else {
 					delete env['CC'];
 				}
-				if (process.env['VSCODE_REMOTE_CXX']) {
-					env['CXX'] = process.env['VSCODE_REMOTE_CXX'];
+				if (process.env['CODEENGINE_REMOTE_CXX']) {
+					env['CXX'] = process.env['CODEENGINE_REMOTE_CXX'];
 				} else {
 					delete env['CXX'];
 				}
 				if (process.env['CXXFLAGS']) { delete env['CXXFLAGS']; }
 				if (process.env['CFLAGS']) { delete env['CFLAGS']; }
 				if (process.env['LDFLAGS']) { delete env['LDFLAGS']; }
-				if (process.env['VSCODE_REMOTE_CXXFLAGS']) { env['CXXFLAGS'] = process.env['VSCODE_REMOTE_CXXFLAGS']; }
-				if (process.env['VSCODE_REMOTE_LDFLAGS']) { env['LDFLAGS'] = process.env['VSCODE_REMOTE_LDFLAGS']; }
-				if (process.env['VSCODE_REMOTE_NODE_GYP']) { env['npm_config_node_gyp'] = process.env['VSCODE_REMOTE_NODE_GYP']; }
+				if (process.env['CODEENGINE_REMOTE_CXXFLAGS']) { env['CXXFLAGS'] = process.env['CODEENGINE_REMOTE_CXXFLAGS']; }
+				if (process.env['CODEENGINE_REMOTE_LDFLAGS']) { env['LDFLAGS'] = process.env['CODEENGINE_REMOTE_LDFLAGS']; }
+				if (process.env['CODEENGINE_REMOTE_NODE_GYP']) { env['npm_config_node_gyp'] = process.env['CODEENGINE_REMOTE_NODE_GYP']; }
 				setNpmrcConfig('remote', env);
 				return npmInstallAsync(remoteDir, { env });
 			});

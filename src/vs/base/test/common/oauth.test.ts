@@ -274,8 +274,8 @@ suite('OAuth', () => {
 		});
 
 		test('scopesMatch should return true for scopes in different order', () => {
-			const scopes1 = ['6f1cc985-85e8-487e-b0dd-aa633302a731/.default', 'VSCODE_TENANT:organizations'];
-			const scopes2 = ['VSCODE_TENANT:organizations', '6f1cc985-85e8-487e-b0dd-aa633302a731/.default'];
+			const scopes1 = ['6f1cc985-85e8-487e-b0dd-aa633302a731/.default', 'CODEENGINE_TENANT:organizations'];
+			const scopes2 = ['CODEENGINE_TENANT:organizations', '6f1cc985-85e8-487e-b0dd-aa633302a731/.default'];
 			assert.strictEqual(scopesMatch(scopes1, scopes2), true);
 		});
 
@@ -292,8 +292,8 @@ suite('OAuth', () => {
 		});
 
 		test('scopesMatch should handle complex Microsoft scopes', () => {
-			const scopes1 = ['6f1cc985-85e8-487e-b0dd-aa633302a731/.default', 'VSCODE_TENANT:organizations'];
-			const scopes2 = ['VSCODE_TENANT:organizations', '6f1cc985-85e8-487e-b0dd-aa633302a731/.default'];
+			const scopes1 = ['6f1cc985-85e8-487e-b0dd-aa633302a731/.default', 'CODEENGINE_TENANT:organizations'];
+			const scopes2 = ['CODEENGINE_TENANT:organizations', '6f1cc985-85e8-487e-b0dd-aa633302a731/.default'];
 			assert.strictEqual(scopesMatch(scopes1, scopes2), true);
 		});
 
@@ -452,7 +452,7 @@ suite('OAuth', () => {
 			const mockResponse = {
 				client_id: 'generated-client-id',
 				client_name: 'Test Client',
-				client_uri: 'https://code.visualstudio.com'
+				client_uri: 'https://github.com/graffitiape/codeengine'
 			};
 
 			fetchStub.resolves({
@@ -481,7 +481,7 @@ suite('OAuth', () => {
 			// Verify request body
 			const requestBody = JSON.parse(options.body as string);
 			assert.strictEqual(requestBody.client_name, 'Test Client');
-			assert.strictEqual(requestBody.client_uri, 'https://code.visualstudio.com');
+			assert.strictEqual(requestBody.client_uri, 'https://github.com/graffitiape/codeengine');
 			assert.deepStrictEqual(requestBody.grant_types, ['authorization_code', 'refresh_token', 'urn:ietf:params:oauth:grant-type:device_code']);
 			assert.deepStrictEqual(requestBody.response_types, ['code']);
 			assert.deepStrictEqual(requestBody.redirect_uris, [

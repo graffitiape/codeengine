@@ -15,7 +15,7 @@ parameters:
 variables:
   - name: NPM_REGISTRY
     value: "https://pkgs.dev.azure.com/monacotools/Monaco/_packaging/vscode/npm/registry/"
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     value: oss
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
       os: linux
     timeoutInMinutes: 1300
     variables:
-      VSCODE_ARCH: x64
+      CODEENGINE_ARCH: x64
     steps:
       - task: NodeTool@0
         inputs:

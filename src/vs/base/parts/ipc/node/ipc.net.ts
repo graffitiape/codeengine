@@ -89,7 +89,7 @@ export function upgradeToISocket(req: http.IncomingMessage, socket: Socket, {
  * ends. For unix domain sockets, the close event may not fire consistently
  * due to what appears to be a Node.js bug.
  *
- * @see https://github.com/microsoft/vscode/issues/211462#issuecomment-2155471996
+ * @see https://github.com/graffitiape/codeengine/issues/211462#issuecomment-2155471996
  */
 const socketEndTimeoutMs = 30_000;
 
@@ -878,7 +878,7 @@ function unmask(buffer: VSBuffer, mask: number): void {
 }
 
 // Read this before there's any chance it is overwritten
-// Related to https://github.com/microsoft/vscode/issues/30624
+// Related to https://github.com/graffitiape/codeengine/issues/30624
 export const XDG_RUNTIME_DIR = process.env['XDG_RUNTIME_DIR'];
 
 const safeIpcPathLengths: { [platform: number]: number } = {
@@ -923,7 +923,7 @@ export function createStaticIPCHandle(directoryPath: string, type: string, versi
 	const typeForSocket = type.substr(0, 6);
 
 	let result: string;
-	if (process.platform !== 'darwin' && XDG_RUNTIME_DIR && !process.env['VSCODE_PORTABLE']) {
+	if (process.platform !== 'darwin' && XDG_RUNTIME_DIR && !process.env['CODEENGINE_PORTABLE']) {
 		result = join(XDG_RUNTIME_DIR, `vscode-${scopeForSocket}-${versionForSocket}-${typeForSocket}.sock`);
 	} else {
 		result = join(directoryPath, `${versionForSocket}-${typeForSocket}.sock`);

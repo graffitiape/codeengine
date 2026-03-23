@@ -206,7 +206,7 @@ If the setting `jsonFoldingLimit` or `jsoncFoldingLimit` is set, the JSON langua
 
 ## Try
 
-The JSON language server is shipped with [Visual Studio Code](https://code.visualstudio.com/) as part of the built-in VSCode extension `json-language-features`. The server is started when the first JSON file is opened. The [VSCode JSON documentation](https://code.visualstudio.com/docs/languages/json) for detailed information on the user experience and has more information on how to configure the language support.
+The JSON language server is shipped with [Code Engine](https://github.com/graffitiape/codeengine/) as part of the built-in VSCode extension `json-language-features`. The server is started when the first JSON file is opened. The [VSCode JSON documentation](https://github.com/graffitiape/codeengine/docs/languages/json) for detailed information on the user experience and has more information on how to configure the language support.
 
 ## Integrate
 
@@ -229,9 +229,9 @@ To connect to the server from NodeJS, see Remy Suen's great write-up on [how to 
 
 ## Participate
 
-The source code of the JSON language server can be found in the [VSCode repository](https://github.com/microsoft/vscode) at [extensions/json-language-features/server](https://github.com/microsoft/vscode/tree/master/extensions/json-language-features/server).
+The source code of the JSON language server can be found in the [Code Engine repository](https://github.com/graffitiape/codeengine) at [extensions/json-language-features/server](https://github.com/graffitiape/codeengine/tree/master/extensions/json-language-features/server).
 
-File issues and pull requests in the [VSCode GitHub Issues](https://github.com/microsoft/vscode/issues). See the document [How to Contribute](https://github.com/microsoft/vscode/wiki/How-to-Contribute) on how to build and run from source.
+File issues and pull requests in the [VSCode GitHub Issues](https://github.com/graffitiape/codeengine/issues). See the document [How to Contribute](https://github.com/graffitiape/codeengine/wiki/How-to-Contribute) on how to build and run from source.
 
 Most of the functionality of the server is located in libraries:
 
@@ -249,4 +249,4 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
-Licensed under the [MIT](https://github.com/microsoft/vscode/blob/master/LICENSE.txt) License.
+Licensed under the [MIT](https://github.com/graffitiape/codeengine/blob/master/LICENSE.txt) License.

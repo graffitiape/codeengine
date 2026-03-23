@@ -1,5 +1,5 @@
 [package]
-name = "code-cli"
+name = "codeengine-cli"
 version = "0.1.0"
 edition = "2021"
 default-run = "code"
@@ -9,7 +9,7 @@ name = "cli"
 path = "src/lib.rs"
 
 [[bin]]
-name = "code"
+name = "code-engine"
 
 [dependencies]
 futures = "0.3.28"
@@ -82,4 +82,4 @@ lto = "thin"
 [features]
 default = []
 vsda = []
-vscode-encrypt = []
+codeengine-encrypt = []

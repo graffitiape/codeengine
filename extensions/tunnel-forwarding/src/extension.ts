@@ -23,7 +23,7 @@ const CLEANUP_TIMEOUT = 10_000;
 
 const versionFolder = vscode.env.appCommit?.substring(0, 10);
 let cliPath: string;
-if (process.env.VSCODE_FORWARDING_IS_DEV) {
+if (process.env.CODEENGINE_FORWARDING_IS_DEV) {
 	cliPath = path.join(__dirname, '../../../cli/target/debug/code');
 } else {
 	let binPath: string;
@@ -277,7 +277,7 @@ class TunnelProvider implements vscode.TunnelProvider {
 		];
 
 		this.logger.log('info', '[forwarding] starting CLI');
-		const child = spawn(cliPath, args, { stdio: 'pipe', env: { ...process.env, NO_COLOR: '1', VSCODE_CLI_ACCESS_TOKEN: session.accessToken } });
+		const child = spawn(cliPath, args, { stdio: 'pipe', env: { ...process.env, NO_COLOR: '1', CODEENGINE_CLI_ACCESS_TOKEN: session.accessToken } });
 		this.state = { state: State.Starting, process: child };
 
 		const progressP = new DeferredPromise<void>();

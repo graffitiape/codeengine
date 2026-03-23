@@ -11,11 +11,11 @@ set VSCODELOGSDIR=%~dp0\..\.build\logs\integration-tests
 if "%INTEGRATION_TEST_ELECTRON_PATH%"=="" (
 	chcp 65001
 	set INTEGRATION_TEST_ELECTRON_PATH=.\scripts\code.bat
-	set VSCODE_BUILD_BUILTIN_EXTENSIONS_SILENCE_PLEASE=1
+	set CODEENGINE_BUILD_BUILTIN_EXTENSIONS_SILENCE_PLEASE=1
 
 	echo Running integration tests out of sources.
 ) else (
-	set VSCODE_CLI=1
+	set CODEENGINE_CLI=1
 	set ELECTRON_ENABLE_LOGGING=1
 
 	echo Running integration tests with '%INTEGRATION_TEST_ELECTRON_PATH%' as build.

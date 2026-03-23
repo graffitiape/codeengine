@@ -25,7 +25,7 @@ VSCODECRASHDIR=$ROOT/.build/crashes
 test -d node_modules || npm i
 
 # Get electron
-if [[ -z "${VSCODE_SKIP_PRELAUNCH}" ]]; then
+if [[ -z "${CODEENGINE_SKIP_PRELAUNCH}" ]]; then
 	npm run electron
 fi
 

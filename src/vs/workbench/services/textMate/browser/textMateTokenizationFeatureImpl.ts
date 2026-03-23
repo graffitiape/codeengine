@@ -230,7 +230,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 						message: nls.localize('progress1', "Preparing to log TM Grammar parsing. Press Stop when finished.")
 					});
 
-					return this._getVSCodeOniguruma().then((vscodeOniguruma) => {
+					return this._getCodeEngineOniguruma().then((vscodeOniguruma) => {
 						vscodeOniguruma.setDefaultDebugCall(true);
 						progress.report({
 							message: nls.localize('progress2', "Now logging TM Grammar parsing. Press Stop when finished.")
@@ -239,7 +239,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 					});
 				},
 				(choice) => {
-					this._getVSCodeOniguruma().then((vscodeOniguruma) => {
+					this._getCodeEngineOniguruma().then((vscodeOniguruma) => {
 						this._debugModePrintFunc = () => { };
 						this._debugMode = false;
 						vscodeOniguruma.setDefaultDebugCall(false);
@@ -259,7 +259,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 			return this._grammarFactory;
 		}
 
-		const [vscodeTextmate, vscodeOniguruma] = await Promise.all([importAMDNodeModule<typeof import('vscode-textmate')>('vscode-textmate', 'release/main.js'), this._getVSCodeOniguruma()]);
+		const [vscodeTextmate, vscodeOniguruma] = await Promise.all([importAMDNodeModule<typeof import('vscode-textmate')>('vscode-textmate', 'release/main.js'), this._getCodeEngineOniguruma()]);
 		const onigLib: Promise<IOnigLib> = Promise.resolve({
 			createOnigScanner: (sources: string[]) => vscodeOniguruma.createOnigScanner(sources),
 			createOnigString: (str: string) => vscodeOniguruma.createOnigString(str)
@@ -372,10 +372,10 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 	}
 
 	private _vscodeOniguruma: Promise<typeof import('vscode-oniguruma')> | null;
-	private _getVSCodeOniguruma(): Promise<typeof import('vscode-oniguruma')> {
+	private _getCodeEngineOniguruma(): Promise<typeof import('vscode-oniguruma')> {
 		if (!this._vscodeOniguruma) {
 			this._vscodeOniguruma = (async () => {
-				const [vscodeOniguruma, wasm] = await Promise.all([importAMDNodeModule<typeof import('vscode-oniguruma')>('vscode-oniguruma', 'release/main.js'), this._loadVSCodeOnigurumaWASM()]);
+				const [vscodeOniguruma, wasm] = await Promise.all([importAMDNodeModule<typeof import('vscode-oniguruma')>('vscode-oniguruma', 'release/main.js'), this._loadCodeEngineOnigurumaWASM()]);
 				await vscodeOniguruma.loadWASM({
 					data: wasm,
 					print: (str: string) => {
@@ -388,7 +388,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 		return this._vscodeOniguruma;
 	}
 
-	private async _loadVSCodeOnigurumaWASM(): Promise<Response | ArrayBuffer> {
+	private async _loadCodeEngineOnigurumaWASM(): Promise<Response | ArrayBuffer> {
 		if (isWeb) {
 			const response = await fetch(resolveAmdNodeModulePath('vscode-oniguruma', 'release/onig.wasm'));
 			// Using the response directly only works if the server sets the MIME type 'application/wasm'.

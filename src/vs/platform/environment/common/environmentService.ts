@@ -22,7 +22,7 @@ export interface INativeEnvironmentPaths {
 	 * The user data directory to use for anything that should be
 	 * persisted except for the content that is meant for the `homeDir`.
 	 *
-	 * Only one instance of VSCode can use the same `userDataDir`.
+	 * Only one instance of CodeEngine can use the same `userDataDir`.
 	 */
 	userDataDir: string;
 
@@ -93,7 +93,7 @@ export abstract class AbstractNativeEnvironmentService implements INativeEnviron
 
 	@memoize
 	get argvResource(): URI {
-		const vscodePortable = env['VSCODE_PORTABLE'];
+		const vscodePortable = env['CODEENGINE_PORTABLE'];
 		if (vscodePortable) {
 			return URI.file(join(vscodePortable, 'argv.json'));
 		}
@@ -134,12 +134,12 @@ export abstract class AbstractNativeEnvironmentService implements INativeEnviron
 			return resolve(cliExtensionsDir);
 		}
 
-		const vscodeExtensions = env['VSCODE_EXTENSIONS'];
+		const vscodeExtensions = env['CODEENGINE_EXTENSIONS'];
 		if (vscodeExtensions) {
 			return vscodeExtensions;
 		}
 
-		const vscodePortable = env['VSCODE_PORTABLE'];
+		const vscodePortable = env['CODEENGINE_PORTABLE'];
 		if (vscodePortable) {
 			return join(vscodePortable, 'extensions');
 		}
@@ -205,7 +205,7 @@ export abstract class AbstractNativeEnvironmentService implements INativeEnviron
 	get debugExtensionHost(): IExtensionHostDebugParams { return parseExtensionHostDebugPort(this.args, this.isBuilt); }
 	get debugRenderer(): boolean { return !!this.args.debugRenderer; }
 
-	get isBuilt(): boolean { return !env['VSCODE_DEV']; }
+	get isBuilt(): boolean { return !env['CODEENGINE_DEV']; }
 	get verbose(): boolean { return !!this.args.verbose; }
 
 	@memoize
@@ -243,7 +243,7 @@ export abstract class AbstractNativeEnvironmentService implements INativeEnviron
 	@memoize
 	get policyFile(): URI | undefined {
 		if (this.args['__enable-file-policy']) {
-			const vscodePortable = env['VSCODE_PORTABLE'];
+			const vscodePortable = env['CODEENGINE_PORTABLE'];
 			if (vscodePortable) {
 				return URI.file(join(vscodePortable, 'policy.json'));
 			}

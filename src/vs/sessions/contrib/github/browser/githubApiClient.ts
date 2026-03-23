@@ -90,7 +90,7 @@ export class GitHubApiClient extends Disposable {
 			headers: {
 				'Authorization': `token ${token}`,
 				'Accept': accept,
-				'User-Agent': 'VSCode-Sessions-GitHub',
+				'User-Agent': 'CodeEngine-Sessions-GitHub',
 				...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
 			},
 			data: body !== undefined ? JSON.stringify(body) : undefined,

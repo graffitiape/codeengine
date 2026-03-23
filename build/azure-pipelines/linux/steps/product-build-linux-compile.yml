@@ -1,23 +1,23 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
-  - name: VSCODE_CIBUILD
+  - name: CODEENGINE_CIBUILD
     type: boolean
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     type: string
-  - name: VSCODE_BUILD_LINUX_SNAP
+  - name: CODEENGINE_BUILD_LINUX_SNAP
     type: boolean
     default: false
-  - name: VSCODE_RUN_ELECTRON_TESTS
+  - name: CODEENGINE_RUN_ELECTRON_TESTS
     type: boolean
     default: false
-  - name: VSCODE_RUN_BROWSER_TESTS
+  - name: CODEENGINE_RUN_BROWSER_TESTS
     type: boolean
     default: false
-  - name: VSCODE_RUN_REMOTE_TESTS
+  - name: CODEENGINE_RUN_REMOTE_TESTS
     type: boolean
     default: false
-  - name: VSCODE_RUN_CHECKS
+  - name: CODEENGINE_RUN_CHECKS
     type: boolean
     default: false
 
@@ -61,7 +61,7 @@ steps:
     condition: and(succeeded(), ne(variables['NPM_REGISTRY'], 'none'))
     displayName: Setup NPM Registry
 
-  - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts linux $VSCODE_ARCH $(node -p process.arch) > .build/packagelockhash
+  - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts linux $CODEENGINE_ARCH $(node -p process.arch) > .build/packagelockhash
     displayName: Prepare node_modules cache key
 
   - task: Cache@2
@@ -112,14 +112,14 @@ steps:
   # hence avoid adding it behind NODE_MODULES_RESTORED condition.
   - script: |
       set -e
-      SYSROOT_ARCH=$VSCODE_ARCH
+      SYSROOT_ARCH=$CODEENGINE_ARCH
       if [ "$SYSROOT_ARCH" == "x64" ]; then
         SYSROOT_ARCH="amd64"
       fi
-      export VSCODE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0
-      SYSROOT_ARCH="$SYSROOT_ARCH" VSCODE_SYSROOT_PREFIX="-glibc-2.28-gcc-8.5.0" node -e 'import { getVSCodeSysroot } from "./build/linux/debian/install-sysroot.ts"; (async () => { await getVSCodeSysroot(process.env["SYSROOT_ARCH"]); })()'
+      export CODEENGINE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0
+      SYSROOT_ARCH="$SYSROOT_ARCH" CODEENGINE_SYSROOT_PREFIX="-glibc-2.28-gcc-8.5.0" node -e 'import { getVSCodeSysroot } from "./build/linux/debian/install-sysroot.ts"; (async () => { await getVSCodeSysroot(process.env["SYSROOT_ARCH"]); })()'
     env:
-      VSCODE_ARCH: $(VSCODE_ARCH)
+      CODEENGINE_ARCH: $(CODEENGINE_ARCH)
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Download vscode sysroots
 
@@ -142,7 +142,7 @@ steps:
       done
     env:
       npm_config_arch: $(NPM_ARCH)
-      VSCODE_ARCH: $(VSCODE_ARCH)
+      CODEENGINE_ARCH: $(CODEENGINE_ARCH)
       ELECTRON_SKIP_BINARY_DOWNLOAD: 1
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
@@ -161,8 +161,8 @@ steps:
     condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
     displayName: Create node_modules archive
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
-    - script: npx deemon --detach --wait -- node build/azure-pipelines/common/waitForArtifacts.ts $(ARTIFACT_PREFIX)vscode_cli_linux_$(VSCODE_ARCH)_cli
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
+    - script: npx deemon --detach --wait -- node build/azure-pipelines/common/waitForArtifacts.ts $(ARTIFACT_PREFIX)vscode_cli_linux_$(CODEENGINE_ARCH)_cli
       env:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       displayName: Wait for CLI artifact (background)
@@ -177,27 +177,27 @@ steps:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Compile
 
-  - ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+  - ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
     - script: node build/azure-pipelines/common/extract-telemetry.ts
       displayName: Generate lists of telemetry events
 
-  - ${{ if or(eq(parameters.VSCODE_RUN_ELECTRON_TESTS, true), eq(parameters.VSCODE_RUN_BROWSER_TESTS, true), eq(parameters.VSCODE_RUN_REMOTE_TESTS, true)) }}:
+  - ${{ if or(eq(parameters.CODEENGINE_RUN_ELECTRON_TESTS, true), eq(parameters.CODEENGINE_RUN_BROWSER_TESTS, true), eq(parameters.CODEENGINE_RUN_REMOTE_TESTS, true)) }}:
     - script: |
         set -e
         npm run compile --prefix test/smoke
         npm run compile --prefix test/integration/browser
       displayName: Compile test suites (non-OSS)
-      condition: and(succeeded(), eq(variables['VSCODE_STEP_ON_IT'], 'false'))
+      condition: and(succeeded(), eq(variables['CODEENGINE_STEP_ON_IT'], 'false'))
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
     - script: npm run copy-policy-dto --prefix build && node build/lib/policies/policyGenerator.ts build/lib/policies/policyData.jsonc linux
       displayName: Generate policy definitions
       retryCountOnTaskFailure: 3
 
   - script: |
       set -e
-      npm run gulp vscode-linux-$(VSCODE_ARCH)-min-ci
-      ARCHIVE_PATH=".build/linux/client/code-${{ parameters.VSCODE_QUALITY }}-$(VSCODE_ARCH)-$(date +%s).tar.gz"
+      npm run gulp vscode-linux-$(CODEENGINE_ARCH)-min-ci
+      ARCHIVE_PATH=".build/linux/client/code-${{ parameters.CODEENGINE_QUALITY }}-$(CODEENGINE_ARCH)-$(date +%s).tar.gz"
       mkdir -p $(dirname $ARCHIVE_PATH)
       echo "##vso[task.setvariable variable=CLIENT_PATH]$ARCHIVE_PATH"
       echo "##vso[task.setvariable variable=CLIENT_ARCHIVE_NAME]$(basename $ARCHIVE_PATH)"
@@ -205,42 +205,42 @@ steps:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Build client
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
-    - script: npx deemon --attach -- node build/azure-pipelines/common/waitForArtifacts.ts $(ARTIFACT_PREFIX)vscode_cli_linux_$(VSCODE_ARCH)_cli
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
+    - script: npx deemon --attach -- node build/azure-pipelines/common/waitForArtifacts.ts $(ARTIFACT_PREFIX)vscode_cli_linux_$(CODEENGINE_ARCH)_cli
       env:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       displayName: Wait for CLI artifact
 
     - task: DownloadPipelineArtifact@2
       inputs:
-        artifact: $(ARTIFACT_PREFIX)vscode_cli_linux_$(VSCODE_ARCH)_cli
+        artifact: $(ARTIFACT_PREFIX)vscode_cli_linux_$(CODEENGINE_ARCH)_cli
         patterns: "**"
         path: $(Build.ArtifactStagingDirectory)/cli
-      displayName: Download VS Code CLI
+      displayName: Download Code Engine CLI
 
     - script: |
         set -e
         tar -xzvf $(Build.ArtifactStagingDirectory)/cli/*.tar.gz -C $(Build.ArtifactStagingDirectory)/cli
-        CLI_APP_NAME=$(node -p "require(\"$(agent.builddirectory)/VSCode-linux-$(VSCODE_ARCH)/resources/app/product.json\").tunnelApplicationName")
-        APP_NAME=$(node -p "require(\"$(agent.builddirectory)/VSCode-linux-$(VSCODE_ARCH)/resources/app/product.json\").applicationName")
-        mv $(Build.ArtifactStagingDirectory)/cli/$APP_NAME $(agent.builddirectory)/VSCode-linux-$(VSCODE_ARCH)/bin/$CLI_APP_NAME
+        CLI_APP_NAME=$(node -p "require(\"$(agent.builddirectory)/VSCode-linux-$(CODEENGINE_ARCH)/resources/app/product.json\").tunnelApplicationName")
+        APP_NAME=$(node -p "require(\"$(agent.builddirectory)/VSCode-linux-$(CODEENGINE_ARCH)/resources/app/product.json\").applicationName")
+        mv $(Build.ArtifactStagingDirectory)/cli/$APP_NAME $(agent.builddirectory)/VSCode-linux-$(CODEENGINE_ARCH)/bin/$CLI_APP_NAME
       displayName: Mix in CLI
 
   - script: |
       set -e
-      tar -czf $CLIENT_PATH -C .. VSCode-linux-$(VSCODE_ARCH)
+      tar -czf $CLIENT_PATH -C .. VSCode-linux-$(CODEENGINE_ARCH)
     env:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Archive client
 
   - script: |
       set -e
-      npm run gulp vscode-reh-linux-$(VSCODE_ARCH)-min-ci
-      mv ../vscode-reh-linux-$(VSCODE_ARCH) ../vscode-server-linux-$(VSCODE_ARCH) # TODO@joaomoreno
-      ARCHIVE_PATH=".build/linux/server/vscode-server-linux-$(VSCODE_ARCH).tar.gz"
-      UNARCHIVE_PATH="`pwd`/../vscode-server-linux-$(VSCODE_ARCH)"
+      npm run gulp vscode-reh-linux-$(CODEENGINE_ARCH)-min-ci
+      mv ../vscode-reh-linux-$(CODEENGINE_ARCH) ../vscode-server-linux-$(CODEENGINE_ARCH) # TODO@joaomoreno
+      ARCHIVE_PATH=".build/linux/server/vscode-server-linux-$(CODEENGINE_ARCH).tar.gz"
+      UNARCHIVE_PATH="`pwd`/../vscode-server-linux-$(CODEENGINE_ARCH)"
       mkdir -p $(dirname $ARCHIVE_PATH)
-      tar --owner=0 --group=0 -czf $ARCHIVE_PATH -C .. vscode-server-linux-$(VSCODE_ARCH)
+      tar --owner=0 --group=0 -czf $ARCHIVE_PATH -C .. vscode-server-linux-$(CODEENGINE_ARCH)
       echo "##vso[task.setvariable variable=SERVER_PATH]$ARCHIVE_PATH"
       echo "##vso[task.setvariable variable=SERVER_UNARCHIVE_PATH]$UNARCHIVE_PATH"
     env:
@@ -249,28 +249,28 @@ steps:
 
   - script: |
       set -e
-      npm run gulp vscode-reh-web-linux-$(VSCODE_ARCH)-min-ci
-      mv ../vscode-reh-web-linux-$(VSCODE_ARCH) ../vscode-server-linux-$(VSCODE_ARCH)-web # TODO@joaomoreno
-      ARCHIVE_PATH=".build/linux/web/vscode-server-linux-$(VSCODE_ARCH)-web.tar.gz"
+      npm run gulp vscode-reh-web-linux-$(CODEENGINE_ARCH)-min-ci
+      mv ../vscode-reh-web-linux-$(CODEENGINE_ARCH) ../vscode-server-linux-$(CODEENGINE_ARCH)-web # TODO@joaomoreno
+      ARCHIVE_PATH=".build/linux/web/vscode-server-linux-$(CODEENGINE_ARCH)-web.tar.gz"
       mkdir -p $(dirname $ARCHIVE_PATH)
-      tar --owner=0 --group=0 -czf $ARCHIVE_PATH -C .. vscode-server-linux-$(VSCODE_ARCH)-web
+      tar --owner=0 --group=0 -czf $ARCHIVE_PATH -C .. vscode-server-linux-$(CODEENGINE_ARCH)-web
       echo "##vso[task.setvariable variable=WEB_PATH]$ARCHIVE_PATH"
     env:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Build server (web)
 
-  - ${{ if or(eq(parameters.VSCODE_ARCH, 'x64'), eq(parameters.VSCODE_ARCH, 'arm64')) }}:
+  - ${{ if or(eq(parameters.CODEENGINE_ARCH, 'x64'), eq(parameters.CODEENGINE_ARCH, 'arm64')) }}:
     - script: |
         set -e
 
         EXPECTED_GLIBC_VERSION="2.28" \
         EXPECTED_GLIBCXX_VERSION="3.4.25" \
-        VSCODE_SYSROOT_DIR="$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0" \
+        CODEENGINE_SYSROOT_DIR="$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0" \
         ./build/azure-pipelines/linux/verify-glibc-requirements.sh
       env:
         SEARCH_PATH: $(SERVER_UNARCHIVE_PATH)
         npm_config_arch: $(NPM_ARCH)
-        VSCODE_ARCH: $(VSCODE_ARCH)
+        CODEENGINE_ARCH: $(CODEENGINE_ARCH)
       displayName: Check GLIBC and GLIBCXX dependencies in server archive
 
   - ${{ else }}:
@@ -279,25 +279,25 @@ steps:
 
         EXPECTED_GLIBC_VERSION="2.28" \
         EXPECTED_GLIBCXX_VERSION="3.4.26" \
-        VSCODE_SYSROOT_DIR="$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0" \
+        CODEENGINE_SYSROOT_DIR="$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0" \
         ./build/azure-pipelines/linux/verify-glibc-requirements.sh
       env:
         SEARCH_PATH: $(SERVER_UNARCHIVE_PATH)
         npm_config_arch: $(NPM_ARCH)
-        VSCODE_ARCH: $(VSCODE_ARCH)
+        CODEENGINE_ARCH: $(CODEENGINE_ARCH)
       displayName: Check GLIBC and GLIBCXX dependencies in server archive
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
     - script:  |
         set -e
-        npm run gulp "vscode-linux-$(VSCODE_ARCH)-prepare-deb"
+        npm run gulp "vscode-linux-$(CODEENGINE_ARCH)-prepare-deb"
       env:
         GITHUB_TOKEN: "$(github-distro-mixin-password)"
       displayName: Prepare deb package
 
     - script:  |
         set -e
-        npm run gulp "vscode-linux-$(VSCODE_ARCH)-build-deb"
+        npm run gulp "vscode-linux-$(CODEENGINE_ARCH)-build-deb"
         mkdir -p .build/linux/deb
         cp .build/linux/deb/*/deb/*.deb .build/linux/deb/
         file_output=$(file $(ls .build/linux/deb/*.deb))
@@ -312,30 +312,30 @@ steps:
     - script:  |
         set -e
         TRIPLE=""
-        if [ "$VSCODE_ARCH" == "x64" ]; then
+        if [ "$CODEENGINE_ARCH" == "x64" ]; then
           TRIPLE="x86_64-linux-gnu"
-        elif [ "$VSCODE_ARCH" == "arm64" ]; then
+        elif [ "$CODEENGINE_ARCH" == "arm64" ]; then
           TRIPLE="aarch64-linux-gnu"
-        elif [ "$VSCODE_ARCH" == "armhf" ]; then
+        elif [ "$CODEENGINE_ARCH" == "armhf" ]; then
           TRIPLE="arm-rpi-linux-gnueabihf"
         fi
-        export VSCODE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-10.5.0
-        export STRIP="$VSCODE_SYSROOT_DIR/$TRIPLE/$TRIPLE/bin/strip"
-        npm run gulp "vscode-linux-$(VSCODE_ARCH)-prepare-rpm"
+        export CODEENGINE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-10.5.0
+        export STRIP="$CODEENGINE_SYSROOT_DIR/$TRIPLE/$TRIPLE/bin/strip"
+        npm run gulp "vscode-linux-$(CODEENGINE_ARCH)-prepare-rpm"
       env:
-        VSCODE_ARCH: $(VSCODE_ARCH)
+        CODEENGINE_ARCH: $(CODEENGINE_ARCH)
       displayName: Prepare rpm package
 
     - script:  |
         set -e
-        npm run gulp "vscode-linux-$(VSCODE_ARCH)-build-rpm"
+        npm run gulp "vscode-linux-$(CODEENGINE_ARCH)-build-rpm"
         mkdir -p .build/linux/rpm
         cp .build/linux/rpm/*/*.rpm .build/linux/rpm/
         echo "##vso[task.setvariable variable=RPM_PATH]$(ls .build/linux/rpm/*.rpm)"
         echo "##vso[task.setvariable variable=RPM_PACKAGE_NAME]$(basename $(ls .build/linux/rpm/*.rpm))"
       displayName: Build rpm package
 
-    - ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+    - ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
       - task: Docker@1
         inputs:
           azureSubscriptionEndpoint: vscode
@@ -343,13 +343,13 @@ steps:
           command: login
         displayName: Login to Container Registry
 
-      - ${{ if eq(parameters.VSCODE_BUILD_LINUX_SNAP, true) }}:
+      - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_SNAP, true) }}:
         - script: |
             set -e
-            npm run gulp "vscode-linux-$(VSCODE_ARCH)-prepare-snap"
-            sudo -E docker run -e VSCODE_ARCH -e VSCODE_QUALITY -v $(pwd):/work -w /work vscodehub.azurecr.io/vscode-linux-build-agent:snapcraft-x64@sha256:ab4a88c4d85e0d7a85acabba59543f7143f575bab2c0b2b07f5b77d4a7e491ff /bin/bash -c "./build/azure-pipelines/linux/build-snap.sh"
+            npm run gulp "vscode-linux-$(CODEENGINE_ARCH)-prepare-snap"
+            sudo -E docker run -e CODEENGINE_ARCH -e CODEENGINE_QUALITY -v $(pwd):/work -w /work vscodehub.azurecr.io/vscode-linux-build-agent:snapcraft-x64@sha256:ab4a88c4d85e0d7a85acabba59543f7143f575bab2c0b2b07f5b77d4a7e491ff /bin/bash -c "./build/azure-pipelines/linux/build-snap.sh"
 
-            SNAP_ROOT="$(pwd)/.build/linux/snap/$(VSCODE_ARCH)"
+            SNAP_ROOT="$(pwd)/.build/linux/snap/$(CODEENGINE_ARCH)"
             SNAP_EXTRACTED_PATH=$(find $SNAP_ROOT -maxdepth 1 -type d -name 'code-*')
 
             mkdir -p .build/linux/snap
@@ -362,7 +362,7 @@ steps:
             echo "##vso[task.setvariable variable=SNAP_PATH]$(ls .build/linux/snap/*.snap)"
             echo "##vso[task.setvariable variable=SNAP_PACKAGE_NAME]$(basename $(ls .build/linux/snap/*.snap))"
           env:
-            VSCODE_ARCH: $(VSCODE_ARCH)
+            CODEENGINE_ARCH: $(CODEENGINE_ARCH)
           displayName: Build snap package
 
     - task: UseDotNet@2
@@ -395,14 +395,14 @@ steps:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       displayName: ✍️ Codesign deb & rpm
 
-  - ${{ if or(eq(parameters.VSCODE_RUN_ELECTRON_TESTS, true), eq(parameters.VSCODE_RUN_BROWSER_TESTS, true), eq(parameters.VSCODE_RUN_REMOTE_TESTS, true)) }}:
+  - ${{ if or(eq(parameters.CODEENGINE_RUN_ELECTRON_TESTS, true), eq(parameters.CODEENGINE_RUN_BROWSER_TESTS, true), eq(parameters.CODEENGINE_RUN_REMOTE_TESTS, true)) }}:
     - template: product-build-linux-test.yml@self
       parameters:
-        VSCODE_RUN_ELECTRON_TESTS: ${{ parameters.VSCODE_RUN_ELECTRON_TESTS }}
-        VSCODE_RUN_BROWSER_TESTS: ${{ parameters.VSCODE_RUN_BROWSER_TESTS }}
-        VSCODE_RUN_REMOTE_TESTS: ${{ parameters.VSCODE_RUN_REMOTE_TESTS }}
+        CODEENGINE_RUN_ELECTRON_TESTS: ${{ parameters.CODEENGINE_RUN_ELECTRON_TESTS }}
+        CODEENGINE_RUN_BROWSER_TESTS: ${{ parameters.CODEENGINE_RUN_BROWSER_TESTS }}
+        CODEENGINE_RUN_REMOTE_TESTS: ${{ parameters.CODEENGINE_RUN_REMOTE_TESTS }}
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
     - script: npx deemon --attach node build/azure-pipelines/linux/codesign.ts
       condition: succeededOrFailed()
       displayName: "✍️ Post-job: Codesign deb & rpm"
@@ -433,7 +433,7 @@ steps:
         # SBOM generation uses hard links which are not supported by the Linux kernel
         # for files that have the SUID bit set, so we need to remove the SUID bit from
         # the chrome-sandbox file.
-        sudo ls -l $(Agent.BuildDirectory)/VSCode-linux-$(VSCODE_ARCH)/chrome-sandbox
-        sudo chmod u-s $(Agent.BuildDirectory)/VSCode-linux-$(VSCODE_ARCH)/chrome-sandbox
-        sudo ls -l $(Agent.BuildDirectory)/VSCode-linux-$(VSCODE_ARCH)/chrome-sandbox
+        sudo ls -l $(Agent.BuildDirectory)/VSCode-linux-$(CODEENGINE_ARCH)/chrome-sandbox
+        sudo chmod u-s $(Agent.BuildDirectory)/VSCode-linux-$(CODEENGINE_ARCH)/chrome-sandbox
+        sudo ls -l $(Agent.BuildDirectory)/VSCode-linux-$(CODEENGINE_ARCH)/chrome-sandbox
       displayName: Move artifacts to out directory

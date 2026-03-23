@@ -123,7 +123,7 @@ async function getShellGlobals(
 				// are up to date, but this ends up launching way too many processes. Especially on
 				// Windows where this caused significant performance issues as processes can block
 				// the extension host for several seconds
-				// (https://github.com/microsoft/vscode/issues/259343).
+				// (https://github.com/graffitiape/codeengine/issues/259343).
 				return cached.commands;
 			}
 		}
@@ -608,7 +608,7 @@ export function sanitizeProcessEnvironment(env: Record<string, string>, ...prese
 	}, {});
 	const keysToRemove = [
 		/^ELECTRON_.$/,
-		/^VSCODE_(?!(PORTABLE|SHELL_LOGIN|ENV_REPLACE|ENV_APPEND|ENV_PREPEND)).+$/,
+		/^CODEENGINE_(?!(PORTABLE|SHELL_LOGIN|ENV_REPLACE|ENV_APPEND|ENV_PREPEND)).+$/,
 		/^SNAP(|_.*)$/,
 		/^GDK_PIXBUF_.$/,
 	];

@@ -18,7 +18,7 @@ trigger:
     include: ["main", "release/*"]
 
 parameters:
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     displayName: Quality
     type: string
     default: insider
@@ -26,7 +26,7 @@ parameters:
       - exploration
       - insider
       - stable
-  - name: VSCODE_BUILD_TYPE
+  - name: CODEENGINE_BUILD_TYPE
     displayName: Build Type
     type: string
     default: Product
@@ -41,105 +41,105 @@ parameters:
     displayName: "Custom Cargo Registry"
     type: string
     default: 'sparse+https://pkgs.dev.azure.com/monacotools/Monaco/_packaging/vscode/Cargo/index/'
-  - name: VSCODE_BUILD_WIN32
+  - name: CODEENGINE_BUILD_WIN32
     displayName: "🎯 Windows x64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_WIN32_ARM64
+  - name: CODEENGINE_BUILD_WIN32_ARM64
     displayName: "🎯 Windows arm64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_LINUX
+  - name: CODEENGINE_BUILD_LINUX
     displayName: "🎯 Linux x64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_LINUX_SNAP
+  - name: CODEENGINE_BUILD_LINUX_SNAP
     displayName: "🎯 Linux x64 Snap"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_LINUX_ARM64
+  - name: CODEENGINE_BUILD_LINUX_ARM64
     displayName: "🎯 Linux arm64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_LINUX_ARMHF
+  - name: CODEENGINE_BUILD_LINUX_ARMHF
     displayName: "🎯 Linux armhf"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_ALPINE
+  - name: CODEENGINE_BUILD_ALPINE
     displayName: "🎯 Alpine x64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_ALPINE_ARM64
+  - name: CODEENGINE_BUILD_ALPINE_ARM64
     displayName: "🎯 Alpine arm64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_MACOS
+  - name: CODEENGINE_BUILD_MACOS
     displayName: "🎯 macOS x64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_MACOS_ARM64
+  - name: CODEENGINE_BUILD_MACOS_ARM64
     displayName: "🎯 macOS arm64"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_MACOS_UNIVERSAL
+  - name: CODEENGINE_BUILD_MACOS_UNIVERSAL
     displayName: "🎯 macOS universal"
     type: boolean
     default: true
-  - name: VSCODE_BUILD_WEB
+  - name: CODEENGINE_BUILD_WEB
     displayName: "🎯 Web"
     type: boolean
     default: true
-  - name: VSCODE_PUBLISH
-    displayName: "Publish to builds.code.visualstudio.com"
+  - name: CODEENGINE_PUBLISH
+    displayName: "Publish to builds.github.com/graffitiape/codeengine"
     type: boolean
     default: true
-  - name: VSCODE_RELEASE
+  - name: CODEENGINE_RELEASE
     displayName: "Release build if successful"
     type: boolean
     default: false
-  - name: VSCODE_STEP_ON_IT
+  - name: CODEENGINE_STEP_ON_IT
     displayName: "Skip tests"
     type: boolean
     default: false
 
 variables:
-  - name: VSCODE_PRIVATE_BUILD
+  - name: CODEENGINE_PRIVATE_BUILD
     value: ${{ ne(variables['Build.Repository.Uri'], 'https://github.com/microsoft/vscode.git') }}
   - name: NPM_REGISTRY
     value: ${{ parameters.NPM_REGISTRY }}
   - name: CARGO_REGISTRY
     value: ${{ parameters.CARGO_REGISTRY }}
-  - name: VSCODE_QUALITY
-    value: ${{ parameters.VSCODE_QUALITY }}
-  - name: VSCODE_BUILD_STAGE_WINDOWS
-    value: ${{ or(eq(parameters.VSCODE_BUILD_WIN32, true), eq(parameters.VSCODE_BUILD_WIN32_ARM64, true)) }}
-  - name: VSCODE_BUILD_STAGE_LINUX
-    value: ${{ or(eq(parameters.VSCODE_BUILD_LINUX, true), eq(parameters.VSCODE_BUILD_LINUX_SNAP, true), eq(parameters.VSCODE_BUILD_LINUX_ARMHF, true), eq(parameters.VSCODE_BUILD_LINUX_ARM64, true)) }}
-  - name: VSCODE_BUILD_STAGE_ALPINE
-    value: ${{ or(eq(parameters.VSCODE_BUILD_ALPINE, true), eq(parameters.VSCODE_BUILD_ALPINE_ARM64, true)) }}
-  - name: VSCODE_BUILD_STAGE_MACOS
-    value: ${{ or(eq(parameters.VSCODE_BUILD_MACOS, true), eq(parameters.VSCODE_BUILD_MACOS_ARM64, true)) }}
-  - name: VSCODE_BUILD_STAGE_WEB
-    value: ${{ eq(parameters.VSCODE_BUILD_WEB, true) }}
-  - name: VSCODE_CIBUILD
-    value: ${{ or(and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))), eq(parameters.VSCODE_BUILD_TYPE, 'CI')) }}
-  - name: VSCODE_PUBLISH
-    value: ${{ and(eq(parameters.VSCODE_PUBLISH, true), eq(variables.VSCODE_CIBUILD, false)) }}
-  - name: VSCODE_SCHEDULEDBUILD
+  - name: CODEENGINE_QUALITY
+    value: ${{ parameters.CODEENGINE_QUALITY }}
+  - name: CODEENGINE_BUILD_STAGE_WINDOWS
+    value: ${{ or(eq(parameters.CODEENGINE_BUILD_WIN32, true), eq(parameters.CODEENGINE_BUILD_WIN32_ARM64, true)) }}
+  - name: CODEENGINE_BUILD_STAGE_LINUX
+    value: ${{ or(eq(parameters.CODEENGINE_BUILD_LINUX, true), eq(parameters.CODEENGINE_BUILD_LINUX_SNAP, true), eq(parameters.CODEENGINE_BUILD_LINUX_ARMHF, true), eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true)) }}
+  - name: CODEENGINE_BUILD_STAGE_ALPINE
+    value: ${{ or(eq(parameters.CODEENGINE_BUILD_ALPINE, true), eq(parameters.CODEENGINE_BUILD_ALPINE_ARM64, true)) }}
+  - name: CODEENGINE_BUILD_STAGE_MACOS
+    value: ${{ or(eq(parameters.CODEENGINE_BUILD_MACOS, true), eq(parameters.CODEENGINE_BUILD_MACOS_ARM64, true)) }}
+  - name: CODEENGINE_BUILD_STAGE_WEB
+    value: ${{ eq(parameters.CODEENGINE_BUILD_WEB, true) }}
+  - name: CODEENGINE_CIBUILD
+    value: ${{ or(and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))), eq(parameters.CODEENGINE_BUILD_TYPE, 'CI')) }}
+  - name: CODEENGINE_PUBLISH
+    value: ${{ and(eq(parameters.CODEENGINE_PUBLISH, true), eq(variables.CODEENGINE_CIBUILD, false)) }}
+  - name: CODEENGINE_SCHEDULEDBUILD
     value: ${{ eq(variables['Build.Reason'], 'Schedule') }}
-  - name: VSCODE_STEP_ON_IT
-    value: ${{ eq(parameters.VSCODE_STEP_ON_IT, true) }}
-  - name: VSCODE_BUILD_MACOS_UNIVERSAL
-    value: ${{ and(eq(parameters.VSCODE_BUILD_MACOS, true), eq(parameters.VSCODE_BUILD_MACOS_ARM64, true), eq(parameters.VSCODE_BUILD_MACOS_UNIVERSAL, true)) }}
-  - name: VSCODE_STAGING_BLOB_STORAGE_ACCOUNT_NAME
+  - name: CODEENGINE_STEP_ON_IT
+    value: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, true) }}
+  - name: CODEENGINE_BUILD_MACOS_UNIVERSAL
+    value: ${{ and(eq(parameters.CODEENGINE_BUILD_MACOS, true), eq(parameters.CODEENGINE_BUILD_MACOS_ARM64, true), eq(parameters.CODEENGINE_BUILD_MACOS_UNIVERSAL, true)) }}
+  - name: CODEENGINE_STAGING_BLOB_STORAGE_ACCOUNT_NAME
     value: vscodeesrp
   - name: PRSS_CDN_URL
     value: https://vscode.download.prss.microsoft.com/dbazure/download
-  - name: VSCODE_ESRP_SERVICE_CONNECTION_ID
+  - name: CODEENGINE_ESRP_SERVICE_CONNECTION_ID
     value: fe07e6ce-6ffb-4df9-8d27-d129523a3f3e
-  - name: VSCODE_ESRP_TENANT_ID
+  - name: CODEENGINE_ESRP_TENANT_ID
     value: 975f013f-7f24-47e8-a7d3-abc4752bf346
-  - name: VSCODE_ESRP_CLIENT_ID
+  - name: CODEENGINE_ESRP_CLIENT_ID
     value: 4ac7ed59-b5e9-4f66-9c30-8d1afa72d32d
   - name: ESRP_TENANT_ID
     value: 975f013f-7f24-47e8-a7d3-abc4752bf346
@@ -147,7 +147,7 @@ variables:
     value: c24324f7-e65f-4c45-8702-ed2d4c35df99
   - name: AZURE_DOCUMENTDB_ENDPOINT
     value: https://vscode.documents.azure.com/
-  - name: VSCODE_MIXIN_REPO
+  - name: CODEENGINE_MIXIN_REPO
     value: microsoft/vscode-distro
   - name: skipComponentGovernanceDetection
     value: true
@@ -158,7 +158,7 @@ variables:
   - name: ARTIFACT_PREFIX
     value: ''
 
-name: "$(Date:yyyyMMdd).$(Rev:r) (${{ parameters.VSCODE_QUALITY }})"
+name: "$(Date:yyyyMMdd).$(Rev:r) (${{ parameters.CODEENGINE_QUALITY }})"
 
 resources:
   repositories:
@@ -202,153 +202,153 @@ extends:
         jobs:
           - template: build/azure-pipelines/product-quality-checks.yml@self
 
-      - ${{ if eq(variables['VSCODE_BUILD_STAGE_WINDOWS'], true) }}:
+      - ${{ if eq(variables['CODEENGINE_BUILD_STAGE_WINDOWS'], true) }}:
         - stage: Windows
           dependsOn: []
           pool:
             name: 1es-windows-2022-x64
             os: windows
           jobs:
-            - ${{ if eq(parameters.VSCODE_BUILD_WIN32, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_WIN32, true) }}:
               - template: build/azure-pipelines/win32/product-build-win32-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: x64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_CHECK_ONLY: ${{ variables.VSCODE_CIBUILD }}
+                  CODEENGINE_ARCH: x64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_CHECK_ONLY: ${{ variables.CODEENGINE_CIBUILD }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_WIN32_ARM64, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_WIN32_ARM64, true)) }}:
               - template: build/azure-pipelines/win32/product-build-win32-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: arm64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: arm64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-            - ${{ if eq(variables['VSCODE_CIBUILD'], true) }}:
+            - ${{ if eq(variables['CODEENGINE_CIBUILD'], true) }}:
               - template: build/azure-pipelines/win32/product-build-win32-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_TEST_SUITE: Electron
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_TEST_SUITE: Electron
               - template: build/azure-pipelines/win32/product-build-win32-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_TEST_SUITE: Browser
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_TEST_SUITE: Browser
               - template: build/azure-pipelines/win32/product-build-win32-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_TEST_SUITE: Remote
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_TEST_SUITE: Remote
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_WIN32, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_WIN32, true)) }}:
               - template: build/azure-pipelines/win32/product-build-win32.yml@self
                 parameters:
-                  VSCODE_ARCH: x64
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_RUN_ELECTRON_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
-                  VSCODE_RUN_BROWSER_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
-                  VSCODE_RUN_REMOTE_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
+                  CODEENGINE_ARCH: x64
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_RUN_ELECTRON_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
+                  CODEENGINE_RUN_BROWSER_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
+                  CODEENGINE_RUN_REMOTE_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_WIN32_ARM64, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_WIN32_ARM64, true)) }}:
               - template: build/azure-pipelines/win32/product-build-win32.yml@self
                 parameters:
-                  VSCODE_ARCH: arm64
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: arm64
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-      - ${{ if eq(variables['VSCODE_BUILD_STAGE_LINUX'], true) }}:
+      - ${{ if eq(variables['CODEENGINE_BUILD_STAGE_LINUX'], true) }}:
         - stage: Linux
           dependsOn: []
           pool:
             name: 1es-ubuntu-22.04-x64
             os: linux
           jobs:
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/linux/product-build-linux-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: x64
-                  VSCODE_CHECK_ONLY: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: x64
+                  CODEENGINE_CHECK_ONLY: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_LINUX_ARM64, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true)) }}:
               - template: build/azure-pipelines/linux/product-build-linux-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: arm64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: arm64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_LINUX_ARMHF, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_LINUX_ARMHF, true)) }}:
               - template: build/azure-pipelines/linux/product-build-linux-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: armhf
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: armhf
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-            - ${{ if eq(variables['VSCODE_CIBUILD'], true) }}:
+            - ${{ if eq(variables['CODEENGINE_CIBUILD'], true) }}:
               - template: build/azure-pipelines/linux/product-build-linux-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_TEST_SUITE: Electron
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_TEST_SUITE: Electron
               - template: build/azure-pipelines/linux/product-build-linux-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_TEST_SUITE: Browser
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_TEST_SUITE: Browser
               - template: build/azure-pipelines/linux/product-build-linux-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_TEST_SUITE: Remote
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_TEST_SUITE: Remote
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), or(eq(parameters.VSCODE_BUILD_LINUX, true), eq(parameters.VSCODE_BUILD_LINUX_SNAP, true))) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), or(eq(parameters.CODEENGINE_BUILD_LINUX, true), eq(parameters.CODEENGINE_BUILD_LINUX_SNAP, true))) }}:
               - template: build/azure-pipelines/linux/product-build-linux.yml@self
                 parameters:
                   NPM_ARCH: x64
-                  VSCODE_ARCH: x64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_RUN_ELECTRON_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
-                  VSCODE_RUN_BROWSER_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
-                  VSCODE_RUN_REMOTE_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
-                  VSCODE_BUILD_LINUX_SNAP: ${{ parameters.VSCODE_BUILD_LINUX_SNAP }}
+                  CODEENGINE_ARCH: x64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_RUN_ELECTRON_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
+                  CODEENGINE_RUN_BROWSER_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
+                  CODEENGINE_RUN_REMOTE_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
+                  CODEENGINE_BUILD_LINUX_SNAP: ${{ parameters.CODEENGINE_BUILD_LINUX_SNAP }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_LINUX_ARMHF, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_LINUX_ARMHF, true)) }}:
               - template: build/azure-pipelines/linux/product-build-linux.yml@self
                 parameters:
                   NPM_ARCH: arm
-                  VSCODE_ARCH: armhf
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
+                  CODEENGINE_ARCH: armhf
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_LINUX_ARM64, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true)) }}:
               - template: build/azure-pipelines/linux/product-build-linux.yml@self
                 parameters:
                   NPM_ARCH: arm64
-                  VSCODE_ARCH: arm64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
+                  CODEENGINE_ARCH: arm64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
 
-      - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(variables['VSCODE_BUILD_STAGE_ALPINE'], true)) }}:
+      - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(variables['CODEENGINE_BUILD_STAGE_ALPINE'], true)) }}:
         - stage: Alpine
           dependsOn: []
           jobs:
-            - ${{ if eq(parameters.VSCODE_BUILD_ALPINE, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_ALPINE, true) }}:
               - template: build/azure-pipelines/alpine/product-build-alpine.yml@self
                 parameters:
-                  VSCODE_ARCH: x64
+                  CODEENGINE_ARCH: x64
               - template: build/azure-pipelines/alpine/product-build-alpine-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: x64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-            - ${{ if eq(parameters.VSCODE_BUILD_ALPINE_ARM64, true) }}:
+                  CODEENGINE_ARCH: x64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+            - ${{ if eq(parameters.CODEENGINE_BUILD_ALPINE_ARM64, true) }}:
               - template: build/azure-pipelines/alpine/product-build-alpine.yml@self
                 parameters:
-                  VSCODE_ARCH: arm64
+                  CODEENGINE_ARCH: arm64
               - template: build/azure-pipelines/alpine/product-build-alpine-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: arm64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: arm64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-      - ${{ if eq(variables['VSCODE_BUILD_STAGE_MACOS'], true) }}:
+      - ${{ if eq(variables['CODEENGINE_BUILD_STAGE_MACOS'], true) }}:
         - stage: macOS
           dependsOn: []
           pool:
@@ -359,67 +359,67 @@ extends:
           variables:
             BUILDSECMON_OPT_IN: true
           jobs:
-            - ${{ if eq(parameters.VSCODE_BUILD_MACOS, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_MACOS, true) }}:
               - template: build/azure-pipelines/darwin/product-build-darwin-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: x64
-                  VSCODE_CHECK_ONLY: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: x64
+                  CODEENGINE_CHECK_ONLY: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_MACOS_ARM64, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_MACOS_ARM64, true)) }}:
               - template: build/azure-pipelines/darwin/product-build-darwin-cli.yml@self
                 parameters:
-                  VSCODE_ARCH: arm64
-                  VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                  CODEENGINE_ARCH: arm64
+                  CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
 
-            - ${{ if eq(variables['VSCODE_CIBUILD'], true) }}:
+            - ${{ if eq(variables['CODEENGINE_CIBUILD'], true) }}:
               - template: build/azure-pipelines/darwin/product-build-darwin-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_TEST_SUITE: Electron
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_TEST_SUITE: Electron
               - template: build/azure-pipelines/darwin/product-build-darwin-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_TEST_SUITE: Browser
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_TEST_SUITE: Browser
               - template: build/azure-pipelines/darwin/product-build-darwin-ci.yml@self
                 parameters:
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_TEST_SUITE: Remote
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_TEST_SUITE: Remote
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_MACOS, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_MACOS, true)) }}:
               - template: build/azure-pipelines/darwin/product-build-darwin.yml@self
                 parameters:
-                  VSCODE_ARCH: x64
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
+                  CODEENGINE_ARCH: x64
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(parameters.VSCODE_BUILD_MACOS_ARM64, true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(parameters.CODEENGINE_BUILD_MACOS_ARM64, true)) }}:
               - template: build/azure-pipelines/darwin/product-build-darwin.yml@self
                 parameters:
-                  VSCODE_ARCH: arm64
-                  VSCODE_CIBUILD: ${{ variables.VSCODE_CIBUILD }}
-                  VSCODE_RUN_ELECTRON_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
-                  VSCODE_RUN_BROWSER_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
-                  VSCODE_RUN_REMOTE_TESTS: ${{ eq(parameters.VSCODE_STEP_ON_IT, false) }}
+                  CODEENGINE_ARCH: arm64
+                  CODEENGINE_CIBUILD: ${{ variables.CODEENGINE_CIBUILD }}
+                  CODEENGINE_RUN_ELECTRON_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
+                  CODEENGINE_RUN_BROWSER_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
+                  CODEENGINE_RUN_REMOTE_TESTS: ${{ eq(parameters.CODEENGINE_STEP_ON_IT, false) }}
 
-            - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(variables['VSCODE_BUILD_MACOS_UNIVERSAL'], true)) }}:
+            - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(variables['CODEENGINE_BUILD_MACOS_UNIVERSAL'], true)) }}:
               - template: build/azure-pipelines/darwin/product-build-darwin-universal.yml@self
 
-      - ${{ if and(eq(variables['VSCODE_CIBUILD'], false), eq(variables['VSCODE_BUILD_STAGE_WEB'], true)) }}:
+      - ${{ if and(eq(variables['CODEENGINE_CIBUILD'], false), eq(variables['CODEENGINE_BUILD_STAGE_WEB'], true)) }}:
         - stage: Web
           dependsOn: []
           jobs:
             - template: build/azure-pipelines/web/product-build-web.yml@self
 
-      - ${{ if eq(variables['VSCODE_PUBLISH'], true) }}:
+      - ${{ if eq(variables['CODEENGINE_PUBLISH'], true) }}:
         - stage: Publish
           dependsOn: []
           jobs:
             - template: build/azure-pipelines/product-publish.yml@self
               parameters:
-                VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
-                VSCODE_SCHEDULEDBUILD: ${{ variables.VSCODE_SCHEDULEDBUILD }}
+                CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}
+                CODEENGINE_SCHEDULEDBUILD: ${{ variables.CODEENGINE_SCHEDULEDBUILD }}
 
-      - ${{ if and(eq(variables['VSCODE_PUBLISH'], 'true'), eq(variables['VSCODE_STEP_ON_IT'], false)) }}:
+      - ${{ if and(eq(variables['CODEENGINE_PUBLISH'], 'true'), eq(variables['CODEENGINE_STEP_ON_IT'], false)) }}:
         - stage: SanityTests
           displayName: Sanity Tests
           dependsOn:
@@ -428,10 +428,10 @@ extends:
             - name: BUILD_COMMIT
               value: $(Build.SourceVersion)
             - name: BUILD_QUALITY
-              value: ${{ variables.VSCODE_QUALITY }}
+              value: ${{ variables.CODEENGINE_QUALITY }}
           jobs:
             # macOS
-            - ${{ if eq(parameters.VSCODE_BUILD_MACOS, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_MACOS, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: macos_x64
@@ -440,7 +440,7 @@ extends:
                   os: macOS
                   args: --no-detection --grep "darwin-x64"
 
-            - ${{ if eq(parameters.VSCODE_BUILD_MACOS_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_MACOS_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: macos_arm64
@@ -449,7 +449,7 @@ extends:
                   os: macOS
 
             # Windows
-            - ${{ if eq(parameters.VSCODE_BUILD_WIN32, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_WIN32, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: windows_x64
@@ -457,7 +457,7 @@ extends:
                   poolName: 1es-windows-2022-x64
                   os: windows
 
-            - ${{ if eq(parameters.VSCODE_BUILD_WIN32_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_WIN32_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: windows_arm64
@@ -466,7 +466,7 @@ extends:
                   os: windows
 
             # Alpine 3.22
-            - ${{ if eq(parameters.VSCODE_BUILD_ALPINE, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_ALPINE, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: alpine_amd64
@@ -475,7 +475,7 @@ extends:
                   container: alpine
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_ALPINE_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_ALPINE_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: alpine_arm64
@@ -485,7 +485,7 @@ extends:
                   arch: arm64
 
             # CentOS Stream 9
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: centos_stream9_amd64
@@ -494,7 +494,7 @@ extends:
                   container: centos
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: centos_stream9_arm64
@@ -504,7 +504,7 @@ extends:
                   arch: arm64
 
             # Debian 10
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: debian_10_amd64
@@ -513,7 +513,7 @@ extends:
                   container: debian-10
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARMHF, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARMHF, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: debian_10_arm32
@@ -522,7 +522,7 @@ extends:
                   container: debian-10
                   arch: arm
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: debian_10_arm64
@@ -532,7 +532,7 @@ extends:
                   arch: arm64
 
             # Debian 12
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: debian_12_amd64
@@ -541,7 +541,7 @@ extends:
                   container: debian-12
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARMHF, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARMHF, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: debian_12_arm32
@@ -550,7 +550,7 @@ extends:
                   container: debian-12
                   arch: arm
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: debian_12_arm64
@@ -560,7 +560,7 @@ extends:
                   arch: arm64
 
             # Fedora 36
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: fedora_36_amd64
@@ -570,7 +570,7 @@ extends:
                   baseImage: fedora:36
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: fedora_36_arm64
@@ -581,7 +581,7 @@ extends:
                   arch: arm64
 
             # Fedora 40
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: fedora_40_amd64
@@ -591,7 +591,7 @@ extends:
                   baseImage: fedora:40
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: fedora_40_arm64
@@ -602,7 +602,7 @@ extends:
                   arch: arm64
 
             # openSUSE Leap 16.0
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: opensuse_leap_amd64
@@ -611,7 +611,7 @@ extends:
                   container: opensuse
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: opensuse_leap_arm64
@@ -621,7 +621,7 @@ extends:
                   arch: arm64
 
             # Red Hat UBI 9
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: redhat_ubi9_amd64
@@ -630,7 +630,7 @@ extends:
                   container: redhat
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: redhat_ubi9_arm64
@@ -640,7 +640,7 @@ extends:
                   arch: arm64
 
             # Ubuntu 22.04 Native (Snap coverage)
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: ubuntu_native_x64
@@ -649,7 +649,7 @@ extends:
                   os: linux
 
             # Ubuntu 22.04
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: ubuntu_22_04_amd64
@@ -659,7 +659,7 @@ extends:
                   baseImage: ubuntu:22.04
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARMHF, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARMHF, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: ubuntu_22_04_arm32
@@ -669,7 +669,7 @@ extends:
                   baseImage: ubuntu:22.04
                   arch: arm
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: ubuntu_22_04_arm64
@@ -680,7 +680,7 @@ extends:
                   arch: arm64
 
             # Ubuntu 24.04
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: ubuntu_24_04_amd64
@@ -690,7 +690,7 @@ extends:
                   baseImage: ubuntu:24.04
                   arch: amd64
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARMHF, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARMHF, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: ubuntu_24_04_arm32
@@ -700,7 +700,7 @@ extends:
                   baseImage: ubuntu:24.04
                   arch: arm
 
-            - ${{ if eq(parameters.VSCODE_BUILD_LINUX_ARM64, true) }}:
+            - ${{ if eq(parameters.CODEENGINE_BUILD_LINUX_ARM64, true) }}:
               - template: build/azure-pipelines/common/sanity-tests.yml@self
                 parameters:
                   name: ubuntu_24_04_arm64
@@ -710,7 +710,7 @@ extends:
                   baseImage: ubuntu:24.04
                   arch: arm64
 
-        - ${{ if and(parameters.VSCODE_RELEASE, eq(variables['VSCODE_PRIVATE_BUILD'], false), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))) }}:
+        - ${{ if and(parameters.CODEENGINE_RELEASE, eq(variables['CODEENGINE_PRIVATE_BUILD'], false), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))) }}:
           - stage: ApproveRelease
             dependsOn: [] # run in parallel to compile stage
             pool:
@@ -737,7 +737,7 @@ extends:
                 steps:
                   - template: build/azure-pipelines/product-release.yml@self
                     parameters:
-                      VSCODE_RELEASE: ${{ parameters.VSCODE_RELEASE }}
+                      CODEENGINE_RELEASE: ${{ parameters.CODEENGINE_RELEASE }}
 
       - ${{ if and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')) }}:
         - stage: TriggerInsiderBuild
@@ -759,7 +759,7 @@ extends:
                           definition: { id: Number(process.env.DEFINITION_ID) },
                           sourceBranch: process.env.SOURCE_BRANCH,
                           sourceVersion: process.env.SOURCE_VERSION,
-                          templateParameters: { VSCODE_QUALITY: "insider", VSCODE_RELEASE: "false" }
+                          templateParameters: { CODEENGINE_QUALITY: "insider", CODEENGINE_RELEASE: "false" }
                         });
                         console.log(`Triggering insider build on ${process.env.SOURCE_BRANCH} @ ${process.env.SOURCE_VERSION}...`);
                         const response = await fetch(process.env.BUILDS_API_URL, {
@@ -783,33 +783,33 @@ extends:
                     SOURCE_VERSION: $(Build.SourceVersion)
                     BUILDS_API_URL: $(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/build/builds?api-version=7.0
 
-      - ${{ if eq(variables['VSCODE_CIBUILD'], true) }}:
+      - ${{ if eq(variables['CODEENGINE_CIBUILD'], true) }}:
         - stage: node_modules
           dependsOn: []
           jobs:
             - template: build/azure-pipelines/win32/product-build-win32-node-modules.yml@self
               parameters:
-                VSCODE_ARCH: arm64
+                CODEENGINE_ARCH: arm64
             - template: build/azure-pipelines/linux/product-build-linux-node-modules.yml@self
               parameters:
                 NPM_ARCH: arm64
-                VSCODE_ARCH: arm64
+                CODEENGINE_ARCH: arm64
             - template: build/azure-pipelines/linux/product-build-linux-node-modules.yml@self
               parameters:
                 NPM_ARCH: arm
-                VSCODE_ARCH: armhf
+                CODEENGINE_ARCH: armhf
             - template: build/azure-pipelines/alpine/product-build-alpine-node-modules.yml@self
               parameters:
-                VSCODE_ARCH: x64
+                CODEENGINE_ARCH: x64
             - template: build/azure-pipelines/alpine/product-build-alpine-node-modules.yml@self
               parameters:
-                VSCODE_ARCH: arm64
+                CODEENGINE_ARCH: arm64
             - template: build/azure-pipelines/darwin/product-build-darwin-node-modules.yml@self
               parameters:
-                VSCODE_ARCH: x64
+                CODEENGINE_ARCH: x64
             - template: build/azure-pipelines/web/product-build-web-node-modules.yml@self
 
-      - ${{ if eq(variables['VSCODE_CIBUILD'], false) }}:
+      - ${{ if eq(variables['CODEENGINE_CIBUILD'], false) }}:
         - stage: APIScan
           dependsOn: []
           pool:
@@ -820,5 +820,5 @@ extends:
               steps:
                 - template: build/azure-pipelines/win32/sdl-scan-win32.yml@self
                   parameters:
-                    VSCODE_ARCH: x64
-                    VSCODE_QUALITY: ${{ variables.VSCODE_QUALITY }}
+                    CODEENGINE_ARCH: x64
+                    CODEENGINE_QUALITY: ${{ variables.CODEENGINE_QUALITY }}

@@ -5,7 +5,7 @@
 
 declare module 'vscode' {
 
-	// https://github.com/microsoft/vscode/issues/251648
+	// https://github.com/graffitiape/codeengine/issues/251648
 
 	export interface AuthenticationProviderSessionOptions {
 		/**

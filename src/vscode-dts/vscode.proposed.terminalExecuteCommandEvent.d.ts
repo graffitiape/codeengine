@@ -5,7 +5,7 @@
 
 declare module 'vscode' {
 
-	// https://github.com/microsoft/vscode/issues/145234
+	// https://github.com/graffitiape/codeengine/issues/145234
 
 	export interface TerminalExecutedCommand {
 		/**

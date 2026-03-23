@@ -57,7 +57,7 @@ export interface ISectionOverride {
  * answers "who consumes it?".
  */
 export enum CustomizationHarness {
-	VSCode = 'vscode',
+	CodeEngine = 'vscode',
 	CLI = 'cli',
 	Claude = 'claude',
 }
@@ -124,7 +124,7 @@ export interface IHarnessDescriptor {
  * Service that manages the active customization harness and provides
  * per-type storage source filters based on the selected harness.
  *
- * The default (core) registration exposes a single "VS Code" harness
+ * The default (core) registration exposes a single "Code Engine" harness
  * that shows all storage sources. The sessions window overrides this
  * to provide CLI-scoped harnesses.
  */
@@ -207,13 +207,13 @@ function buildAllSources(extras: readonly string[]): readonly string[] {
 }
 
 /**
- * Creates a "VS Code" harness descriptor that shows all storage sources
+ * Creates a "Code Engine" harness descriptor that shows all storage sources
  * with no user-root restrictions.
  */
-export function createVSCodeHarnessDescriptor(extras: readonly string[]): IHarnessDescriptor {
+export function createCodeEngineHarnessDescriptor(extras: readonly string[]): IHarnessDescriptor {
 	const filter: IStorageSourceFilter = { sources: buildAllSources(extras) };
 	return {
-		id: CustomizationHarness.VSCode,
+		id: CustomizationHarness.CodeEngine,
 		label: localize('harness.local', "Local"),
 		icon: ThemeIcon.fromId(Codicon.vm.id),
 		sectionOverrides: new Map([

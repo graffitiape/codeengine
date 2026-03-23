@@ -145,7 +145,7 @@ cd "$ROOT"
 
 # Start the server directly using Node (not via code-agent-host.sh which
 # spawns a subprocess tree that's harder to manage in background mode).
-# Use system node rather than the VS Code-managed node binary which may
+# Use system node rather than the Code Engine-managed node binary which may
 # not have been downloaded yet.
 SERVER_ENTRY="$ROOT/out/vs/platform/agentHost/node/agentHostServerMain.js"
 
@@ -220,7 +220,7 @@ echo "=== Step 3: Launching Sessions app ===" >&2
 
 cd "$ROOT"
 # Unset ELECTRON_RUN_AS_NODE to ensure the app launches as Electron, not Node.
-VSCODE_SKIP_PRELAUNCH=1 ELECTRON_RUN_AS_NODE= ./scripts/code.sh \
+CODEENGINE_SKIP_PRELAUNCH=1 ELECTRON_RUN_AS_NODE= ./scripts/code.sh \
 	--sessions \
 	--skip-sessions-welcome \
 	--remote-debugging-port="$CDP_PORT" \

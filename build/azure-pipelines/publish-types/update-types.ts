@@ -67,20 +67,20 @@ function getNewFileContent(content: string, shorttag: string) {
 
 function getNewFileHeader(shorttag: string) {
 	const header = [
-		`// Type definitions for Visual Studio Code ${shorttag}`,
+		`// Type definitions for Code Engine ${shorttag}`,
 		`// Project: https://github.com/microsoft/vscode`,
-		`// Definitions by: Visual Studio Code Team, Microsoft <https://github.com/microsoft>`,
+		`// Definitions by: Code Engine Team, Microsoft <https://github.com/microsoft>`,
 		`// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped`,
 		``,
 		`/*---------------------------------------------------------------------------------------------`,
 		` *  Copyright (c) Microsoft Corporation. All rights reserved.`,
 		` *  Licensed under the MIT License.`,
-		` *  See https://github.com/microsoft/vscode/blob/main/LICENSE.txt for license information.`,
+		` *  See https://github.com/graffitiape/codeengine/blob/main/LICENSE.txt for license information.`,
 		` *--------------------------------------------------------------------------------------------*/`,
 		``,
 		`/**`,
-		` * Type Definition for Visual Studio Code ${shorttag} Extension API`,
-		` * See https://code.visualstudio.com/api for more information`,
+		` * Type Definition for Code Engine ${shorttag} Extension API`,
+		` * See https://github.com/graffitiape/codeengine/api for more information`,
 		` */`
 	].join('\n');
 

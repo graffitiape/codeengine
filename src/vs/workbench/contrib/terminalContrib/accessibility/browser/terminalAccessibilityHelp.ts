@@ -41,7 +41,7 @@ export class TerminalAccessibilityHelpProvider extends Disposable implements IAc
 	}
 	options: IAccessibleViewOptions = {
 		type: AccessibleViewType.Help,
-		readMoreUrl: 'https://code.visualstudio.com/docs/editor/accessibility#_terminal-accessibility'
+		readMoreUrl: 'https://github.com/graffitiape/codeengine/docs/editor/accessibility#_terminal-accessibility'
 	};
 	verbositySettingKey = AccessibilityVerbositySettingId.Terminal;
 
@@ -53,7 +53,7 @@ export class TerminalAccessibilityHelpProvider extends Disposable implements IAc
 		@IContextKeyService private readonly _contextKeyService: IContextKeyService,
 	) {
 		super();
-		this._hasShellIntegration = _xterm.shellIntegration.status === ShellIntegrationStatus.VSCode;
+		this._hasShellIntegration = _xterm.shellIntegration.status === ShellIntegrationStatus.CodeEngine;
 	}
 	provideContent(): string {
 		const content = [

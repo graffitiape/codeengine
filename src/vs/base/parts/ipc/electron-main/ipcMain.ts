@@ -6,7 +6,7 @@
 import electron from 'electron';
 import { onUnexpectedError } from '../../../common/errors.js';
 import { Event } from '../../../common/event.js';
-import { VSCODE_AUTHORITY } from '../../../common/network.js';
+import { CODEENGINE_AUTHORITY } from '../../../common/network.js';
 
 type ipcMainListener = (event: electron.IpcMainEvent, ...args: any[]) => void;
 
@@ -112,7 +112,7 @@ class ValidatedIpcMain implements Event.NodeEventEmitter {
 		const sender = event.senderFrame;
 
 		const url = sender?.url;
-		// `url` can be `undefined` when running tests from playwright https://github.com/microsoft/vscode/issues/147301
+		// `url` can be `undefined` when running tests from playwright https://github.com/graffitiape/codeengine/issues/147301
 		// and `url` can be `about:blank` when reloading the window
 		// from performance tab of devtools https://github.com/electron/electron/issues/39427.
 		// It is fine to skip the checks in these cases.
@@ -128,13 +128,13 @@ class ValidatedIpcMain implements Event.NodeEventEmitter {
 			return false; // unexpected URL
 		}
 
-		if (process.env.VSCODE_DEV) {
+		if (process.env.CODEENGINE_DEV) {
 			if (url === process.env.DEV_WINDOW_SRC && (host === 'localhost' || host.startsWith('localhost:'))) {
 				return true; // development support where the window is served from localhost
 			}
 		}
 
-		if (host !== VSCODE_AUTHORITY) {
+		if (host !== CODEENGINE_AUTHORITY) {
 			onUnexpectedError(`Refused to handle ipcMain event for channel '${channel}' because of a bad origin of '${host}'.`);
 			return false; // unexpected sender
 		}

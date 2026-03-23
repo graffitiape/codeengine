@@ -38,7 +38,7 @@ then
 
 	echo "Running remote integration tests out of sources."
 else
-	export VSCODE_CLI=1
+	export CODEENGINE_CLI=1
 	export ELECTRON_ENABLE_LOGGING=1
 
 	# Running from a build, we need to enable the vscode-test-resolver extension
@@ -51,11 +51,11 @@ export TESTRESOLVER_DATA_FOLDER=$TESTRESOLVER_DATA_FOLDER
 export TESTRESOLVER_LOGS_FOLDER=$VSCODELOGSDIR/server
 
 # Figure out which remote server to use for running tests
-if [ -z "$VSCODE_REMOTE_SERVER_PATH" ]
+if [ -z "$CODEENGINE_REMOTE_SERVER_PATH" ]
 then
 	echo "Using remote server out of sources for integration tests"
 else
-	echo "Using $VSCODE_REMOTE_SERVER_PATH as server path for integration tests"
+	echo "Using $CODEENGINE_REMOTE_SERVER_PATH as server path for integration tests"
 	export TESTRESOLVER_INSTALL_BUILTIN_EXTENSION='ms-vscode.vscode-smoketest-check'
 fi
 

@@ -41,13 +41,13 @@ import { IsAuxiliaryWindowContext } from '../../../../workbench/common/contextke
 import { ContextKeyExpr } from '../../../../platform/contextkey/common/contextkey.js';
 import { SessionsWelcomeVisibleContext } from '../../../common/contextkeys.js';
 
-export class OpenSessionWorktreeInVSCodeAction extends Action2 {
-	static readonly ID = 'chat.openSessionWorktreeInVSCode';
+export class OpenSessionWorktreeInCodeEngineAction extends Action2 {
+	static readonly ID = 'chat.openSessionWorktreeInCodeEngine';
 
 	constructor() {
 		super({
-			id: OpenSessionWorktreeInVSCodeAction.ID,
-			title: localize2('openInVSCode', 'Open in VS Code'),
+			id: OpenSessionWorktreeInCodeEngineAction.ID,
+			title: localize2('openInCodeEngine', 'Open in Code Engine'),
 			icon: Codicon.vscodeInsiders,
 			precondition: IsActiveSessionBackgroundProviderContext,
 			menu: [{
@@ -93,7 +93,7 @@ export class OpenSessionWorktreeInVSCodeAction extends Action2 {
 		}), { openExternal: true });
 	}
 }
-registerAction2(OpenSessionWorktreeInVSCodeAction);
+registerAction2(OpenSessionWorktreeInCodeEngineAction);
 
 class NewChatInSessionsWindowAction extends Action2 {
 

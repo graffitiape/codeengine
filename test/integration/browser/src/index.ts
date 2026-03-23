@@ -43,7 +43,7 @@ const args = minimist(process.argv.slice(2), {
 });
 
 if (args.help) {
-	console.error(`Integration test runner for VS Code in the browser
+	console.error(`Integration test runner for Code Engine in the browser
 	Usage: node integration-tests-browser/out/index.js [options]
 
 	--workspacePath <path>             Path to the workspace (folder or *.code-workspace file) to open in the test
@@ -165,23 +165,23 @@ async function launchServer(browserType: BrowserType, browserChannel: BrowserCha
 	const userDataDir = path.join(testDataPath, 'd');
 
 	const env = {
-		VSCODE_BROWSER: browserChannel ? `${browserType}-${browserChannel}` : browserType,
+		CODEENGINE_BROWSER: browserChannel ? `${browserType}-${browserChannel}` : browserType,
 		...process.env
 	};
 
 	const serverArgs = ['--enable-proposed-api', '--disable-telemetry', '--disable-experiments', '--server-data-dir', userDataDir, '--accept-server-license-terms', '--disable-workspace-trust'];
 
 	let serverLocation: string;
-	if (process.env.VSCODE_REMOTE_SERVER_PATH) {
-		const { serverApplicationName } = require(path.join(process.env.VSCODE_REMOTE_SERVER_PATH, 'product.json'));
-		serverLocation = path.join(process.env.VSCODE_REMOTE_SERVER_PATH, 'bin', `${serverApplicationName}${process.platform === 'win32' ? '.cmd' : ''}`);
+	if (process.env.CODEENGINE_REMOTE_SERVER_PATH) {
+		const { serverApplicationName } = require(path.join(process.env.CODEENGINE_REMOTE_SERVER_PATH, 'product.json'));
+		serverLocation = path.join(process.env.CODEENGINE_REMOTE_SERVER_PATH, 'bin', `${serverApplicationName}${process.platform === 'win32' ? '.cmd' : ''}`);
 
 		if (args.debug) {
 			console.log(`Starting built server from '${serverLocation}'`);
 		}
 	} else {
 		serverLocation = path.join(root, `scripts/code-server.${process.platform === 'win32' ? 'bat' : 'sh'}`);
-		process.env.VSCODE_DEV = '1';
+		process.env.CODEENGINE_DEV = '1';
 
 		if (args.debug) {
 			console.log(`Starting server out of sources from '${serverLocation}'`);

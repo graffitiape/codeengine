@@ -32,7 +32,7 @@ const embeddedSvgsNotValid = l10n.t("Embedded SVGs are not a valid image source.
 const dataUrlsNotValid = l10n.t("Data URLs are not a valid image source.");
 const relativeUrlRequiresHttpsRepository = l10n.t("Relative image URLs require a repository with HTTPS protocol to be specified in the package.json.");
 const relativeBadgeUrlRequiresHttpsRepository = l10n.t("Relative badge URLs require a repository with HTTPS protocol to be specified in this package.json.");
-const apiProposalNotListed = l10n.t("This proposal cannot be used because for this extension the product defines a fixed set of API proposals. You can test your extension but before publishing you MUST reach out to the VS Code team.");
+const apiProposalNotListed = l10n.t("This proposal cannot be used because for this extension the product defines a fixed set of API proposals. You can test your extension but before publishing you MUST reach out to the Code Engine team.");
 
 const starActivation = l10n.t("Using '*' activation is usually a bad idea as it impacts performance.");
 const parsingErrorHeader = l10n.t("Error parsing the when-clause:");
@@ -186,7 +186,7 @@ export class ExtensionLinter {
 							const diagnostic = new Diagnostic(new Range(start, end), starActivation, DiagnosticSeverity.Information);
 							diagnostic.code = {
 								value: 'star-activation',
-								target: Uri.parse('https://code.visualstudio.com/api/references/activation-events#Start-up'),
+								target: Uri.parse('https://github.com/graffitiape/codeengine/api/references/activation-events#Start-up'),
 							};
 							diagnostics.push(diagnostic);
 						}
@@ -261,7 +261,7 @@ export class ExtensionLinter {
 				const diagnostic = new Diagnostic(new Range(start, end), errMsg, DiagnosticSeverity.Error);
 				diagnostic.code = {
 					value: 'See docs',
-					target: Uri.parse('https://code.visualstudio.com/api/references/when-clause-contexts'),
+					target: Uri.parse('https://github.com/graffitiape/codeengine/api/references/when-clause-contexts'),
 				};
 				diagnostics.push(diagnostic);
 			}

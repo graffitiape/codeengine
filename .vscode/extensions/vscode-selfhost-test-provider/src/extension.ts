@@ -19,7 +19,7 @@ import {
 	guessWorkspaceFolder,
 	itemData,
 } from './testTree';
-import { BrowserTestRunner, PlatformTestRunner, VSCodeTestRunner } from './vscodeTestRunner';
+import { BrowserTestRunner, PlatformTestRunner, CodeEngineTestRunner } from './vscodeTestRunner';
 import { ImportGraph } from './importGraph';
 
 const TEST_FILE_PATTERN = 'src/vs/**/*.{test,integrationTest}.ts';
@@ -39,7 +39,7 @@ const browserArgs: [name: string, arg: string][] = [
 type FileChangeEvent = { uri: vscode.Uri; removed: boolean };
 
 export async function activate(context: vscode.ExtensionContext) {
-	const ctrl = vscode.tests.createTestController('selfhost-test-controller', 'VS Code Tests');
+	const ctrl = vscode.tests.createTestController('selfhost-test-controller', 'Code Engine Tests');
 	const fileChangedEmitter = new vscode.EventEmitter<FileChangeEvent>();
 
 	context.subscriptions.push(vscode.tests.registerTestFollowupProvider({
@@ -94,7 +94,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	const createRunHandler = (
-		runnerCtor: { new(folder: vscode.WorkspaceFolder): VSCodeTestRunner },
+		runnerCtor: { new(folder: vscode.WorkspaceFolder): CodeEngineTestRunner },
 		kind: vscode.TestRunProfileKind,
 		args: string[] = []
 	) => {

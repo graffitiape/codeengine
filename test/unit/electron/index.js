@@ -108,7 +108,7 @@ if (crashReporterDirectory) {
 
 	crashReporter.start({
 		companyName: 'Microsoft',
-		productName: process.env['VSCODE_DEV'] ? `${product.nameShort} Dev` : product.nameShort,
+		productName: process.env['CODEENGINE_DEV'] ? `${product.nameShort} Dev` : product.nameShort,
 		uploadToServer: false,
 		compress: true
 	});
@@ -240,11 +240,11 @@ app.on('ready', () => {
 		return {
 			product: {
 				version: '1.x.y',
-				nameShort: 'Code - OSS Dev',
-				nameLong: 'Code - OSS Dev',
-				applicationName: 'code-oss',
-				dataFolderName: '.vscode-oss',
-				urlProtocol: 'code-oss',
+				nameShort: 'Code Engine Dev',
+				nameLong: 'Code Engine Dev',
+				applicationName: 'code-engine',
+				dataFolderName: '.vscode-engine',
+				urlProtocol: 'code-engine',
 			}
 		};
 	});
@@ -313,7 +313,7 @@ app.on('ready', () => {
 		width: 800,
 		show: false,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload.js'), // ensure similar environment as VSCode as tests may depend on this
+			preload: path.join(__dirname, 'preload.js'), // ensure similar environment as CodeEngine as tests may depend on this
 			additionalArguments: [`--vscode-window-config=vscode:test-vscode-window-config`],
 			nodeIntegration: true,
 			contextIsolation: false,

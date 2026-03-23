@@ -13,12 +13,12 @@ concurrency:
 permissions: {}
 
 env:
-  VSCODE_QUALITY: 'oss'
+  CODEENGINE_QUALITY: 'oss'
 
 jobs:
   compile:
     name: Compile & Hygiene
-    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-oss-ubuntu-22.04-x64 ]
+    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-engine-ubuntu-22.04-x64 ]
     steps:
       - name: Checkout microsoft/vscode
         uses: actions/checkout@v6

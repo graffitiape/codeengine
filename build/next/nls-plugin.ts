@@ -138,7 +138,7 @@ export async function finalizeNLS(
 		),
 		fs.promises.writeFile(
 			path.join(dir, 'nls.messages.js'),
-			`/*---------------------------------------------------------\n * Copyright (C) Microsoft Corporation. All rights reserved.\n *--------------------------------------------------------*/\nglobalThis._VSCODE_NLS_MESSAGES=${JSON.stringify(allMessages)};`
+			`/*---------------------------------------------------------\n * Copyright (C) Microsoft Corporation. All rights reserved.\n *--------------------------------------------------------*/\nglobalThis._CODEENGINE_NLS_MESSAGES=${JSON.stringify(allMessages)};`
 		),
 	]));
 

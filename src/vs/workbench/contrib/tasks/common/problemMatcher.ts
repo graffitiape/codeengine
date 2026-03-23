@@ -460,7 +460,7 @@ abstract class AbstractLineMatcher implements ILineMatcher {
 		if (startColumn !== undefined) {
 			return { startLineNumber: startLine, startCharacter: startColumn, endLineNumber: startLine, endCharacter: startColumn };
 		}
-		return { startLineNumber: startLine, startCharacter: 1, endLineNumber: startLine, endCharacter: 2 ** 31 - 1 }; // See https://github.com/microsoft/vscode/issues/80288#issuecomment-650636442 for discussion
+		return { startLineNumber: startLine, startCharacter: 1, endLineNumber: startLine, endCharacter: 2 ** 31 - 1 }; // See https://github.com/graffitiape/codeengine/issues/80288#issuecomment-650636442 for discussion
 	}
 
 	private getSeverity(data: IProblemData): MarkerSeverity {
@@ -827,8 +827,8 @@ export namespace Config {
 		base?: string;
 
 		/**
-		 * The owner of the produced VSCode problem. This is typically
-		 * the identifier of a VSCode language service if the problems are
+		 * The owner of the produced CodeEngine problem. This is typically
+		 * the identifier of a CodeEngine language service if the problems are
 		 * to be merged with the one produced by the language service
 		 * or a generated internal id. Defaults to the generated internal id.
 		 */
@@ -853,7 +853,7 @@ export namespace Config {
 		applyTo?: string;
 
 		/**
-		* The severity of the VSCode problem produced by this problem matcher.
+		* The severity of the CodeEngine problem produced by this problem matcher.
 		*
 		* Valid values are:
 		*   "error": to produce errors.

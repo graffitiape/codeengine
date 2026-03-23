@@ -343,7 +343,7 @@ export class ProtocolServerHandler extends Disposable {
 			return;
 		}
 
-		// VS Code extension methods (not in the typed protocol maps yet)
+		// Code Engine extension methods (not in the typed protocol maps yet)
 		const extensionResult = this._handleExtensionRequest(method, params);
 		if (extensionResult) {
 			extensionResult.then(result => {
@@ -359,7 +359,7 @@ export class ProtocolServerHandler extends Disposable {
 	}
 
 	/**
-	 * Handle VS Code extension methods that are not yet part of the typed
+	 * Handle Code Engine extension methods that are not yet part of the typed
 	 * protocol. Returns a Promise if the method was recognized, undefined
 	 * otherwise.
 	 */
@@ -437,10 +437,10 @@ export interface IProtocolSideEffectHandler {
 	handleBrowseDirectory(uri: URI): Promise<IBrowseDirectoryResult>;
 	/** Returns the server's default browsing directory, if available. */
 	getDefaultDirectory?(): URI;
-	/** Refresh models from all providers (VS Code extension method). */
+	/** Refresh models from all providers (Code Engine extension method). */
 	handleRefreshModels?(): Promise<void>;
-	/** List agent descriptors (VS Code extension method). */
+	/** List agent descriptors (Code Engine extension method). */
 	handleListAgents?(): IAgentDescriptor[];
-	/** Shut down all providers (VS Code extension method). */
+	/** Shut down all providers (Code Engine extension method). */
 	handleShutdown?(): Promise<void>;
 }

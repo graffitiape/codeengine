@@ -17,18 +17,18 @@ suite('User data path', () => {
 	});
 
 	test('getUserDataPath - portable mode', () => {
-		const origPortable = process.env['VSCODE_PORTABLE'];
+		const origPortable = process.env['CODEENGINE_PORTABLE'];
 		try {
 			const portableDir = 'portable-dir';
-			process.env['VSCODE_PORTABLE'] = portableDir;
+			process.env['CODEENGINE_PORTABLE'] = portableDir;
 
 			const path = getUserDataPath(parseArgs(process.argv, OPTIONS), product.nameShort);
 			assert.ok(path.includes(portableDir));
 		} finally {
 			if (typeof origPortable === 'string') {
-				process.env['VSCODE_PORTABLE'] = origPortable;
+				process.env['CODEENGINE_PORTABLE'] = origPortable;
 			} else {
-				delete process.env['VSCODE_PORTABLE'];
+				delete process.env['CODEENGINE_PORTABLE'];
 			}
 		}
 	});
@@ -42,19 +42,19 @@ suite('User data path', () => {
 		assert.ok(path.includes(cliUserDataDir));
 	});
 
-	test('getUserDataPath - VSCODE_APPDATA', () => {
-		const origAppData = process.env['VSCODE_APPDATA'];
+	test('getUserDataPath - CODEENGINE_APPDATA', () => {
+		const origAppData = process.env['CODEENGINE_APPDATA'];
 		try {
 			const appDataDir = 'appdata-dir';
-			process.env['VSCODE_APPDATA'] = appDataDir;
+			process.env['CODEENGINE_APPDATA'] = appDataDir;
 
 			const path = getUserDataPath(parseArgs(process.argv, OPTIONS), product.nameShort);
 			assert.ok(path.includes(appDataDir));
 		} finally {
 			if (typeof origAppData === 'string') {
-				process.env['VSCODE_APPDATA'] = origAppData;
+				process.env['CODEENGINE_APPDATA'] = origAppData;
 			} else {
-				delete process.env['VSCODE_APPDATA'];
+				delete process.env['CODEENGINE_APPDATA'];
 			}
 		}
 	});

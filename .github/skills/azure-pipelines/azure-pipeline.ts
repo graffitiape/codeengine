@@ -773,7 +773,7 @@ function printQueueUsage(): void {
 	const scriptName = 'node .github/skills/azure-pipelines/azure-pipeline.ts queue';
 	console.log(`Usage: ${scriptName} [options]`);
 	console.log('');
-	console.log('Queue an Azure DevOps pipeline build for VS Code.');
+	console.log('Queue an Azure DevOps pipeline build for Code Engine.');
 	console.log('');
 	console.log('Options:');
 	console.log('  --branch <name>       Source branch to build (default: current git branch)');
@@ -786,8 +786,8 @@ function printQueueUsage(): void {
 	console.log('Examples:');
 	console.log(`  ${scriptName}                                    # Queue build on current branch`);
 	console.log(`  ${scriptName} --branch my-feature                # Queue build on specific branch`);
-	console.log(`  ${scriptName} --parameter "VSCODE_BUILD_WEB=false" --parameter "VSCODE_PUBLISH=false"`);
-	console.log(`  ${scriptName} --parameter "VSCODE_BUILD_TYPE=Product Build"  # Parameter values with spaces`);
+	console.log(`  ${scriptName} --parameter "CODEENGINE_BUILD_WEB=false" --parameter "CODEENGINE_PUBLISH=false"`);
+	console.log(`  ${scriptName} --parameter "CODEENGINE_BUILD_TYPE=Product Build"  # Parameter values with spaces`);
 }
 
 function parseQueueArgs(args: string[]): QueueArgs {
@@ -1813,7 +1813,7 @@ function printMainUsage(): void {
 	const scriptName = 'node .github/skills/azure-pipelines/azure-pipeline.ts';
 	console.log(`Usage: ${scriptName} <command> [options]`);
 	console.log('');
-	console.log('Azure DevOps Pipeline CLI for VS Code builds.');
+	console.log('Azure DevOps Pipeline CLI for Code Engine builds.');
 	console.log('');
 	console.log('Commands:');
 	console.log('  queue   Queue a new pipeline build');

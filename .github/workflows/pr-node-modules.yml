@@ -10,7 +10,7 @@ permissions: {}
 jobs:
   compile:
     name: Compile
-    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-oss-ubuntu-22.04-x64 ]
+    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-engine-ubuntu-22.04-x64 ]
     steps:
       - name: Checkout microsoft/vscode
         uses: actions/checkout@v6
@@ -54,7 +54,7 @@ jobs:
         env:
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-          GITHUB_TOKEN: ${{ secrets.VSCODE_OSS }}
+          GITHUB_TOKEN: ${{ secrets.CODEENGINE_OSS }}
 
       - name: Create node_modules archive
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
@@ -82,14 +82,14 @@ jobs:
         if: steps.cache-builtin-extensions.outputs.cache-hit != 'true'
         run: node build/lib/builtInExtensions.ts
         env:
-          GITHUB_TOKEN: ${{ secrets.VSCODE_OSS }}
+          GITHUB_TOKEN: ${{ secrets.CODEENGINE_OSS }}
 
   linux:
     name: Linux
-    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-oss-ubuntu-22.04-x64 ]
+    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-engine-ubuntu-22.04-x64 ]
     env:
       NPM_ARCH: x64
-      VSCODE_ARCH: x64
+      CODEENGINE_ARCH: x64
     steps:
       - name: Checkout microsoft/vscode
         uses: actions/checkout@v6
@@ -100,7 +100,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Prepare node_modules cache key
-        run: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts linux $VSCODE_ARCH $(node -p process.arch) > .build/packagelockhash
+        run: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts linux $CODEENGINE_ARCH $(node -p process.arch) > .build/packagelockhash
 
       - name: Restore node_modules cache
         id: cache-node-modules
@@ -124,7 +124,7 @@ jobs:
             echo "Npm install failed $i, trying again..."
           done
         env:
-          GITHUB_TOKEN: ${{ secrets.VSCODE_OSS }}
+          GITHUB_TOKEN: ${{ secrets.CODEENGINE_OSS }}
 
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
@@ -143,10 +143,10 @@ jobs:
           done
         env:
           npm_config_arch: ${{ env.NPM_ARCH }}
-          VSCODE_ARCH: ${{ env.VSCODE_ARCH }}
+          CODEENGINE_ARCH: ${{ env.CODEENGINE_ARCH }}
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-          GITHUB_TOKEN: ${{ secrets.VSCODE_OSS }}
+          GITHUB_TOKEN: ${{ secrets.CODEENGINE_OSS }}
 
       - name: Create node_modules archive
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
@@ -161,7 +161,7 @@ jobs:
     runs-on: macos-14-xlarge
     env:
       NPM_ARCH: arm64
-      VSCODE_ARCH: arm64
+      CODEENGINE_ARCH: arm64
     steps:
       - name: Checkout microsoft/vscode
         uses: actions/checkout@v6
@@ -172,7 +172,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Prepare node_modules cache key
-        run: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts darwin $VSCODE_ARCH $(node -p process.arch) > .build/packagelockhash
+        run: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts darwin $CODEENGINE_ARCH $(node -p process.arch) > .build/packagelockhash
 
       - name: Restore node_modules cache
         id: cache-node-modules
@@ -199,10 +199,10 @@ jobs:
           done
         env:
           npm_config_arch: ${{ env.NPM_ARCH }}
-          VSCODE_ARCH: ${{ env.VSCODE_ARCH }}
+          CODEENGINE_ARCH: ${{ env.CODEENGINE_ARCH }}
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-          GITHUB_TOKEN: ${{ secrets.VSCODE_OSS }}
+          GITHUB_TOKEN: ${{ secrets.CODEENGINE_OSS }}
           # Avoid using dlopen to load Kerberos on macOS which can cause missing libraries
           # https://github.com/mongodb-js/kerberos/commit/04044d2814ad1d01e77f1ce87f26b03d86692cf2
           # flipped the default to support legacy linux distros which shouldn't happen
@@ -219,10 +219,10 @@ jobs:
 
   windows:
     name: Windows
-    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-oss-windows-2022-x64 ]
+    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-engine-windows-2022-x64 ]
     env:
       NPM_ARCH: x64
-      VSCODE_ARCH: x64
+      CODEENGINE_ARCH: x64
     steps:
       - name: Checkout microsoft/vscode
         uses: actions/checkout@v6
@@ -236,7 +236,7 @@ jobs:
         shell: pwsh
         run: |
           mkdir .build -ea 0
-          node build/azure-pipelines/common/computeNodeModulesCacheKey.ts win32 ${{ env.VSCODE_ARCH }} $(node -p process.arch) > .build/packagelockhash
+          node build/azure-pipelines/common/computeNodeModulesCacheKey.ts win32 ${{ env.CODEENGINE_ARCH }} $(node -p process.arch) > .build/packagelockhash
 
       - name: Restore node_modules cache
         uses: actions/cache@v5
@@ -269,10 +269,10 @@ jobs:
         env:
           npm_config_arch: ${{ env.NPM_ARCH }}
           npm_config_foreground_scripts: "true"
-          VSCODE_ARCH: ${{ env.VSCODE_ARCH }}
+          CODEENGINE_ARCH: ${{ env.CODEENGINE_ARCH }}
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-          GITHUB_TOKEN: ${{ secrets.VSCODE_OSS }}
+          GITHUB_TOKEN: ${{ secrets.CODEENGINE_OSS }}
 
       - name: Create node_modules archive
         if: steps.node-modules-cache.outputs.cache-hit != 'true'

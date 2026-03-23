@@ -273,7 +273,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		if (this._accountStatus !== accountStatus) {
 			const previous = this._accountStatus;
 			const logMsg = `Settings Sync: Account status changed from ${previous} to ${accountStatus}`;
-			if (env.VSCODE_DEV) {
+			if (env.CODEENGINE_DEV) {
 				this.logService.trace(logMsg);
 			} else {
 				this.logService.info(logMsg);

@@ -20,10 +20,10 @@ const escapeRe = (s: string) => s.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
 const TEST_ELECTRON_SCRIPT_PATH = 'test/unit/electron/index.js';
 const TEST_BROWSER_SCRIPT_PATH = 'test/unit/browser/index.js';
 
-const ATTACH_CONFIG_NAME = 'Attach to VS Code';
+const ATTACH_CONFIG_NAME = 'Attach to Code Engine';
 const DEBUG_TYPE = 'pwa-chrome';
 
-export abstract class VSCodeTestRunner {
+export abstract class CodeEngineTestRunner {
 	constructor(protected readonly repoLocation: vscode.WorkspaceFolder) { }
 
 	public async run(baseArgs: ReadonlyArray<string>, filter?: ReadonlyArray<vscode.TestItem>) {
@@ -52,9 +52,9 @@ export abstract class VSCodeTestRunner {
 		const args = [
 			...this.prepareArguments(baseArgs, filter),
 			`--remote-debugging-port=${port}`,
-			// for breakpoint freeze: https://github.com/microsoft/vscode/issues/122225#issuecomment-885377304
+			// for breakpoint freeze: https://github.com/graffitiape/codeengine/issues/122225#issuecomment-885377304
 			'--js-flags="--regexp_interpret_all"',
-			// for general runtime freezes: https://github.com/microsoft/vscode/issues/127861#issuecomment-904144910
+			// for general runtime freezes: https://github.com/graffitiape/codeengine/issues/127861#issuecomment-904144910
 			'--disable-features=CalculateNativeWinOcclusion',
 			'--timeout=0',
 			`--waitServer=${server.port}`,
@@ -254,7 +254,7 @@ export abstract class VSCodeTestRunner {
 	}
 }
 
-export class BrowserTestRunner extends VSCodeTestRunner {
+export class BrowserTestRunner extends CodeEngineTestRunner {
 	/** @override */
 	protected binaryPath(): Promise<string> {
 		return Promise.resolve(process.execPath);
@@ -275,7 +275,7 @@ export class BrowserTestRunner extends VSCodeTestRunner {
 	}
 }
 
-export class WindowsTestRunner extends VSCodeTestRunner {
+export class WindowsTestRunner extends CodeEngineTestRunner {
 	/** @override */
 	protected async binaryPath() {
 		const { nameShort } = await this.readProductJson();
@@ -288,7 +288,7 @@ export class WindowsTestRunner extends VSCodeTestRunner {
 	}
 }
 
-export class PosixTestRunner extends VSCodeTestRunner {
+export class PosixTestRunner extends CodeEngineTestRunner {
 	/** @override */
 	protected async binaryPath() {
 		const { applicationName } = await this.readProductJson();

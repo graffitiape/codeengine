@@ -425,7 +425,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 					URI.from({ scheme: Schemas.file, path: '/folder/foo/bar.txt' })
 				]);
 				await opener.open({
-					text: './foo/bar.txt:10:5:import { ILoveVSCode } from \'./foo/bar.ts\';',
+					text: './foo/bar.txt:10:5:import { ILoveCodeEngine } from \'./foo/bar.ts\';',
 					bufferRange: { start: { x: 1, y: 1 }, end: { x: 8, y: 1 } },
 					type: TerminalBuiltinLinkType.Search
 				});
@@ -440,7 +440,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 					},
 				});
 				await opener.open({
-					text: './foo/bar.txt:10:import { ILoveVSCode } from \'./foo/bar.ts\';',
+					text: './foo/bar.txt:10:import { ILoveCodeEngine } from \'./foo/bar.ts\';',
 					bufferRange: { start: { x: 1, y: 1 }, end: { x: 8, y: 1 } },
 					type: TerminalBuiltinLinkType.Search
 				});
@@ -456,7 +456,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 				});
 			});
 
-			// Test for https://github.com/microsoft/vscode/pull/200919#discussion_r1428124196
+			// Test for https://github.com/graffitiape/codeengine/pull/200919#discussion_r1428124196
 			test('should extract column and/or line numbers from links and remove grepped lines incl singular spaces', async () => {
 				localFileOpener = instantiationService.createInstance(TerminalLocalFileLinkOpener);
 				const localFolderOpener = instantiationService.createInstance(TerminalLocalFolderInWorkspaceLinkOpener);
@@ -796,7 +796,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 					URI.from({ scheme: Schemas.file, path: 'c:/folder/foo/bar.txt' })
 				]);
 				await opener.open({
-					text: './foo/bar.txt:10:5:import { ILoveVSCode } from \'./foo/bar.ts\';',
+					text: './foo/bar.txt:10:5:import { ILoveCodeEngine } from \'./foo/bar.ts\';',
 					bufferRange: { start: { x: 1, y: 1 }, end: { x: 8, y: 1 } },
 					type: TerminalBuiltinLinkType.Search
 				});
@@ -811,7 +811,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 					},
 				});
 				await opener.open({
-					text: './foo/bar.txt:10:import { ILoveVSCode } from \'./foo/bar.ts\';',
+					text: './foo/bar.txt:10:import { ILoveCodeEngine } from \'./foo/bar.ts\';',
 					bufferRange: { start: { x: 1, y: 1 }, end: { x: 8, y: 1 } },
 					type: TerminalBuiltinLinkType.Search
 				});
@@ -826,7 +826,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 					},
 				});
 				await opener.open({
-					text: '.\\foo\\bar.txt:10:5:import { ILoveVSCode } from \'./foo/bar.ts\';',
+					text: '.\\foo\\bar.txt:10:5:import { ILoveCodeEngine } from \'./foo/bar.ts\';',
 					bufferRange: { start: { x: 1, y: 1 }, end: { x: 8, y: 1 } },
 					type: TerminalBuiltinLinkType.Search
 				});
@@ -841,7 +841,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 					},
 				});
 				await opener.open({
-					text: '.\\foo\\bar.txt:10:import { ILoveVSCode } from \'./foo/bar.ts\';',
+					text: '.\\foo\\bar.txt:10:import { ILoveCodeEngine } from \'./foo/bar.ts\';',
 					bufferRange: { start: { x: 1, y: 1 }, end: { x: 8, y: 1 } },
 					type: TerminalBuiltinLinkType.Search
 				});
@@ -857,7 +857,7 @@ suite('Workbench - TerminalLinkOpeners', () => {
 				});
 			});
 
-			// Test for https://github.com/microsoft/vscode/pull/200919#discussion_r1428124196
+			// Test for https://github.com/graffitiape/codeengine/pull/200919#discussion_r1428124196
 			test('should extract column and/or line numbers from links and remove grepped lines incl singular spaces', async () => {
 				localFileOpener = instantiationService.createInstance(TerminalLocalFileLinkOpener);
 				const localFolderOpener = instantiationService.createInstance(TerminalLocalFolderInWorkspaceLinkOpener);

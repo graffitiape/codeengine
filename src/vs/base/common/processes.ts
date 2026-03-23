@@ -11,7 +11,7 @@ import { IProcessEnvironment, isLinux } from './platform.js';
 export interface CommandOptions {
 	/**
 	 * The current working directory of the executed program or shell.
-	 * If omitted VSCode's current workspace root is used.
+	 * If omitted CodeEngine's current workspace root is used.
 	 */
 	cwd?: string;
 
@@ -99,7 +99,7 @@ export interface ProcessItem {
 }
 
 /**
- * Sanitizes a VS Code process environment by removing all Electron/VS Code-related values.
+ * Sanitizes a Code Engine process environment by removing all Electron/Code Engine-related values.
  */
 export function sanitizeProcessEnvironment(env: IProcessEnvironment, ...preserve: string[]): void {
 	const set = preserve.reduce<Record<string, boolean>>((set, key) => {
@@ -108,7 +108,7 @@ export function sanitizeProcessEnvironment(env: IProcessEnvironment, ...preserve
 	}, {});
 	const keysToRemove = [
 		/^ELECTRON_.+$/,
-		/^VSCODE_(?!(PORTABLE|SHELL_LOGIN|ENV_REPLACE|ENV_APPEND|ENV_PREPEND)).+$/,
+		/^CODEENGINE_(?!(PORTABLE|SHELL_LOGIN|ENV_REPLACE|ENV_APPEND|ENV_PREPEND)).+$/,
 		/^SNAP(|_.*)$/,
 		/^GDK_PIXBUF_.+$/,
 	];
@@ -137,12 +137,12 @@ export function removeDangerousEnvVariables(env: IProcessEnvironment | undefined
 	}
 
 	// Unset `DEBUG`, as an invalid value might lead to process crashes
-	// See https://github.com/microsoft/vscode/issues/130072
+	// See https://github.com/graffitiape/codeengine/issues/130072
 	delete env['DEBUG'];
 
 	if (isLinux) {
 		// Unset `LD_PRELOAD`, as it might lead to process crashes
-		// See https://github.com/microsoft/vscode/issues/134177
+		// See https://github.com/graffitiape/codeengine/issues/134177
 		delete env['LD_PRELOAD'];
 	}
 }

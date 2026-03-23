@@ -244,7 +244,7 @@ export class AgentHostContribution extends Disposable implements IWorkbenchContr
 	/**
 	 * Discover auth requirements from the server's resource metadata
 	 * and authenticate using matching tokens resolved via the standard
-	 * VS Code authentication service (same flow as MCP auth).
+	 * Code Engine authentication service (same flow as MCP auth).
 	 */
 	private async _authenticateWithServer(): Promise<void> {
 		try {
@@ -267,7 +267,7 @@ export class AgentHostContribution extends Disposable implements IWorkbenchContr
 
 	/**
 	 * Resolve a bearer token for a set of authorization servers using the
-	 * standard VS Code authentication service provider resolution.
+	 * standard Code Engine authentication service provider resolution.
 	 */
 	private async _resolveTokenForResource(resourceServer: URI, authorizationServers: readonly string[], scopes: readonly string[]): Promise<string | undefined> {
 		for (const server of authorizationServers) {

@@ -332,12 +332,12 @@ function stripComments(content: string): string {
 function processCoreBundleFormat(base: string, fileHeader: string, languages: Language[], json: NLSKeysFormat, emitter: eventStream.ThroughStream) {
 	const languageDirectory = path.join(REPO_ROOT_PATH, '..', 'vscode-loc', 'i18n');
 	if (!fs.existsSync(languageDirectory)) {
-		log(`No VS Code localization repository found. Looking at ${languageDirectory}`);
+		log(`No Code Engine localization repository found. Looking at ${languageDirectory}`);
 		log(`To bundle translations please check out the vscode-loc repository as a sibling of the vscode repository.`);
 	}
 	const sortedLanguages = sortLanguages(languages);
 	sortedLanguages.forEach((language) => {
-		if (process.env['VSCODE_BUILD_VERBOSE']) {
+		if (process.env['CODEENGINE_BUILD_VERBOSE']) {
 			log(`Generating nls bundles for: ${language.id}`);
 		}
 
@@ -361,8 +361,8 @@ function processCoreBundleFormat(base: string, fileHeader: string, languages: La
 
 		emitter.queue(new File({
 			contents: Buffer.from(`${fileHeader}
-globalThis._VSCODE_NLS_MESSAGES=${JSON.stringify(nlsResult)};
-globalThis._VSCODE_NLS_LANGUAGE=${JSON.stringify(language.id)};`),
+globalThis._CODEENGINE_NLS_MESSAGES=${JSON.stringify(nlsResult)};
+globalThis._CODEENGINE_NLS_LANGUAGE=${JSON.stringify(language.id)};`),
 			base,
 			path: `${base}/nls.messages.${language.id}.js`
 		}));

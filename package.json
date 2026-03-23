@@ -1,9 +1,9 @@
 {
-  "name": "code-oss-dev",
+  "name": "code-engine",
   "version": "1.113.0",
   "distro": "a981e7362565b4058f3bfd7604f8ab8c4f85101b",
   "author": {
-    "name": "Microsoft Corporation"
+    "name": "Graffiti Ape"
   },
   "license": "MIT",
   "main": "./out/main.js",
@@ -241,10 +241,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/vscode.git"
+    "url": "https://github.com/graffitiape/codeengine.git"
   },
   "bugs": {
-    "url": "https://github.com/microsoft/vscode/issues"
+    "url": "https://github.com/graffitiape/codeengine/issues"
   },
   "optionalDependencies": {
     "windows-foreground-love": "0.6.1"

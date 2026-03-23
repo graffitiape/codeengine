@@ -313,7 +313,7 @@ export class MarkerHoverParticipant implements IEditorHoverParticipant<MarkerHov
 
 				// Notify that the contents have changed given we added
 				// actions to the hover
-				// https://github.com/microsoft/vscode/issues/250424
+				// https://github.com/graffitiape/codeengine/issues/250424
 				context.onContentsChanged();
 
 			}, onUnexpectedError);

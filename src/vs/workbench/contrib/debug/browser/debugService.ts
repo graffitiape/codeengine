@@ -338,7 +338,7 @@ export class DebugService implements IDebugService {
 	private lazySetup() {
 		if (!this.haveDoneLazySetup) {
 			// Registering fs providers is slow
-			// https://github.com/microsoft/vscode/issues/159886
+			// https://github.com/graffitiape/codeengine/issues/159886
 			this.disposables.add(this.fileService.registerProvider(DEBUG_MEMORY_SCHEME, this.disposables.add(new DebugMemoryFileSystemProvider(this))));
 			this.haveDoneLazySetup = true;
 		}
@@ -753,7 +753,7 @@ export class DebugService implements IDebugService {
 				this.telemetry.logDebugSessionStop(session, adapterExitEvent);
 			}
 
-			// 'Run without debugging' mode VSCode must terminate the extension host. More details: #3905
+			// 'Run without debugging' mode CodeEngine must terminate the extension host. More details: #3905
 			const extensionDebugSession = getExtensionHostDebugSession(session);
 			if (extensionDebugSession && extensionDebugSession.state === State.Running && extensionDebugSession.configuration.noDebug) {
 				this.extensionHostDebugService.close(extensionDebugSession.getId());

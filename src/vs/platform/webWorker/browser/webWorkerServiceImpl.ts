@@ -59,7 +59,7 @@ const ttPolicy = ((): ReturnType<typeof createTrustedTypesPolicy> => {
 
 	// Reuse the trusted types policy defined from worker bootstrap
 	// when available.
-	// Refs https://github.com/microsoft/vscode/issues/222193
+	// Refs https://github.com/graffitiape/codeengine/issues/222193
 	const workerGlobalThis = globalThis as WorkerGlobalWithPolicy;
 	if (typeof self === 'object' && self.constructor && self.constructor.name === 'DedicatedWorkerGlobalScope' && workerGlobalThis.workerttPolicy !== undefined) {
 		return workerGlobalThis.workerttPolicy;
@@ -100,9 +100,9 @@ function getWorkerBootstrapUrl(label: string, workerScriptUrl: string, workerLoa
 	// terminating characters (such as ' or ").
 	const blob = new Blob([coalesce([
 		`/*${label}*/`,
-		`globalThis._VSCODE_NLS_MESSAGES = ${JSON.stringify(getNLSMessages())};`,
-		`globalThis._VSCODE_NLS_LANGUAGE = ${JSON.stringify(getNLSLanguage())};`,
-		`globalThis._VSCODE_FILE_ROOT = ${JSON.stringify(globalThis._VSCODE_FILE_ROOT)};`,
+		`globalThis._CODEENGINE_NLS_MESSAGES = ${JSON.stringify(getNLSMessages())};`,
+		`globalThis._CODEENGINE_NLS_LANGUAGE = ${JSON.stringify(getNLSLanguage())};`,
+		`globalThis._CODEENGINE_FILE_ROOT = ${JSON.stringify(globalThis._CODEENGINE_FILE_ROOT)};`,
 		`const ttPolicy = globalThis.trustedTypes?.createPolicy('defaultWorkerFactory', { createScriptURL: value => value });`,
 		`globalThis.workerttPolicy = ttPolicy;`,
 

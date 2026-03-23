@@ -150,7 +150,7 @@ export class McpSandboxService extends Disposable implements IMcpSandboxService 
 		return {
 			message: localize(
 				'mcpSandboxSuggestion.message',
-				"The MCP server {0} reported potential sandbox blocks. VS Code found possible sandbox configuration updates:\n{1}",
+				"The MCP server {0} reported potential sandbox blocks. Code Engine found possible sandbox configuration updates:\n{1}",
 				serverLabel,
 				suggestionLines.join('\n')
 			),
@@ -288,8 +288,8 @@ export class McpSandboxService extends Disposable implements IMcpSandboxService 
 			// Add any remote-specific environment variables here
 			env = { ...env, ELECTRON_RUN_AS_NODE: '1' };
 		}
-		// Ensure VSCODE_INSPECTOR_OPTIONS is not inherited by the sandboxed process, as it can cause issues with sandboxing.
-		env['VSCODE_INSPECTOR_OPTIONS'] = null;
+		// Ensure CODEENGINE_INSPECTOR_OPTIONS is not inherited by the sandboxed process, as it can cause issues with sandboxing.
+		env['CODEENGINE_INSPECTOR_OPTIONS'] = null;
 		return env;
 	}
 

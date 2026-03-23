@@ -32,7 +32,7 @@ import { Schemas } from '../../../base/common/network.js';
 
 // Entry point for the agent host utility process.
 // Sets up IPC, logging, and registers agent providers (Copilot).
-// When VSCODE_AGENT_HOST_PORT or VSCODE_AGENT_HOST_SOCKET_PATH env vars
+// When CODEENGINE_AGENT_HOST_PORT or CODEENGINE_AGENT_HOST_SOCKET_PATH env vars
 // are set, also starts a WebSocket server for external clients.
 
 startAgentHost();
@@ -92,15 +92,15 @@ function startAgentHost(): void {
  * that the IPC channel uses, so both IPC and WebSocket clients share state.
  */
 async function startWebSocketServer(agentService: AgentService, logService: ILogService, disposables: DisposableStore): Promise<void> {
-	const port = process.env['VSCODE_AGENT_HOST_PORT'];
-	const socketPath = process.env['VSCODE_AGENT_HOST_SOCKET_PATH'];
+	const port = process.env['CODEENGINE_AGENT_HOST_PORT'];
+	const socketPath = process.env['CODEENGINE_AGENT_HOST_SOCKET_PATH'];
 
 	if (!port && !socketPath) {
 		return;
 	}
 
-	const connectionToken = process.env['VSCODE_AGENT_HOST_CONNECTION_TOKEN'];
-	const host = process.env['VSCODE_AGENT_HOST_HOST'] || 'localhost';
+	const connectionToken = process.env['CODEENGINE_AGENT_HOST_CONNECTION_TOKEN'];
+	const host = process.env['CODEENGINE_AGENT_HOST_HOST'] || 'localhost';
 
 	const wsServer = disposables.add(await WebSocketProtocolServer.create(
 		socketPath

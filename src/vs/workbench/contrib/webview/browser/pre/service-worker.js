@@ -200,7 +200,7 @@ sw.addEventListener('fetch', (event) => {
 	}
 
 	// If we're making a request against the remote authority, we want to go
-	// through VS Code itself so that we are authenticated properly.  If the
+	// through Code Engine itself so that we are authenticated properly.  If the
 	// service worker is hosted on the same origin we will have cookies and
 	// authentication will not be an issue.
 	if (requestUrl.origin !== sw.origin && requestUrl.host === remoteAuthority) {
@@ -263,7 +263,7 @@ async function processResourceRequest(
 
 	const webviewId = getWebviewIdForClient(client);
 
-	// Refs https://github.com/microsoft/vscode/issues/244143
+	// Refs https://github.com/graffitiape/codeengine/issues/244143
 	// With PlzDedicatedWorker, worker subresources and blob wokers
 	// will use clients different from the window client.
 	// Since we cannot different a worker main resource from a worker subresource
@@ -441,7 +441,7 @@ async function processLocalhostRequest(
 		return fetch(event.request);
 	}
 	const webviewId = getWebviewIdForClient(client);
-	// Refs https://github.com/microsoft/vscode/issues/244143
+	// Refs https://github.com/graffitiape/codeengine/issues/244143
 	// With PlzDedicatedWorker, worker subresources and blob wokers
 	// will use clients different from the window client.
 	// Since we cannot different a worker main resource from a worker subresource

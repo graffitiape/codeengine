@@ -10,7 +10,7 @@ import { importAMDNodeModule } from '../../../../../../amdX.js';
 import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../../../base/test/common/utils.js';
 import { NullLogService } from '../../../../../../platform/log/common/log.js';
 import { ITerminalCapabilityStore, TerminalCapability } from '../../../../../../platform/terminal/common/capabilities/capabilities.js';
-import { deserializeVSCodeOscMessage, serializeVSCodeOscMessage, parseKeyValueAssignment, parseMarkSequence, ShellIntegrationAddon } from '../../../../../../platform/terminal/common/xterm/shellIntegrationAddon.js';
+import { deserializeCodeEngineOscMessage, serializeCodeEngineOscMessage, parseKeyValueAssignment, parseMarkSequence, ShellIntegrationAddon } from '../../../../../../platform/terminal/common/xterm/shellIntegrationAddon.js';
 import { writeP } from '../../../browser/terminalTestHelpers.js';
 import { TestXtermLogger } from '../../../../../../platform/terminal/test/common/terminalTestHelpers.js';
 
@@ -293,11 +293,11 @@ suite('ShellIntegrationAddon', () => {
 		];
 
 		cases.forEach(([title, input, expected]) => {
-			test(title, () => strictEqual(deserializeVSCodeOscMessage(input), expected));
+			test(title, () => strictEqual(deserializeCodeEngineOscMessage(input), expected));
 		});
 	});
 
-	suite('serializeVSCodeOscMessage', () => {
+	suite('serializeCodeEngineOscMessage', () => {
 		// A single literal backslash, in order to avoid confusion about whether we are escaping test data or testing escapes.
 		const Backslash = '\\' as const;
 		const Newline = '\n' as const;
@@ -328,7 +328,7 @@ suite('ShellIntegrationAddon', () => {
 		];
 
 		cases.forEach(([title, input, expected]) => {
-			test(title, () => strictEqual(serializeVSCodeOscMessage(input), expected));
+			test(title, () => strictEqual(serializeCodeEngineOscMessage(input), expected));
 		});
 	});
 

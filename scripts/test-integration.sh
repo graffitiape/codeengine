@@ -21,7 +21,7 @@ then
 
 	echo "Running integration tests out of sources."
 else
-	export VSCODE_CLI=1
+	export CODEENGINE_CLI=1
 	export ELECTRON_ENABLE_LOGGING=1
 
 	echo "Running integration tests with '$INTEGRATION_TEST_ELECTRON_PATH' as build."

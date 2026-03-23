@@ -41,9 +41,9 @@ export async function buildUserEnvironment(startParamsEnv: { [key: string]: stri
 		...processEnv,
 		...userShellEnv,
 		...{
-			VSCODE_ESM_ENTRYPOINT: 'vs/workbench/api/node/extensionHostProcess',
-			VSCODE_HANDLES_UNCAUGHT_ERRORS: 'true',
-			VSCODE_NLS_CONFIG: JSON.stringify(nlsConfig)
+			CODEENGINE_ESM_ENTRYPOINT: 'vs/workbench/api/node/extensionHostProcess',
+			CODEENGINE_HANDLES_UNCAUGHT_ERRORS: 'true',
+			CODEENGINE_NLS_CONFIG: JSON.stringify(nlsConfig)
 		},
 		...startParamsEnv
 	};
@@ -63,8 +63,8 @@ export async function buildUserEnvironment(startParamsEnv: { [key: string]: stri
 		env.BROWSER = join(binFolder, 'helpers', isWindows ? 'browser.cmd' : 'browser.sh'); // a command that opens a browser on the local machine
 	}
 
-	env.VSCODE_RECONNECTION_GRACE_TIME = String(environmentService.reconnectionGraceTime);
-	logService.trace(`[reconnection-grace-time] Setting VSCODE_RECONNECTION_GRACE_TIME env var for extension host: ${environmentService.reconnectionGraceTime}ms (${Math.floor(environmentService.reconnectionGraceTime / 1000)}s)`);
+	env.CODEENGINE_RECONNECTION_GRACE_TIME = String(environmentService.reconnectionGraceTime);
+	logService.trace(`[reconnection-grace-time] Setting CODEENGINE_RECONNECTION_GRACE_TIME env var for extension host: ${environmentService.reconnectionGraceTime}ms (${Math.floor(environmentService.reconnectionGraceTime / 1000)}s)`);
 
 	removeNulls(env);
 	return env;
@@ -98,7 +98,7 @@ class ConnectionData {
 		}
 
 		return {
-			type: 'VSCODE_EXTHOST_IPC_SOCKET',
+			type: 'CODEENGINE_EXTHOST_IPC_SOCKET',
 			initialDataChunk: (<Buffer>this.initialDataChunk.buffer).toString('base64'),
 			skipWebSocketFrames: skipWebSocketFrames,
 			permessageDeflate: permessageDeflate,
@@ -205,7 +205,7 @@ export class ExtensionHostConnection extends Disposable {
 			return;
 		}
 		const msg: IExtHostReduceGraceTimeMessage = {
-			type: 'VSCODE_EXTHOST_IPC_REDUCE_GRACE_TIME'
+			type: 'CODEENGINE_EXTHOST_IPC_REDUCE_GRACE_TIME'
 		};
 		this._extensionHostProcess.send(msg);
 	}
@@ -275,7 +275,7 @@ export class ExtensionHostConnection extends Disposable {
 				silent: true
 			};
 
-			// Refs https://github.com/microsoft/vscode/issues/189805
+			// Refs https://github.com/graffitiape/codeengine/issues/189805
 			opts.execArgv.unshift('--dns-result-order=ipv4first');
 
 			// Run Extension Host as fork of current process
@@ -317,7 +317,7 @@ export class ExtensionHostConnection extends Disposable {
 				});
 			} else {
 				const messageListener = (msg: IExtHostReadyMessage) => {
-					if (msg.type === 'VSCODE_EXTHOST_IPC_READY') {
+					if (msg.type === 'CODEENGINE_EXTHOST_IPC_READY') {
 						this._extensionHostProcess!.removeListener('message', messageListener);
 						this._sendSocketToExtensionHost(this._extensionHostProcess!, this._connectionData!);
 						this._connectionData = null;

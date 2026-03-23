@@ -43,7 +43,7 @@ async function getInstallationToken(jwt: string, installationId: string): Promis
 		headers: {
 			'Authorization': `Bearer ${jwt}`,
 			'Accept': 'application/vnd.github+json',
-			'User-Agent': 'VSCode-ADO-Pipeline',
+			'User-Agent': 'CodeEngine-ADO-Pipeline',
 			'X-GitHub-Api-Version': '2022-11-28'
 		}
 	});
@@ -58,7 +58,7 @@ function updateCheckRun(token: string, checkRunId: string, conclusion: string, d
 		headers: {
 			'Authorization': `token ${token}`,
 			'Accept': 'application/vnd.github+json',
-			'User-Agent': 'VSCode-ADO-Pipeline',
+			'User-Agent': 'CodeEngine-ADO-Pipeline',
 			'X-GitHub-Api-Version': '2022-11-28'
 		}
 	}, {

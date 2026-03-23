@@ -53,7 +53,7 @@ resources:
   pipelines:
     - pipeline: vscode
       # allow-any-unicode-next-line
-      source: '⭐️ VS Code'
+      source: '⭐️ Code Engine'
       trigger:
         stages:
           - Publish

@@ -276,11 +276,11 @@ export const nodeModulesPath: AppResourcePath = 'vs/../../node_modules';
 export const nodeModulesAsarPath: AppResourcePath = 'vs/../../node_modules.asar';
 export const nodeModulesAsarUnpackedPath: AppResourcePath = 'vs/../../node_modules.asar.unpacked';
 
-export const VSCODE_AUTHORITY = 'vscode-app';
+export const CODEENGINE_AUTHORITY = 'vscode-app';
 
 class FileAccessImpl {
 
-	private static readonly FALLBACK_AUTHORITY = VSCODE_AUTHORITY;
+	private static readonly FALLBACK_AUTHORITY = CODEENGINE_AUTHORITY;
 
 	/**
 	 * Returns a URI to use in contexts where the browser is responsible
@@ -366,8 +366,8 @@ class FileAccessImpl {
 			return uriOrModule;
 		}
 
-		if (globalThis._VSCODE_FILE_ROOT) {
-			const rootUriOrPath = globalThis._VSCODE_FILE_ROOT;
+		if (globalThis._CODEENGINE_FILE_ROOT) {
+			const rootUriOrPath = globalThis._CODEENGINE_FILE_ROOT;
 
 			// File URL (with scheme)
 			if (/^\w[\w\d+.-]*:\/\//.test(rootUriOrPath)) {

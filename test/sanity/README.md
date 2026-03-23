@@ -1,16 +1,16 @@
-# VS Code Release Sanity Check Tests
+# Code Engine Release Sanity Check Tests
 
 ## Overview
 
-Automated end-to-end release sanity tests for published VS Code builds.
+Automated end-to-end release sanity tests for published Code Engine builds.
 These tests verify critical functionality across different platforms and installation methods,
 ensuring that published builds meet quality standards before reaching end users.
 
-See [Sanity Check wiki page](https://github.com/microsoft/vscode/wiki/Sanity-Check) for more details on sanity testing.
+See [Sanity Check wiki page](https://github.com/graffitiape/codeengine/wiki/Sanity-Check) for more details on sanity testing.
 
 ## Usage
 
-Many tests will use the underlying platform to install and verify basic VS Code functionality.
+Many tests will use the underlying platform to install and verify basic Code Engine functionality.
 Such tests will need to be run on the corresponding target OS/virtual machine and will fail if ran outside.
 Use -g or -f command-line options to filter tests to match the host platform.
 
@@ -83,7 +83,7 @@ Each container includes:
 - Node.js 22.x runtime
 - X11 server (Xvfb) for headless desktop testing
 - D-Bus for desktop integration
-- Architecture-specific VS Code dependencies
+- Architecture-specific Code Engine dependencies
 
 Some containers include web browser used for validating web server targets.
 
@@ -143,14 +143,14 @@ For the following platforms only downloads are validated (and not install/runtim
 
 ## References
 
-The following public documentation pages provide details on end-user VS Code setup scenarios.
+The following public documentation pages provide details on end-user Code Engine setup scenarios.
 
-- [Download VS Code](https://code.visualstudio.com/Download)
-- [Requirements](https://code.visualstudio.com/docs/supporting/requirements)
-- [Setup Overview](https://code.visualstudio.com/docs/setup/setup-overview)
-- [Linux Setup](https://code.visualstudio.com/docs/setup/linux)
-- [macOS Setup](https://code.visualstudio.com/docs/setup/mac)
-- [Windows Setup](https://code.visualstudio.com/docs/setup/windows)
-- [Portable Mode](https://code.visualstudio.com/docs/editor/portable)
-- [VS Code Server](https://code.visualstudio.com/docs/remote/vscode-server)
-- [Developing in WSL](https://code.visualstudio.com/docs/remote/wsl)
+- [Download Code Engine](https://github.com/graffitiape/codeengine/Download)
+- [Requirements](https://github.com/graffitiape/codeengine/docs/supporting/requirements)
+- [Setup Overview](https://github.com/graffitiape/codeengine/docs/setup/setup-overview)
+- [Linux Setup](https://github.com/graffitiape/codeengine/docs/setup/linux)
+- [macOS Setup](https://github.com/graffitiape/codeengine/docs/setup/mac)
+- [Windows Setup](https://github.com/graffitiape/codeengine/docs/setup/windows)
+- [Portable Mode](https://github.com/graffitiape/codeengine/docs/editor/portable)
+- [Code Engine Server](https://github.com/graffitiape/codeengine/docs/remote/vscode-server)
+- [Developing in WSL](https://github.com/graffitiape/codeengine/docs/remote/wsl)

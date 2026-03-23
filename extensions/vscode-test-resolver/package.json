@@ -1,6 +1,6 @@
 {
   "name": "vscode-test-resolver",
-  "description": "Test resolver for VS Code",
+  "description": "Test resolver for Code Engine",
   "version": "0.0.1",
   "publisher": "vscode",
   "license": "MIT",
@@ -172,6 +172,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/vscode.git"
+    "url": "https://github.com/graffitiape/codeengine.git"
   }
 }

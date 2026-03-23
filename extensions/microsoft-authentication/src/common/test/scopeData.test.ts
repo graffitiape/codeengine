@@ -33,45 +33,45 @@ suite('ScopeData', () => {
 		assert.deepStrictEqual(scopeData.scopesToSend, ['email', 'offline_access', 'openid', 'profile', 'User.Read']);
 	});
 
-	test('should filter out internal VS Code scopes for scopesToSend', () => {
-		const scopeData = new ScopeData(['custom_scope', 'VSCODE_CLIENT_ID:some_id']);
+	test('should filter out internal Code Engine scopes for scopesToSend', () => {
+		const scopeData = new ScopeData(['custom_scope', 'CODEENGINE_CLIENT_ID:some_id']);
 		assert.deepStrictEqual(scopeData.scopesToSend, ['custom_scope']);
 	});
 
-	test('should use the default client ID if no VSCODE_CLIENT_ID scope is present', () => {
+	test('should use the default client ID if no CODEENGINE_CLIENT_ID scope is present', () => {
 		const scopeData = new ScopeData(['custom_scope']);
 		assert.strictEqual(scopeData.clientId, 'aebc6443-996d-45c2-90f0-388ff96faa56');
 	});
 
-	test('should use the VSCODE_CLIENT_ID scope if present', () => {
-		const scopeData = new ScopeData(['custom_scope', 'VSCODE_CLIENT_ID:some_id']);
+	test('should use the CODEENGINE_CLIENT_ID scope if present', () => {
+		const scopeData = new ScopeData(['custom_scope', 'CODEENGINE_CLIENT_ID:some_id']);
 		assert.strictEqual(scopeData.clientId, 'some_id');
 	});
 
-	test('should use the default tenant ID if no VSCODE_TENANT scope is present', () => {
+	test('should use the default tenant ID if no CODEENGINE_TENANT scope is present', () => {
 		const scopeData = new ScopeData(['custom_scope']);
 		assert.strictEqual(scopeData.tenant, 'organizations');
 	});
 
-	test('should use the VSCODE_TENANT scope if present', () => {
-		const scopeData = new ScopeData(['custom_scope', 'VSCODE_TENANT:some_tenant']);
+	test('should use the CODEENGINE_TENANT scope if present', () => {
+		const scopeData = new ScopeData(['custom_scope', 'CODEENGINE_TENANT:some_tenant']);
 		assert.strictEqual(scopeData.tenant, 'some_tenant');
 	});
 
-	test('should have tenantId be undefined if no VSCODE_TENANT scope is present', () => {
+	test('should have tenantId be undefined if no CODEENGINE_TENANT scope is present', () => {
 		const scopeData = new ScopeData(['custom_scope']);
 		assert.strictEqual(scopeData.tenantId, undefined);
 	});
 
 	test('should have tenantId be undefined if typical tenant values are present', () => {
 		for (const element of ['common', 'organizations', 'consumers']) {
-			const scopeData = new ScopeData(['custom_scope', `VSCODE_TENANT:${element}`]);
+			const scopeData = new ScopeData(['custom_scope', `CODEENGINE_TENANT:${element}`]);
 			assert.strictEqual(scopeData.tenantId, undefined);
 		}
 	});
 
-	test('should have tenantId be the value of VSCODE_TENANT scope if set to a specific value', () => {
-		const scopeData = new ScopeData(['custom_scope', 'VSCODE_TENANT:some_guid']);
+	test('should have tenantId be the value of CODEENGINE_TENANT scope if set to a specific value', () => {
+		const scopeData = new ScopeData(['custom_scope', 'CODEENGINE_TENANT:some_guid']);
 		assert.strictEqual(scopeData.tenantId, 'some_guid');
 	});
 
@@ -97,9 +97,9 @@ suite('ScopeData', () => {
 		assert.strictEqual(scopeData.tenant, 'organizations');
 	});
 
-	test('should prioritize authorization server URL over VSCODE_TENANT scope', () => {
+	test('should prioritize authorization server URL over CODEENGINE_TENANT scope', () => {
 		const authorizationServer = Uri.parse('https://login.microsoftonline.com/url_tenant/oauth2/v2.0');
-		const scopeData = new ScopeData(['custom_scope', 'VSCODE_TENANT:scope_tenant'], undefined, authorizationServer);
+		const scopeData = new ScopeData(['custom_scope', 'CODEENGINE_TENANT:scope_tenant'], undefined, authorizationServer);
 		assert.strictEqual(scopeData.tenant, 'url_tenant');
 	});
 

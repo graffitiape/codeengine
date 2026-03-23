@@ -43,7 +43,7 @@ export async function resolveNLSConfiguration({ userLocale, osLocale, userDataPa
 	mark('code/willGenerateNls');
 
 	if (
-		process.env['VSCODE_DEV'] ||
+		process.env['CODEENGINE_DEV'] ||
 		userLocale === 'pseudo' ||
 		userLocale.startsWith('en') ||
 		!commit ||

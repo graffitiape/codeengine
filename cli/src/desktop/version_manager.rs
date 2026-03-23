@@ -107,7 +107,7 @@ impl CodeVersionManager {
 		}
 	}
 
-	/// Tries to find the binary entrypoint for VS Code installed in the path.
+	/// Tries to find the binary entrypoint for Code Engine installed in the path.
 	pub async fn get_entrypoint_for_install_dir(path: &Path) -> Option<PathBuf> {
 		use tokio::sync::mpsc;
 
@@ -257,14 +257,14 @@ fn detect_installed_program(log: &log::Logger) -> io::Result<Vec<PathBuf>> {
 	// profiler can output nicely structure plist xml, pulling in an xml parser
 	// just for this is overkill. The default output looks something like...
 	//
-	//     Visual Studio Code - Exploration 2:
+	//     Code Engine - Exploration 2:
 	//
 	//        Version: 1.73.0-exploration
 	//        Obtained from: Identified Developer
 	//        Last Modified: 9/23/22, 10:16 AM
 	//        Kind: Intel
 	//        Signed by: Developer ID Application: Microsoft Corporation (UBF8T346G9), Developer ID Certification Authority, Apple Root CA
-	//        Location: /Users/connor/Downloads/Visual Studio Code - Exploration 2.app
+	//        Location: /Users/connor/Downloads/Code Engine - Exploration 2.app
 	//
 	// So, use a simple state machine that looks for the first line, and then for
 	// the `Location:` line for the path.
@@ -415,7 +415,7 @@ mod tests {
 
 	use super::*;
 
-	fn make_fake_vscode_install(path: &Path) {
+	fn make_fake_codeengine_install(path: &Path) {
 		let bin = DESKTOP_CLI_RELATIVE_PATH
 			.split(',')
 			.next()
@@ -432,16 +432,16 @@ mod tests {
 			.expect("expected to write binary");
 	}
 
-	fn make_multiple_vscode_install() -> tempfile::TempDir {
+	fn make_multiple_codeengine_install() -> tempfile::TempDir {
 		let dir = tempfile::tempdir().expect("expected to make temp dir");
-		make_fake_vscode_install(&dir.path().join("desktop/stable"));
-		make_fake_vscode_install(&dir.path().join("desktop/1.68.2"));
+		make_fake_codeengine_install(&dir.path().join("desktop/stable"));
+		make_fake_codeengine_install(&dir.path().join("desktop/1.68.2"));
 		dir
 	}
 
 	#[test]
 	fn test_detect_installed_program() {
-		// developers can run this test and debug output manually; VS Code will not
+		// developers can run this test and debug output manually; Code Engine will not
 		// be installed in CI, so the test only makes sure it doesn't error out
 		let result = detect_installed_program(&log::Logger::test());
 		println!("result: {result:?}");
@@ -450,7 +450,7 @@ mod tests {
 
 	#[tokio::test]
 	async fn test_set_preferred_version() {
-		let dir = make_multiple_vscode_install();
+		let dir = make_multiple_codeengine_install();
 		let lp = LauncherPaths::new_without_replacements(dir.path().to_owned());
 		let vm1 = CodeVersionManager::new(log::Logger::test(), &lp, Platform::LinuxARM64);
 
@@ -482,7 +482,7 @@ mod tests {
 
 	#[tokio::test]
 	async fn test_gets_entrypoint() {
-		let dir = make_multiple_vscode_install();
+		let dir = make_multiple_codeengine_install();
 
 		assert!(CodeVersionManager::get_entrypoint_for_install_dir(
 			&dir.path().join("desktop").join("stable")

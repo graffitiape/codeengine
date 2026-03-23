@@ -1096,7 +1096,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		// Start checking for instruction files immediately if not already done
 		if (!this._instructionFilesCheckPromise) {
 			this._instructionFilesCheckPromise = this._checkForAgentInstructionFiles();
-			// Use VS Code's idiomatic pattern for disposal-safe promise callbacks
+			// Use Code Engine's idiomatic pattern for disposal-safe promise callbacks
 			this._register(thenIfNotDisposed(this._instructionFilesCheckPromise, hasFiles => {
 				this._instructionFilesExist = hasFiles;
 				// Only re-render if the current view still doesn't have items and we're showing the welcome message
@@ -2022,7 +2022,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		const delay = renderImmediately ? MicrotaskDelay : 0;
 		this.viewModelDisposables.add(Event.runAndSubscribe(Event.accumulate(this.viewModel.onDidChange, delay), (events => {
 			if (!this.viewModel || this._store.isDisposed) {
-				// See https://github.com/microsoft/vscode/issues/278969
+				// See https://github.com/graffitiape/codeengine/issues/278969
 				return;
 			}
 

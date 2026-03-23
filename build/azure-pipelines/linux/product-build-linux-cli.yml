@@ -1,30 +1,30 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
-  - name: VSCODE_CHECK_ONLY
+  - name: CODEENGINE_CHECK_ONLY
     type: boolean
     default: false
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     type: string
 
 jobs:
-  - job: LinuxCLI_${{ parameters.VSCODE_ARCH }}
-    displayName: Linux CLI (${{ upper(parameters.VSCODE_ARCH) }})
+  - job: LinuxCLI_${{ parameters.CODEENGINE_ARCH }}
+    displayName: Linux CLI (${{ upper(parameters.CODEENGINE_ARCH) }})
     timeoutInMinutes: 60
     pool:
       name: 1es-ubuntu-22.04-x64
       os: linux
     variables:
-      VSCODE_ARCH: ${{ parameters.VSCODE_ARCH }}
+      CODEENGINE_ARCH: ${{ parameters.CODEENGINE_ARCH }}
     templateContext:
       outputs:
-        - ${{ if not(parameters.VSCODE_CHECK_ONLY) }}:
+        - ${{ if not(parameters.CODEENGINE_CHECK_ONLY) }}:
           - output: pipelineArtifact
-            targetPath: $(Build.ArtifactStagingDirectory)/vscode_cli_linux_$(VSCODE_ARCH)_cli.tar.gz
-            artifactName: vscode_cli_linux_$(VSCODE_ARCH)_cli
-            displayName: Publish vscode_cli_linux_$(VSCODE_ARCH)_cli artifact
+            targetPath: $(Build.ArtifactStagingDirectory)/vscode_cli_linux_$(CODEENGINE_ARCH)_cli.tar.gz
+            artifactName: vscode_cli_linux_$(CODEENGINE_ARCH)_cli
+            displayName: Publish vscode_cli_linux_$(CODEENGINE_ARCH)_cli artifact
             sbomBuildDropPath: $(Build.ArtifactStagingDirectory)/cli
-            sbomPackageName: "VS Code Linux $(VSCODE_ARCH) CLI"
+            sbomPackageName: "Code Engine Linux $(CODEENGINE_ARCH) CLI"
             sbomPackageVersion: $(Build.SourceVersion)
     steps:
       - template: ../common/checkout.yml@self
@@ -95,45 +95,45 @@ jobs:
       - template: ../cli/install-rust-posix.yml@self
         parameters:
           targets:
-            - ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+            - ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
               - x86_64-unknown-linux-gnu
-            - ${{ if eq(parameters.VSCODE_ARCH, 'arm64') }}:
+            - ${{ if eq(parameters.CODEENGINE_ARCH, 'arm64') }}:
               - aarch64-unknown-linux-gnu
-            - ${{ if eq(parameters.VSCODE_ARCH, 'armhf') }}:
+            - ${{ if eq(parameters.CODEENGINE_ARCH, 'armhf') }}:
               - armv7-unknown-linux-gnueabihf
 
-      - ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+      - ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
         - template: ../cli/cli-compile.yml@self
           parameters:
-            VSCODE_QUALITY: ${{ parameters.VSCODE_QUALITY }}
-            VSCODE_CLI_TARGET: x86_64-unknown-linux-gnu
-            VSCODE_CLI_ARTIFACT: vscode_cli_linux_x64_cli
-            VSCODE_CHECK_ONLY: ${{ parameters.VSCODE_CHECK_ONLY }}
-            VSCODE_CLI_ENV:
+            CODEENGINE_QUALITY: ${{ parameters.CODEENGINE_QUALITY }}
+            CODEENGINE_CLI_TARGET: x86_64-unknown-linux-gnu
+            CODEENGINE_CLI_ARTIFACT: vscode_cli_linux_x64_cli
+            CODEENGINE_CHECK_ONLY: ${{ parameters.CODEENGINE_CHECK_ONLY }}
+            CODEENGINE_CLI_ENV:
               OPENSSL_LIB_DIR: $(Build.ArtifactStagingDirectory)/openssl/x64-linux/lib
               OPENSSL_INCLUDE_DIR: $(Build.ArtifactStagingDirectory)/openssl/x64-linux/include
               SYSROOT_ARCH: amd64
 
-      - ${{ if eq(parameters.VSCODE_ARCH, 'arm64') }}:
+      - ${{ if eq(parameters.CODEENGINE_ARCH, 'arm64') }}:
         - template: ../cli/cli-compile.yml@self
           parameters:
-            VSCODE_QUALITY: ${{ parameters.VSCODE_QUALITY }}
-            VSCODE_CLI_TARGET: aarch64-unknown-linux-gnu
-            VSCODE_CLI_ARTIFACT: vscode_cli_linux_arm64_cli
-            VSCODE_CHECK_ONLY: ${{ parameters.VSCODE_CHECK_ONLY }}
-            VSCODE_CLI_ENV:
+            CODEENGINE_QUALITY: ${{ parameters.CODEENGINE_QUALITY }}
+            CODEENGINE_CLI_TARGET: aarch64-unknown-linux-gnu
+            CODEENGINE_CLI_ARTIFACT: vscode_cli_linux_arm64_cli
+            CODEENGINE_CHECK_ONLY: ${{ parameters.CODEENGINE_CHECK_ONLY }}
+            CODEENGINE_CLI_ENV:
               OPENSSL_LIB_DIR: $(Build.ArtifactStagingDirectory)/openssl/arm64-linux/lib
               OPENSSL_INCLUDE_DIR: $(Build.ArtifactStagingDirectory)/openssl/arm64-linux/include
               SYSROOT_ARCH: arm64
 
-      - ${{ if eq(parameters.VSCODE_ARCH, 'armhf') }}:
+      - ${{ if eq(parameters.CODEENGINE_ARCH, 'armhf') }}:
         - template: ../cli/cli-compile.yml@self
           parameters:
-            VSCODE_QUALITY: ${{ parameters.VSCODE_QUALITY }}
-            VSCODE_CLI_TARGET: armv7-unknown-linux-gnueabihf
-            VSCODE_CLI_ARTIFACT: vscode_cli_linux_armhf_cli
-            VSCODE_CHECK_ONLY: ${{ parameters.VSCODE_CHECK_ONLY }}
-            VSCODE_CLI_ENV:
+            CODEENGINE_QUALITY: ${{ parameters.CODEENGINE_QUALITY }}
+            CODEENGINE_CLI_TARGET: armv7-unknown-linux-gnueabihf
+            CODEENGINE_CLI_ARTIFACT: vscode_cli_linux_armhf_cli
+            CODEENGINE_CHECK_ONLY: ${{ parameters.CODEENGINE_CHECK_ONLY }}
+            CODEENGINE_CLI_ENV:
               OPENSSL_LIB_DIR: $(Build.ArtifactStagingDirectory)/openssl/arm-linux/lib
               OPENSSL_INCLUDE_DIR: $(Build.ArtifactStagingDirectory)/openssl/arm-linux/include
               SYSROOT_ARCH: armhf

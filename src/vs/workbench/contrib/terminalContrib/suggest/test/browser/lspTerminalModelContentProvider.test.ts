@@ -18,7 +18,7 @@ import { GeneralShellType } from '../../../../../../platform/terminal/common/ter
 import { ITerminalCapabilityStore } from '../../../../../../platform/terminal/common/capabilities/capabilities.js';
 import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../../../base/test/common/utils.js';
 import { Schemas } from '../../../../../../base/common/network.js';
-import { VSCODE_LSP_TERMINAL_PROMPT_TRACKER } from '../../browser/lspTerminalUtil.js';
+import { CODEENGINE_LSP_TERMINAL_PROMPT_TRACKER } from '../../browser/lspTerminalUtil.js';
 
 suite('LspTerminalModelContentProvider', () => {
 	const store = ensureNoDisposablesAreLeakedInTestSuite();
@@ -93,29 +93,29 @@ suite('LspTerminalModelContentProvider', () => {
 			lspTerminalModelContentProvider.setContent('print("hello")');
 
 			assert.strictEqual(setValueSpy.calledOnce, true);
-			assert.strictEqual(setValueSpy.args[0][0], VSCODE_LSP_TERMINAL_PROMPT_TRACKER);
+			assert.strictEqual(setValueSpy.args[0][0], CODEENGINE_LSP_TERMINAL_PROMPT_TRACKER);
 		});
 
 		test('should update content with delimiter when document already has content', () => {
-			const existingContent = 'previous content\n' + VSCODE_LSP_TERMINAL_PROMPT_TRACKER;
+			const existingContent = 'previous content\n' + CODEENGINE_LSP_TERMINAL_PROMPT_TRACKER;
 			getValueSpy.returns(existingContent);
 
 			lspTerminalModelContentProvider.setContent('print("hello")');
 
 			assert.strictEqual(setValueSpy.calledOnce, true);
-			const expectedContent = 'previous content\n\nprint("hello")\n' + VSCODE_LSP_TERMINAL_PROMPT_TRACKER;
+			const expectedContent = 'previous content\n\nprint("hello")\n' + CODEENGINE_LSP_TERMINAL_PROMPT_TRACKER;
 			assert.strictEqual(setValueSpy.args[0][0], expectedContent);
 		});
 
 		test('should sanitize content when delimiter is in the middle of existing content', () => {
 			// Simulating a corrupted state where the delimiter is in the middle
-			const existingContent = 'previous content\n' + VSCODE_LSP_TERMINAL_PROMPT_TRACKER + 'some extra text';
+			const existingContent = 'previous content\n' + CODEENGINE_LSP_TERMINAL_PROMPT_TRACKER + 'some extra text';
 			getValueSpy.returns(existingContent);
 
 			lspTerminalModelContentProvider.setContent('print("hello")');
 
 			assert.strictEqual(setValueSpy.calledOnce, true);
-			const expectedContent = 'previous content\n\nprint("hello")\n' + VSCODE_LSP_TERMINAL_PROMPT_TRACKER;
+			const expectedContent = 'previous content\n\nprint("hello")\n' + CODEENGINE_LSP_TERMINAL_PROMPT_TRACKER;
 			assert.strictEqual(setValueSpy.args[0][0], expectedContent);
 		});
 

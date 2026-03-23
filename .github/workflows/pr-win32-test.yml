@@ -17,11 +17,11 @@ on:
 jobs:
   windows-test:
     name: ${{ inputs.job_name }}
-    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-oss-windows-2022-x64 ]
+    runs-on: [ self-hosted, 1ES.Pool=1es-vscode-engine-windows-2022-x64 ]
     env:
       ARTIFACT_NAME: ${{ (inputs.electron_tests && 'electron') || (inputs.browser_tests && 'browser') || (inputs.remote_tests && 'remote') || 'unknown' }}
       NPM_ARCH: x64
-      VSCODE_ARCH: x64
+      CODEENGINE_ARCH: x64
     steps:
       - name: Checkout microsoft/vscode
         uses: actions/checkout@v6
@@ -35,7 +35,7 @@ jobs:
         shell: pwsh
         run: |
           mkdir .build -ea 0
-          node build/azure-pipelines/common/computeNodeModulesCacheKey.ts win32 ${{ env.VSCODE_ARCH }} $(node -p process.arch) > .build/packagelockhash
+          node build/azure-pipelines/common/computeNodeModulesCacheKey.ts win32 ${{ env.CODEENGINE_ARCH }} $(node -p process.arch) > .build/packagelockhash
 
       - name: Restore node_modules cache
         uses: actions/cache/restore@v5
@@ -73,7 +73,7 @@ jobs:
         env:
           npm_config_arch: ${{ env.NPM_ARCH }}
           npm_config_foreground_scripts: "true"
-          VSCODE_ARCH: ${{ env.VSCODE_ARCH }}
+          CODEENGINE_ARCH: ${{ env.CODEENGINE_ARCH }}
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -119,7 +119,7 @@ jobs:
         run: |
           for ($i = 1; $i -le 3; $i++) {
             try {
-              npm exec -- npm-run-all2 -lp "electron ${{ env.VSCODE_ARCH }}" "playwright-install"
+              npm exec -- npm-run-all2 -lp "electron ${{ env.CODEENGINE_ARCH }}" "playwright-install"
               break
             }
             catch {
@@ -253,7 +253,7 @@ jobs:
         if: failure()
         continue-on-error: true
         with:
-          name: ${{ format('crash-dump-windows-{0}-{1}-{2}', env.VSCODE_ARCH, env.ARTIFACT_NAME, github.run_attempt) }}
+          name: ${{ format('crash-dump-windows-{0}-{1}-{2}', env.CODEENGINE_ARCH, env.ARTIFACT_NAME, github.run_attempt) }}
           path: .build/crashes
           if-no-files-found: ignore
 
@@ -264,7 +264,7 @@ jobs:
         if: failure()
         continue-on-error: true
         with:
-          name: ${{ format('node-modules-windows-{0}-{1}-{2}', env.VSCODE_ARCH, env.ARTIFACT_NAME, github.run_attempt) }}
+          name: ${{ format('node-modules-windows-{0}-{1}-{2}', env.CODEENGINE_ARCH, env.ARTIFACT_NAME, github.run_attempt) }}
           path: node_modules
           if-no-files-found: ignore
 
@@ -273,6 +273,6 @@ jobs:
         if: always()
         continue-on-error: true
         with:
-          name: ${{ format('logs-windows-{0}-{1}-{2}', env.VSCODE_ARCH, env.ARTIFACT_NAME, github.run_attempt) }}
+          name: ${{ format('logs-windows-{0}-{1}-{2}', env.CODEENGINE_ARCH, env.ARTIFACT_NAME, github.run_attempt) }}
           path: .build/logs
           if-no-files-found: ignore

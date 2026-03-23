@@ -270,7 +270,7 @@ export async function createTerminalEnvironment(
 			}
 		}
 
-		// Workaround for https://github.com/microsoft/vscode/issues/204005
+		// Workaround for https://github.com/graffitiape/codeengine/issues/204005
 		// We should restore the following environment variables when a user
 		// launches the application using the CLI so that integrated terminal
 		// can still inherit these variables.
@@ -278,21 +278,21 @@ export async function createTerminalEnvironment(
 		// since this only affects integrated terminal and not the application itself.
 		if (isMacintosh) {
 			// Restore NODE_OPTIONS if it was set
-			if (env['VSCODE_NODE_OPTIONS']) {
-				env['NODE_OPTIONS'] = env['VSCODE_NODE_OPTIONS'];
-				delete env['VSCODE_NODE_OPTIONS'];
+			if (env['CODEENGINE_NODE_OPTIONS']) {
+				env['NODE_OPTIONS'] = env['CODEENGINE_NODE_OPTIONS'];
+				delete env['CODEENGINE_NODE_OPTIONS'];
 			}
 
 			// Restore NODE_REPL_EXTERNAL_MODULE if it was set
-			if (env['VSCODE_NODE_REPL_EXTERNAL_MODULE']) {
-				env['NODE_REPL_EXTERNAL_MODULE'] = env['VSCODE_NODE_REPL_EXTERNAL_MODULE'];
-				delete env['VSCODE_NODE_REPL_EXTERNAL_MODULE'];
+			if (env['CODEENGINE_NODE_REPL_EXTERNAL_MODULE']) {
+				env['NODE_REPL_EXTERNAL_MODULE'] = env['CODEENGINE_NODE_REPL_EXTERNAL_MODULE'];
+				delete env['CODEENGINE_NODE_REPL_EXTERNAL_MODULE'];
 			}
 		}
 
-		// Sanitize the environment, removing any undesirable VS Code and Electron environment
+		// Sanitize the environment, removing any undesirable Code Engine and Electron environment
 		// variables
-		sanitizeProcessEnvironment(env, 'VSCODE_IPC_HOOK_CLI');
+		sanitizeProcessEnvironment(env, 'CODEENGINE_IPC_HOOK_CLI');
 
 		// Merge config (settings) and ShellLaunchConfig environments
 		mergeEnvironments(env, allowedEnvFromConfig);

@@ -90,7 +90,7 @@ export class ExtHostCommands implements ExtHostCommandsShape {
 			{
 				processArgument(arg) {
 					return cloneAndChange(arg, function (obj) {
-						// Reverse of https://github.com/microsoft/vscode/blob/1f28c5fc681f4c01226460b6d1c7e91b8acb4a5b/src/vs/workbench/api/node/extHostCommands.ts#L112-L127
+						// Reverse of https://github.com/graffitiape/codeengine/blob/1f28c5fc681f4c01226460b6d1c7e91b8acb4a5b/src/vs/workbench/api/node/extHostCommands.ts#L112-L127
 						if (Range.isIRange(obj)) {
 							return extHostTypeConverter.Range.to(obj);
 						}
@@ -286,7 +286,7 @@ export class ExtHostCommands implements ExtHostCommandsShape {
 			return;
 		}
 		if (id.startsWith('code.copilot.logStructured')) {
-			// This command is very active. See https://github.com/microsoft/vscode/issues/254153.
+			// This command is very active. See https://github.com/graffitiape/codeengine/issues/254153.
 			return;
 		}
 		type ExtensionActionTelemetry = {
@@ -462,8 +462,8 @@ export class ApiCommandArgument<V, O = V> {
 
 	static readonly CallHierarchyItem = new ApiCommandArgument('item', 'A call hierarchy item', v => v instanceof extHostTypes.CallHierarchyItem, extHostTypeConverter.CallHierarchyItem.from);
 	static readonly TypeHierarchyItem = new ApiCommandArgument('item', 'A type hierarchy item', v => v instanceof extHostTypes.TypeHierarchyItem, extHostTypeConverter.TypeHierarchyItem.from);
-	static readonly TestItem = new ApiCommandArgument('testItem', 'A VS Code TestItem', v => v instanceof TestItemImpl, extHostTypeConverter.TestItem.from);
-	static readonly TestProfile = new ApiCommandArgument('testProfile', 'A VS Code test profile', v => v instanceof extHostTypes.TestRunProfileBase, extHostTypeConverter.TestRunProfile.from);
+	static readonly TestItem = new ApiCommandArgument('testItem', 'A Code Engine TestItem', v => v instanceof TestItemImpl, extHostTypeConverter.TestItem.from);
+	static readonly TestProfile = new ApiCommandArgument('testProfile', 'A Code Engine test profile', v => v instanceof extHostTypes.TestRunProfileBase, extHostTypeConverter.TestRunProfile.from);
 
 	constructor(
 		readonly name: string,

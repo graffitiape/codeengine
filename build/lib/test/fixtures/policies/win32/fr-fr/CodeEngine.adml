@@ -4,12 +4,12 @@
 	<description />
 	<resources>
 		<stringTable>
-			<string id="Application">Code - OSS</string>
-			<string id="Supported_1_101">Code - OSS &gt;= 1.101</string>
-			<string id="Supported_1_104">Code - OSS &gt;= 1.104</string>
-			<string id="Supported_1_67">Code - OSS &gt;= 1.67</string>
-			<string id="Supported_1_96">Code - OSS &gt;= 1.96</string>
-			<string id="Supported_1_99">Code - OSS &gt;= 1.99</string>
+			<string id="Application">Code Engine</string>
+			<string id="Supported_1_101">Code Engine &gt;= 1.101</string>
+			<string id="Supported_1_104">Code Engine &gt;= 1.104</string>
+			<string id="Supported_1_67">Code Engine &gt;= 1.67</string>
+			<string id="Supported_1_96">Code Engine &gt;= 1.96</string>
+			<string id="Supported_1_99">Code Engine &gt;= 1.99</string>
 			<string id="Category_interactiveSessionConfigurationTitle">Session interactive</string>
 			<string id="Category_extensionsConfigurationTitle">Extensions</string>
 			<string id="Category_terminalIntegratedConfigurationTitle">Terminal intégré</string>
@@ -29,11 +29,11 @@
 			<string id="ChatToolsAutoApprove">ChatToolsAutoApprove</string>
 			<string id="ChatToolsAutoApprove_autoApprove2_description">L’approbation automatique globale, également appelée « mode YOLO », désactive complètement l’approbation manuelle pour tous les outils dans tous les espaces de travail, permettant à l’agent d’agir de manière totalement autonome. Ceci est extrêmement dangereux et est *jamais* recommandé, même dans des environnements conteneurisés comme [Codespaces](https://github.com/features/codespaces) et [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), où des clés utilisateur sont transférées dans le conteneur et pourraient être compromises.
 
-Cette fonctionnalité désactive [les protections de sécurité critiques](https://code.visualstudio.com/docs/copilot/security) et facilite considérablement la compromission de la machine par un attaquant.</string>
+Cette fonctionnalité désactive [les protections de sécurité critiques](https://github.com/graffitiape/codeengine/docs/copilot/security) et facilite considérablement la compromission de la machine par un attaquant.</string>
 			<string id="McpGalleryServiceUrl">McpGalleryServiceUrl</string>
 			<string id="McpGalleryServiceUrl_mcp_gallery_serviceUrl">Configurer l’URL du service de la galerie MCP à laquelle se connecter</string>
 			<string id="AllowedExtensions">AllowedExtensions</string>
-			<string id="AllowedExtensions_extensions_allowed_policy">Spécifiez une liste d’extensions autorisées. Cela permet de maintenir un environnement de développement sécurisé et cohérent en limitant l’utilisation d’extensions non autorisées. Plus d’informations : https://code.visualstudio.com/docs/setup/enterprise#_configure-allowed-extensions</string>
+			<string id="AllowedExtensions_extensions_allowed_policy">Spécifiez une liste d’extensions autorisées. Cela permet de maintenir un environnement de développement sécurisé et cohérent en limitant l’utilisation d’extensions non autorisées. Plus d’informations : https://github.com/graffitiape/codeengine/docs/setup/enterprise#_configure-allowed-extensions</string>
 			<string id="ExtensionGalleryServiceUrl">ExtensionGalleryServiceUrl</string>
 			<string id="ExtensionGalleryServiceUrl_extensions_gallery_serviceUrl">Configurer l’URL du service Place de marché à laquelle se connecter</string>
 			<string id="ChatToolsTerminalEnableAutoApprove">ChatToolsTerminalEnableAutoApprove</string>

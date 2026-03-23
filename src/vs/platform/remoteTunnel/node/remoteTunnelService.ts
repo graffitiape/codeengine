@@ -186,17 +186,17 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 		if (!this._tunnelCommand) {
 			let binParentLocation;
 			if (isMacintosh) {
-				// appRoot = /Applications/Visual Studio Code - Insiders.app/Contents/Resources/app
-				// bin = /Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin
+				// appRoot = /Applications/Code Engine - Insiders.app/Contents/Resources/app
+				// bin = /Applications/Code Engine - Insiders.app/Contents/Resources/app/bin
 				binParentLocation = this.environmentService.appRoot;
 			} else if (isWindows) {
 				if (this.productService.win32VersionedUpdate) {
-					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\<version>\resources\app
-					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\bin
+					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft Code Engine Insiders\<version>\resources\app
+					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft Code Engine Insiders\bin
 					binParentLocation = dirname(dirname(dirname(this.environmentService.appRoot)));
 				} else {
-					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\resources\app
-					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\bin
+					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft Code Engine Insiders\resources\app
+					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft Code Engine Insiders\bin
 					binParentLocation = dirname(dirname(this.environmentService.appRoot));
 				}
 			} else {
@@ -330,7 +330,7 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 				a = a.replaceAll(token, '*'.repeat(4));
 				onOutput(a, isErr);
 			};
-			const loginProcess = this.runCodeTunnelCommand('login', ['user', 'login', '--provider', session.providerId, '--log', LogLevelToString(this._logger.getLevel())], onLoginOutput, { VSCODE_CLI_ACCESS_TOKEN: token });
+			const loginProcess = this.runCodeTunnelCommand('login', ['user', 'login', '--provider', session.providerId, '--log', LogLevelToString(this._logger.getLevel())], onLoginOutput, { CODEENGINE_CLI_ACCESS_TOKEN: token });
 			this._tunnelProcess = loginProcess;
 			try {
 				await loginProcess;

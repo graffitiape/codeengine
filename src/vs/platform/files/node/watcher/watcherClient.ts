@@ -32,9 +32,9 @@ export class UniversalWatcherClient extends AbstractUniversalWatcherClient {
 				serverName: 'File Watcher',
 				args: ['--type=fileWatcher'],
 				env: {
-					VSCODE_ESM_ENTRYPOINT: 'vs/platform/files/node/watcher/watcherMain',
-					VSCODE_PIPE_LOGGING: 'true',
-					VSCODE_VERBOSE_LOGGING: 'true' // transmit console logs from server to client
+					CODEENGINE_ESM_ENTRYPOINT: 'vs/platform/files/node/watcher/watcherMain',
+					CODEENGINE_PIPE_LOGGING: 'true',
+					CODEENGINE_VERBOSE_LOGGING: 'true' // transmit console logs from server to client
 				}
 			}
 		));

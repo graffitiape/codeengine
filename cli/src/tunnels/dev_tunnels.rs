@@ -264,9 +264,9 @@ impl ActiveTunnel {
 	}
 }
 
-const VSCODE_CLI_TUNNEL_TAG: &str = "vscode-server-launcher";
-const VSCODE_CLI_FORWARDING_TAG: &str = "vscode-port-forward";
-const OWNED_TUNNEL_TAGS: &[&str] = &[VSCODE_CLI_TUNNEL_TAG, VSCODE_CLI_FORWARDING_TAG];
+const CODEENGINE_CLI_TUNNEL_TAG: &str = "codeengine-server-launcher";
+const CODEENGINE_CLI_FORWARDING_TAG: &str = "codeengine-port-forward";
+const OWNED_TUNNEL_TAGS: &[&str] = &[CODEENGINE_CLI_TUNNEL_TAG, CODEENGINE_CLI_FORWARDING_TAG];
 const MAX_TUNNEL_NAME_LENGTH: usize = 20;
 
 fn get_host_token_from_tunnel(tunnel: &Tunnel) -> String {
@@ -308,16 +308,16 @@ lazy_static! {
 /// Structure optionally passed into `start_existing_tunnel` to forward an existing tunnel.
 #[derive(Clone, Debug)]
 pub struct ExistingTunnel {
-	/// Name you'd like to assign preexisting tunnel to use to connect to the VS Code Server
+	/// Name you'd like to assign preexisting tunnel to use to connect to the Code Engine Server
 	pub tunnel_name: Option<String>,
 
 	/// Token to authenticate and use preexisting tunnel
 	pub host_token: String,
 
-	/// Id of preexisting tunnel to use to connect to the VS Code Server
+	/// Id of preexisting tunnel to use to connect to the Code Engine Server
 	pub tunnel_id: String,
 
-	/// Cluster of preexisting tunnel to use to connect to the VS Code Server
+	/// Cluster of preexisting tunnel to use to connect to the Code Engine Server
 	pub cluster: String,
 }
 
@@ -336,11 +336,11 @@ impl DevTunnels {
 			log: log.clone(),
 			client: client.into(),
 			launcher_tunnel: PersistedState::new(paths.root().join("port_forwarding_tunnel.json")),
-			tag: VSCODE_CLI_FORWARDING_TAG,
+			tag: CODEENGINE_CLI_FORWARDING_TAG,
 		}
 	}
 
-	/// Creates a new DevTunnels client used for the Remote Tunnels extension to access the VS Code Server.
+	/// Creates a new DevTunnels client used for the Remote Tunnels extension to access the Code Engine Server.
 	pub fn new_remote_tunnel(
 		log: &log::Logger,
 		auth: auth::Auth,
@@ -354,7 +354,7 @@ impl DevTunnels {
 			log: log.clone(),
 			client: client.into(),
 			launcher_tunnel: PersistedState::new(paths.root().join("code_tunnel.json")),
-			tag: VSCODE_CLI_TUNNEL_TAG,
+			tag: CODEENGINE_CLI_TUNNEL_TAG,
 		}
 	}
 

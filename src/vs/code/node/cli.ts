@@ -62,14 +62,14 @@ export async function main(argv: string[]): Promise<void> {
 			// bootstrap-esm.js determines the electron environment based
 			// on the following variable. For the server we need to unset
 			// it to prevent importing any electron specific modules.
-			// Refs https://github.com/microsoft/vscode/issues/221883
+			// Refs https://github.com/graffitiape/codeengine/issues/221883
 			delete env['ELECTRON_RUN_AS_NODE'];
 
 			const tunnelArgs = argv.slice(argv.indexOf(subcommand) + 1); // all arguments behind `tunnel`
 			return new Promise((resolve, reject) => {
 				let tunnelProcess: ChildProcess;
 				const stdio: StdioOptions = ['ignore', 'pipe', 'pipe'];
-				if (process.env['VSCODE_DEV']) {
+				if (process.env['CODEENGINE_DEV']) {
 					tunnelProcess = spawn('cargo', ['run', '--', subcommand, ...tunnelArgs], { cwd: join(getAppRoot(), 'cli'), stdio, env });
 				} else {
 					const appPath = process.platform === 'darwin'
@@ -131,7 +131,7 @@ export async function main(argv: string[]): Promise<void> {
 		// built, because our location on disk is different if built.
 
 		let cliProcessMain: string;
-		if (process.env['VSCODE_DEV']) {
+		if (process.env['CODEENGINE_DEV']) {
 			cliProcessMain = './cliProcessMain.js';
 		} else {
 			cliProcessMain = './vs/code/node/cliProcessMain.js';
@@ -199,9 +199,9 @@ export async function main(argv: string[]): Promise<void> {
 				// On Windows we use a different strategy of saving the file
 				// by first truncating the file and then writing with r+ mode.
 				// This helps to save hidden files on Windows
-				// (see https://github.com/microsoft/vscode/issues/931) and
+				// (see https://github.com/graffitiape/codeengine/issues/931) and
 				// prevent removing alternate data streams
-				// (see https://github.com/microsoft/vscode/issues/6363)
+				// (see https://github.com/graffitiape/codeengine/issues/6363)
 				truncateSync(target, 0);
 				writeFileSync(target, data, { flag: 'r+' });
 			} else {
@@ -266,7 +266,7 @@ export async function main(argv: string[]): Promise<void> {
 
 			// Read from stdin: we require a single "-" argument to be passed in order to start reading from
 			// stdin. We do this because there is no reliable way to find out if data is piped to stdin. Just
-			// checking for stdin being connected to a TTY is not enough (https://github.com/microsoft/vscode/issues/40351)
+			// checking for stdin being connected to a TTY is not enough (https://github.com/graffitiape/codeengine/issues/40351)
 
 			if (hasReadStdinArg) {
 				stdinFilePath = getStdinFilePath();
@@ -413,7 +413,7 @@ export async function main(argv: string[]): Promise<void> {
 								}
 								let suffix = '';
 								const result = await session.stop();
-								if (!process.env['VSCODE_DEV']) {
+								if (!process.env['CODEENGINE_DEV']) {
 									// when running from a not-development-build we remove
 									// absolute filenames because we don't want to reveal anything
 									// about users. We also append the `.txt` suffix to make it
@@ -489,9 +489,9 @@ export async function main(argv: string[]): Promise<void> {
 		} else {
 			// On macOS, we spawn using the open command to obtain behavior
 			// similar to if the app was launched from the dock
-			// https://github.com/microsoft/vscode/issues/102975
+			// https://github.com/graffitiape/codeengine/issues/102975
 
-			// The following args are for the open command itself, rather than for VS Code:
+			// The following args are for the open command itself, rather than for Code Engine:
 			// -n creates a new instance.
 			//    Without -n, the open command re-opens the existing instance as-is.
 			// -g starts the new instance in the background.
@@ -556,7 +556,7 @@ export async function main(argv: string[]): Promise<void> {
 				// Ignore the _ env var, because the open command
 				// ignores it anyway.
 				// Pass the rest of the env vars in to fix
-				// https://github.com/microsoft/vscode/issues/134696.
+				// https://github.com/graffitiape/codeengine/issues/134696.
 				if (e !== '_') {
 					spawnArgs.push('--env');
 					spawnArgs.push(`${e}=${env[e]}`);
@@ -565,7 +565,7 @@ export async function main(argv: string[]): Promise<void> {
 
 			spawnArgs.push('--args', ...argv.slice(2)); // pass on our arguments
 
-			if (env['VSCODE_DEV']) {
+			if (env['CODEENGINE_DEV']) {
 				// If we're in development mode, replace the . arg with the
 				// vscode source arg. Because the OSS app isn't bundled,
 				// it needs the full vscode source arg to launch properly.

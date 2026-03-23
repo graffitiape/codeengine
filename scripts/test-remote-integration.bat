@@ -25,11 +25,11 @@ set VSCODELOGSDIR=%~dp0\..\.build\logs\integration-tests-remote
 set TESTRESOLVER_DATA_FOLDER=%TMP%\testresolverdatafolder-%RANDOM%-%TIME:~6,5%
 set TESTRESOLVER_LOGS_FOLDER=%VSCODELOGSDIR%\server
 
-if "%VSCODE_REMOTE_SERVER_PATH%"=="" (
+if "%CODEENGINE_REMOTE_SERVER_PATH%"=="" (
 	echo Using remote server out of sources for integration tests
 ) else (
 	set TESTRESOLVER_INSTALL_BUILTIN_EXTENSION=ms-vscode.vscode-smoketest-check
-	echo Using '%VSCODE_REMOTE_SERVER_PATH%' as server path
+	echo Using '%CODEENGINE_REMOTE_SERVER_PATH%' as server path
 )
 
 :: Figure out which Electron to use for running tests
@@ -40,7 +40,7 @@ if "%INTEGRATION_TEST_ELECTRON_PATH%"=="" (
 
 	echo Running integration tests out of sources.
 ) else (
-	set VSCODE_CLI=1
+	set CODEENGINE_CLI=1
 	set ELECTRON_ENABLE_LOGGING=1
 
 	:: Extra arguments only when running against a built version

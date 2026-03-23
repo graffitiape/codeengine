@@ -48,8 +48,8 @@ function getParams(type: string): Params[] {
 					keyCode: 'CP-230012',
 					operationSetCode: 'SigntoolSign',
 					parameters: [
-						{ parameterName: 'OpusName', parameterValue: 'VS Code' },
-						{ parameterName: 'OpusInfo', parameterValue: 'https://code.visualstudio.com/' },
+						{ parameterName: 'OpusName', parameterValue: 'Code Engine' },
+						{ parameterName: 'OpusInfo', parameterValue: 'https://github.com/graffitiape/codeengine/' },
 						{ parameterName: 'Append', parameterValue: '/as' },
 						{ parameterName: 'FileDigest', parameterValue: '/fd "SHA256"' },
 						{ parameterName: 'PageHash', parameterValue: '/NPH' },
@@ -74,8 +74,8 @@ function getParams(type: string): Params[] {
 					keyCode: 'CP-229979',
 					operationSetCode: 'SigntoolSign',
 					parameters: [
-						{ parameterName: 'OpusName', parameterValue: 'VS Code' },
-						{ parameterName: 'OpusInfo', parameterValue: 'https://code.visualstudio.com/' },
+						{ parameterName: 'OpusName', parameterValue: 'Code Engine' },
+						{ parameterName: 'OpusInfo', parameterValue: 'https://github.com/graffitiape/codeengine/' },
 						{ parameterName: 'FileDigest', parameterValue: '/fd "SHA256"' },
 						{ parameterName: 'PageHash', parameterValue: '/NPH' },
 						{ parameterName: 'TimeStamp', parameterValue: '/tr "http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer" /td sha256' }
@@ -164,9 +164,9 @@ export function main([esrpCliPath, type, folderPath, pattern]: string[]) {
 		projectId: process.env['SYSTEM_TEAMPROJECTID'],
 		hub: process.env['SYSTEM_HOSTTYPE'],
 		uri: process.env['SYSTEM_COLLECTIONURI'],
-		managedIdentityId: process.env['VSCODE_ESRP_CLIENT_ID'],
-		managedIdentityTenantId: process.env['VSCODE_ESRP_TENANT_ID'],
-		serviceConnectionId: process.env['VSCODE_ESRP_SERVICE_CONNECTION_ID'],
+		managedIdentityId: process.env['CODEENGINE_ESRP_CLIENT_ID'],
+		managedIdentityTenantId: process.env['CODEENGINE_ESRP_TENANT_ID'],
+		serviceConnectionId: process.env['CODEENGINE_ESRP_SERVICE_CONNECTION_ID'],
 		tempDirectory: os.tmpdir(),
 		systemAccessToken: encryptedTokenPath,
 		encryptionKey: encryptionDetailsPath

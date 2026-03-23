@@ -6,7 +6,7 @@ jobs:
       name: 1es-ubuntu-22.04-x64
       os: linux
     variables:
-      VSCODE_ARCH: x64
+      CODEENGINE_ARCH: x64
     templateContext:
       outputs:
         - output: pipelineArtifact
@@ -14,7 +14,7 @@ jobs:
           artifactName: vscode_web_linux_standalone_archive-unsigned
           displayName: Publish web archive
           sbomBuildDropPath: $(Agent.BuildDirectory)/vscode-web
-          sbomPackageName: "VS Code Linux x64 Web (Standalone)"
+          sbomPackageName: "Code Engine Linux x64 Web (Standalone)"
           sbomPackageVersion: $(Build.SourceVersion)
     steps:
       - template: ../common/checkout.yml@self

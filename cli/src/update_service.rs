@@ -8,7 +8,7 @@ use std::{fmt, path::Path};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-	constants::VSCODE_CLI_UPDATE_ENDPOINT,
+	constants::CODEENGINE_CLI_UPDATE_ENDPOINT,
 	debug, log, options, spanf,
 	util::{
 		errors::{wrap, AnyError, CodeError, WrappedError},
@@ -19,7 +19,7 @@ use crate::{
 	},
 };
 
-/// Implementation of the VS Code Update service for use in the CLI.
+/// Implementation of the Code Engine Update service for use in the CLI.
 #[derive(Clone)]
 pub struct UpdateService {
 	client: BoxedHttp,
@@ -57,12 +57,12 @@ fn quality_download_segment(quality: options::Quality) -> &'static str {
 }
 
 fn get_update_endpoint() -> Result<String, CodeError> {
-	if let Ok(url) = std::env::var("VSCODE_CLI_UPDATE_URL") {
+	if let Ok(url) = std::env::var("CODEENGINE_CLI_UPDATE_URL") {
 		if !url.is_empty() {
 			return Ok(url);
 		}
 	}
-	VSCODE_CLI_UPDATE_ENDPOINT
+	CODEENGINE_CLI_UPDATE_ENDPOINT
 		.map(|s| s.to_string())
 		.ok_or_else(|| CodeError::UpdatesNotConfigured("no service url"))
 }

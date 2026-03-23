@@ -103,8 +103,8 @@ const config = defineConfig(extensions.map(extension => {
 	config.mocha ??= {};
 	if (process.env.BUILD_ARTIFACTSTAGINGDIRECTORY || process.env.GITHUB_WORKSPACE) {
 		let suite = '';
-		if (process.env.VSCODE_BROWSER) {
-			suite = `${process.env.VSCODE_BROWSER} Browser Integration ${config.label} tests`;
+		if (process.env.CODEENGINE_BROWSER) {
+			suite = `${process.env.CODEENGINE_BROWSER} Browser Integration ${config.label} tests`;
 		} else if (process.env.REMOTE_VSCODE) {
 			suite = `Remote Integration ${config.label} tests`;
 		} else {
@@ -131,7 +131,7 @@ const config = defineConfig(extensions.map(extension => {
 		};
 		config.env = {
 			...config.env,
-			VSCODE_SKIP_PRELAUNCH: '1',
+			CODEENGINE_SKIP_PRELAUNCH: '1',
 		};
 	} else {
 		// web configs not supported, yet

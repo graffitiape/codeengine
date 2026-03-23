@@ -64,7 +64,7 @@ async function retrySignOnKeychainError<T>(fn: () => Promise<T>, maxRetries: num
 
 async function main(buildDir?: string): Promise<void> {
 	const tempDir = process.env['AGENT_TEMPDIRECTORY'];
-	const arch = process.env['VSCODE_ARCH'];
+	const arch = process.env['CODEENGINE_ARCH'];
 	const identity = process.env['CODESIGN_IDENTITY'];
 
 	if (!buildDir) {
@@ -75,7 +75,7 @@ async function main(buildDir?: string): Promise<void> {
 		throw new Error('$AGENT_TEMPDIRECTORY not set');
 	}
 
-	const appRoot = path.join(buildDir, `VSCode-darwin-${arch}`);
+	const appRoot = path.join(buildDir, `CodeEngine-darwin-${arch}`);
 	const appName = product.nameLong + '.app';
 	const infoPlistPath = path.resolve(appRoot, appName, 'Contents', 'Info.plist');
 
@@ -100,28 +100,28 @@ async function main(buildDir?: string): Promise<void> {
 			'-insert',
 			'NSAppleEventsUsageDescription',
 			'-string',
-			'An application in Visual Studio Code wants to use AppleScript.',
+			'An application in Code Engine wants to use AppleScript.',
 			`${infoPlistPath}`
 		]);
 		await spawn('plutil', [
 			'-replace',
 			'NSMicrophoneUsageDescription',
 			'-string',
-			'An application in Visual Studio Code wants to use the Microphone.',
+			'An application in Code Engine wants to use the Microphone.',
 			`${infoPlistPath}`
 		]);
 		await spawn('plutil', [
 			'-replace',
 			'NSCameraUsageDescription',
 			'-string',
-			'An application in Visual Studio Code wants to use the Camera.',
+			'An application in Code Engine wants to use the Camera.',
 			`${infoPlistPath}`
 		]);
 		await spawn('plutil', [
 			'-replace',
 			'NSAudioCaptureUsageDescription',
 			'-string',
-			'An application in Visual Studio Code wants to use Audio Capture.',
+			'An application in Code Engine wants to use Audio Capture.',
 			`${infoPlistPath}`
 		]);
 	}

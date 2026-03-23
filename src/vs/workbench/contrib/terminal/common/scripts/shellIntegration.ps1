@@ -27,17 +27,17 @@ $Global:__VSCodeState = @{
 # Store the nonce in a regular variable and unset the environment variable. It's by design that
 # anything that can execute PowerShell code can read the nonce, as it's basically impossible to hide
 # in PowerShell. The most important thing is getting it out of the environment.
-$Global:__VSCodeState.Nonce = $env:VSCODE_NONCE
-$env:VSCODE_NONCE = $null
+$Global:__VSCodeState.Nonce = $env:CODEENGINE_NONCE
+$env:CODEENGINE_NONCE = $null
 
-$Global:__VSCodeState.IsStable = $env:VSCODE_STABLE
-$env:VSCODE_STABLE = $null
+$Global:__VSCodeState.IsStable = $env:CODEENGINE_STABLE
+$env:CODEENGINE_STABLE = $null
 
-$Global:__VSCodeState.IsA11yMode = $env:VSCODE_A11Y_MODE
-$env:VSCODE_A11Y_MODE = $null
+$Global:__VSCodeState.IsA11yMode = $env:CODEENGINE_A11Y_MODE
+$env:CODEENGINE_A11Y_MODE = $null
 
-$__vscode_shell_env_reporting = $env:VSCODE_SHELL_ENV_REPORTING
-$env:VSCODE_SHELL_ENV_REPORTING = $null
+$__vscode_shell_env_reporting = $env:CODEENGINE_SHELL_ENV_REPORTING
+$env:CODEENGINE_SHELL_ENV_REPORTING = $null
 if ($__vscode_shell_env_reporting) {
 	$Global:__VSCodeState.EnvVarsToReport = $__vscode_shell_env_reporting.Split(',')
 }
@@ -47,37 +47,37 @@ $osVersion = [System.Environment]::OSVersion.Version
 $Global:__VSCodeState.IsWindows10 = $IsWindows -and $osVersion.Major -eq 10 -and $osVersion.Minor -eq 0 -and $osVersion.Build -lt 22000
 Remove-Variable -Name osVersion -ErrorAction SilentlyContinue
 
-if ($env:VSCODE_ENV_REPLACE) {
-	$Split = $env:VSCODE_ENV_REPLACE.Split(":")
+if ($env:CODEENGINE_ENV_REPLACE) {
+	$Split = $env:CODEENGINE_ENV_REPLACE.Split(":")
 	foreach ($Item in $Split) {
 		$Inner = $Item.Split('=', 2)
 		[Environment]::SetEnvironmentVariable($Inner[0], $Inner[1].Replace('\x3a', ':'))
 	}
-	$env:VSCODE_ENV_REPLACE = $null
+	$env:CODEENGINE_ENV_REPLACE = $null
 }
-if ($env:VSCODE_ENV_PREPEND) {
-	$Split = $env:VSCODE_ENV_PREPEND.Split(":")
+if ($env:CODEENGINE_ENV_PREPEND) {
+	$Split = $env:CODEENGINE_ENV_PREPEND.Split(":")
 	foreach ($Item in $Split) {
 		$Inner = $Item.Split('=', 2)
 		[Environment]::SetEnvironmentVariable($Inner[0], $Inner[1].Replace('\x3a', ':') + [Environment]::GetEnvironmentVariable($Inner[0]))
 	}
-	$env:VSCODE_ENV_PREPEND = $null
+	$env:CODEENGINE_ENV_PREPEND = $null
 }
-if ($env:VSCODE_ENV_APPEND) {
-	$Split = $env:VSCODE_ENV_APPEND.Split(":")
+if ($env:CODEENGINE_ENV_APPEND) {
+	$Split = $env:CODEENGINE_ENV_APPEND.Split(":")
 	foreach ($Item in $Split) {
 		$Inner = $Item.Split('=', 2)
 		[Environment]::SetEnvironmentVariable($Inner[0], [Environment]::GetEnvironmentVariable($Inner[0]) + $Inner[1].Replace('\x3a', ':'))
 	}
-	$env:VSCODE_ENV_APPEND = $null
+	$env:CODEENGINE_ENV_APPEND = $null
 }
 
 # Register Python shell activate hooks
 # Prevent multiple activation with guard
-if (-not $env:VSCODE_PYTHON_AUTOACTIVATE_GUARD) {
-	$env:VSCODE_PYTHON_AUTOACTIVATE_GUARD = '1'
-	if ($env:VSCODE_PYTHON_PWSH_ACTIVATE -and $env:TERM_PROGRAM -eq 'vscode') {
-		$activateScript = $env:VSCODE_PYTHON_PWSH_ACTIVATE
+if (-not $env:CODEENGINE_PYTHON_AUTOACTIVATE_GUARD) {
+	$env:CODEENGINE_PYTHON_AUTOACTIVATE_GUARD = '1'
+	if ($env:CODEENGINE_PYTHON_PWSH_ACTIVATE -and $env:TERM_PROGRAM -eq 'vscode') {
+		$activateScript = $env:CODEENGINE_PYTHON_PWSH_ACTIVATE
 
 		try {
 			Invoke-Expression $activateScript
@@ -85,11 +85,11 @@ if (-not $env:VSCODE_PYTHON_AUTOACTIVATE_GUARD) {
 		}
 		catch {
 			$activationError = $_
-			Write-Host "`e[0m`e[7m * `e[0;103m VS Code Python powershell activation failed with exit code $($activationError.Exception.Message) `e[0m"
+			Write-Host "`e[0m`e[7m * `e[0;103m Code Engine Python powershell activation failed with exit code $($activationError.Exception.Message) `e[0m"
 		}
 	}
 	# Remove any leftover Python activation env vars.
-	Get-ChildItem Env:VSCODE_PYTHON_*_ACTIVATE | Remove-Item -ErrorAction SilentlyContinue
+	Get-ChildItem Env:CODEENGINE_PYTHON_*_ACTIVATE | Remove-Item -ErrorAction SilentlyContinue
 }
 
 function Global:__VSCode-Escape-Value([string]$value) {
@@ -182,7 +182,7 @@ if ($Global:__VSCodeState.IsA11yMode -eq "1") {
 	if (-not $hasScreenReaderParam -and $PSVersionTable.PSVersion -ge "7.0") {
 		# The loaded PSReadLine lacks EnableScreenReaderMode (only available in 2.4.4-beta4+).
 		# PowerShell 7.0+ skips autoloading PSReadLine when the OS reports a screen reader active.
-		# When only VS Code's accessibility mode is enabled (no OS screen reader),
+		# When only Code Engine's accessibility mode is enabled (no OS screen reader),
 		# it's still loaded and must be removed to load our bundled copy.
 		# Skip this on Windows PowerShell 5.1 where removing the built-in PSReadLine 2.0.0
 		# and replacing it can cause input handling issues (e.g. repeated Enter key presses).
@@ -190,7 +190,7 @@ if ($Global:__VSCodeState.IsA11yMode -eq "1") {
 			Remove-Module PSReadLine -Force
 		}
 
-		# Import VS Code's bundled PSReadLine 2.4.3 which has EnableScreenReaderMode
+		# Import Code Engine's bundled PSReadLine 2.4.3 which has EnableScreenReaderMode
 		$specialPsrlPath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) 'psreadline'
 		if (Test-Path $specialPsrlPath) {
 			Import-Module $specialPsrlPath
@@ -253,7 +253,7 @@ else {
 	[Console]::Write("$([char]0x1b)]633;P;IsWindows=$IsWindows`a")
 }
 
-# Set always on key handlers which map to default VS Code keybindings
+# Set always on key handlers which map to default Code Engine keybindings
 function Set-MappedKeyHandler {
 	param ([string[]] $Chord, [string[]]$Sequence)
 	try {
@@ -280,11 +280,11 @@ if ($Global:__VSCodeState.HasPSReadLine) {
 	Set-MappedKeyHandlers
 
 	# Prevent AI-executed commands from polluting shell history
-	if ($env:VSCODE_PREVENT_SHELL_HISTORY -eq "1") {
+	if ($env:CODEENGINE_PREVENT_SHELL_HISTORY -eq "1") {
 		Set-PSReadLineOption -AddToHistoryHandler {
 			param([string]$line)
 			return $false
 		}
-		$env:VSCODE_PREVENT_SHELL_HISTORY = $null
+		$env:CODEENGINE_PREVENT_SHELL_HISTORY = $null
 	}
 }

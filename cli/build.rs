@@ -60,7 +60,7 @@ fn set_env_vars_from_map_keys(prefix: &str, map: impl IntoIterator<Item = (Strin
 				if let Value::String(s) = &value {
 					let idx = s.find(" - ");
 					println!(
-						"cargo:rustc-env=VSCODE_CLI_QUALITYLESS_PRODUCT_NAME={}",
+						"cargo:rustc-env=CODEENGINE_CLI_QUALITYLESS_PRODUCT_NAME={}",
 						idx.map(|i| &s[..i]).unwrap_or(s)
 					);
 				}
@@ -95,7 +95,7 @@ fn set_env_vars_from_map_keys(prefix: &str, map: impl IntoIterator<Item = (Strin
 
 	if !win32_app_ids.is_empty() {
 		println!(
-			"cargo:rustc-env=VSCODE_CLI_WIN32_APP_IDS={}",
+			"cargo:rustc-env=CODEENGINE_CLI_WIN32_APP_IDS={}",
 			win32_app_ids.join(",")
 		);
 	}
@@ -111,7 +111,7 @@ where
 
 fn apply_build_from_product_json(path: &Path) {
 	let json: HashMap<String, Value> = read_json_from_path(path);
-	set_env_vars_from_map_keys("VSCODE_CLI", json);
+	set_env_vars_from_map_keys("CODEENGINE_CLI", json);
 }
 
 #[derive(Deserialize)]
@@ -123,11 +123,11 @@ fn apply_build_environment_variables() {
 	let repo_dir = env::current_dir().unwrap().join("..");
 	let package_json = read_json_from_path::<PackageJson>(&repo_dir.join("package.json"));
 	println!(
-		"cargo:rustc-env=VSCODE_CLI_VERSION={}",
+		"cargo:rustc-env=CODEENGINE_CLI_VERSION={}",
 		package_json.version
 	);
 
-	match env::var("VSCODE_CLI_PRODUCT_JSON") {
+	match env::var("CODEENGINE_CLI_PRODUCT_JSON") {
 		Ok(v) => {
 			let path = if cfg!(windows) {
 				PathBuf::from_str(&v.replace('/', "\\")).unwrap()
@@ -157,7 +157,7 @@ fn apply_win32_version_resources() {
 	let repo_dir = env::current_dir().unwrap().join("..");
 	let package_json = read_json_from_path::<PackageJson>(&repo_dir.join("package.json"));
 
-	let product_json_path = match env::var("VSCODE_CLI_PRODUCT_JSON") {
+	let product_json_path = match env::var("CODEENGINE_CLI_PRODUCT_JSON") {
 		Ok(v) => {
 			if cfg!(windows) {
 				PathBuf::from_str(&v.replace('/', "\\")).unwrap()
@@ -172,7 +172,7 @@ fn apply_win32_version_resources() {
 	let name_long = product
 		.get("nameLong")
 		.and_then(|v| v.as_str())
-		.unwrap_or("Code - OSS");
+		.unwrap_or("Code Engine");
 	let application_name = product
 		.get("applicationName")
 		.and_then(|v| v.as_str())

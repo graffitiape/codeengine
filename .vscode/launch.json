@@ -87,7 +87,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code Emmet Tests",
+			"name": "Code Engine Emmet Tests",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"${workspaceFolder}/extensions/emmet/test-workspace",
@@ -105,7 +105,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code Configuration Editing Tests",
+			"name": "Code Engine Configuration Editing Tests",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}/extensions/configuration-editing",
@@ -122,7 +122,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code Git Tests",
+			"name": "Code Engine Git Tests",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"/tmp/my4g9l",
@@ -140,7 +140,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code Github Tests",
+			"name": "Code Engine Github Tests",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"${workspaceFolder}/extensions/github/testWorkspace",
@@ -158,7 +158,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code API Tests (single folder)",
+			"name": "Code Engine API Tests (single folder)",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				// "${workspaceFolder}", // Uncomment for running out of sources.
@@ -178,7 +178,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code API Tests (workspace)",
+			"name": "Code Engine API Tests (workspace)",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"${workspaceFolder}/extensions/vscode-api-tests/testworkspace.code-workspace",
@@ -196,7 +196,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code Tokenizer Tests",
+			"name": "Code Engine Tokenizer Tests",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"${workspaceFolder}/extensions/vscode-colorize-tests/test",
@@ -214,7 +214,7 @@
 		{
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "VS Code Tokenizer Performance Tests",
+			"name": "Code Engine Tokenizer Performance Tests",
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"${workspaceFolder}/extensions/vscode-colorize-perf-tests/test",
@@ -232,7 +232,7 @@
 		{
 			"type": "chrome",
 			"request": "attach",
-			"name": "Attach to VS Code",
+			"name": "Attach to Code Engine",
 			"browserAttachLocation": "workspace",
 			"port": 9222,
 			"outFiles": [
@@ -246,7 +246,7 @@
 		{
 			"type": "chrome",
 			"request": "launch",
-			"name": "Launch VS Code Internal",
+			"name": "Launch Code Engine Internal",
 			"windows": {
 				"runtimeExecutable": "${workspaceFolder}/scripts/code.bat"
 			},
@@ -269,11 +269,11 @@
 				"--inspect-brk=5875",
 				"--no-cached-data",
 				"--crash-reporter-directory=${workspaceFolder}/.profile-oss/crashes",
-				// for general runtime freezes: https://github.com/microsoft/vscode/issues/127861#issuecomment-904144910
+				// for general runtime freezes: https://github.com/graffitiape/codeengine/issues/127861#issuecomment-904144910
 				"--disable-features=CalculateNativeWinOcclusion",
 				"--disable-extension=vscode.vscode-api-tests"
 			],
-			"userDataDir": "${userHome}/.vscode-oss-dev",
+			"userDataDir": "${userHome}/.vscode-engine-dev",
 			"webRoot": "${workspaceFolder}",
 			"cascadeTerminateToConfigurations": [
 				"Attach to Extension Host"
@@ -313,12 +313,12 @@
 				"--inspect-brk=5875",
 				"--no-cached-data",
 				"--crash-reporter-directory=${workspaceFolder}/.profile-oss/crashes",
-				// for general runtime freezes: https://github.com/microsoft/vscode/issues/127861#issuecomment-904144910
+				// for general runtime freezes: https://github.com/graffitiape/codeengine/issues/127861#issuecomment-904144910
 				"--disable-features=CalculateNativeWinOcclusion",
 				"--disable-extension=vscode.vscode-api-tests",
 				"--sessions"
 			],
-			"userDataDir": "${userHome}/.vscode-oss-sessions-dev",
+			"userDataDir": "${userHome}/.vscode-engine-sessions-dev",
 			"webRoot": "${workspaceFolder}",
 			"cascadeTerminateToConfigurations": [
 				"Attach to Extension Host"
@@ -336,7 +336,7 @@
 			// To debug observables you also need the extension "ms-vscode.debug-value-editor"
 			"type": "chrome",
 			"request": "launch",
-			"name": "Launch VS Code Internal (Hot Reload)",
+			"name": "Launch Code Engine Internal (Hot Reload)",
 			"windows": {
 				"runtimeExecutable": "${workspaceFolder}/scripts/code.bat"
 			},
@@ -362,11 +362,11 @@
 				"--inspect-brk=5875",
 				"--no-cached-data",
 				"--crash-reporter-directory=${workspaceFolder}/.profile-oss/crashes",
-				// for general runtime freezes: https://github.com/microsoft/vscode/issues/127861#issuecomment-904144910
+				// for general runtime freezes: https://github.com/graffitiape/codeengine/issues/127861#issuecomment-904144910
 				"--disable-features=CalculateNativeWinOcclusion",
 				"--disable-extension=vscode.vscode-api-tests"
 			],
-			"userDataDir": "${userHome}/.vscode-oss-dev",
+			"userDataDir": "${userHome}/.vscode-engine-dev",
 			"webRoot": "${workspaceFolder}",
 			"cascadeTerminateToConfigurations": [
 				"Attach to Extension Host"
@@ -384,7 +384,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "VS Code Server (Web)",
+			"name": "Code Engine Server (Web)",
 			"runtimeExecutable": "${workspaceFolder}/scripts/code-server.sh",
 			"windows": {
 				"runtimeExecutable": "${workspaceFolder}/scripts/code-server.bat",
@@ -424,7 +424,7 @@
 			"request": "launch",
 			"outFiles": [],
 			"perScriptSourcemaps": "yes",
-			"name": "VS Code Server (Web, Chrome)",
+			"name": "Code Engine Server (Web, Chrome)",
 			"url": "http://localhost:8080?tkn=dev-token",
 			"preLaunchTask": "Run code server",
 			"presentation": {
@@ -437,7 +437,7 @@
 			"request": "launch",
 			"outFiles": [],
 			"perScriptSourcemaps": "yes",
-			"name": "VS Code Server (Web, Edge)",
+			"name": "Code Engine Server (Web, Edge)",
 			"url": "http://localhost:8080?tkn=dev-token",
 			"pauseForSourceMap": false,
 			"preLaunchTask": "Run code server",
@@ -451,7 +451,7 @@
 			"request": "launch",
 			"outFiles": [],
 			"perScriptSourcemaps": "yes",
-			"name": "VS Code Web (Chrome)",
+			"name": "Code Engine Web (Chrome)",
 			"url": "http://localhost:8080",
 			"preLaunchTask": "Run code web",
 			"presentation": {
@@ -464,7 +464,7 @@
 			"request": "launch",
 			"outFiles": [],
 			"perScriptSourcemaps": "yes",
-			"name": "VS Code Web (Edge)",
+			"name": "Code Engine Web (Edge)",
 			"url": "http://localhost:8080",
 			"pauseForSourceMap": false,
 			"preLaunchTask": "Run code web",
@@ -559,12 +559,12 @@
 			"request": "launch",
 			"name": "Run Unit Tests",
 			"program": "${workspaceFolder}/test/unit/electron/index.js",
-			"runtimeExecutable": "${workspaceFolder}/.build/electron/Code - OSS.app/Contents/MacOS/Code - OSS",
+			"runtimeExecutable": "${workspaceFolder}/.build/electron/Code Engine.app/Contents/MacOS/Code Engine",
 			"windows": {
-				"runtimeExecutable": "${workspaceFolder}/.build/electron/Code - OSS.exe"
+				"runtimeExecutable": "${workspaceFolder}/.build/electron/Code Engine.exe"
 			},
 			"linux": {
-				"runtimeExecutable": "${workspaceFolder}/.build/electron/code-oss"
+				"runtimeExecutable": "${workspaceFolder}/.build/electron/code-engine"
 			},
 			"outputCapture": "std",
 			"args": [
@@ -575,7 +575,7 @@
 				"${workspaceFolder}/out/**/*.js"
 			],
 			"cascadeTerminateToConfigurations": [
-				"Attach to VS Code"
+				"Attach to Code Engine"
 			],
 			"env": {
 				"MOCHA_COLORS": "true"
@@ -589,15 +589,15 @@
 			"request": "launch",
 			"name": "Run Unit Tests For Current File",
 			"program": "${workspaceFolder}/test/unit/electron/index.js",
-			"runtimeExecutable": "${workspaceFolder}/.build/electron/Code - OSS.app/Contents/MacOS/Code - OSS",
+			"runtimeExecutable": "${workspaceFolder}/.build/electron/Code Engine.app/Contents/MacOS/Code Engine",
 			"windows": {
-				"runtimeExecutable": "${workspaceFolder}/.build/electron/Code - OSS.exe"
+				"runtimeExecutable": "${workspaceFolder}/.build/electron/Code Engine.exe"
 			},
 			"linux": {
-				"runtimeExecutable": "${workspaceFolder}/.build/electron/code-oss"
+				"runtimeExecutable": "${workspaceFolder}/.build/electron/code-engine"
 			},
 			"cascadeTerminateToConfigurations": [
-				"Attach to VS Code"
+				"Attach to Code Engine"
 			],
 			"outputCapture": "std",
 			"args": [
@@ -625,7 +625,7 @@
 			"timeout": 240000,
 			"args": [
 				"-l",
-				"${workspaceFolder}/.build/electron/Code - OSS.app/Contents/MacOS/Code - OSS"
+				"${workspaceFolder}/.build/electron/Code Engine.app/Contents/MacOS/Code Engine"
 			],
 			"outFiles": [
 				"${cwd}/out/**/*.js"
@@ -703,10 +703,10 @@
 	],
 	"compounds": [
 		{
-			"name": "VS Code",
+			"name": "Code Engine",
 			"stopAll": true,
 			"configurations": [
-				"Launch VS Code Internal",
+				"Launch Code Engine Internal",
 				"Attach to Main Process",
 				"Attach to Extension Host",
 				"Attach to Shared Process",
@@ -734,10 +734,10 @@
 			}
 		},
 		{
-			"name": "VS Code (Hot Reload)",
+			"name": "Code Engine (Hot Reload)",
 			"stopAll": true,
 			"configurations": [
-				"Launch VS Code Internal (Hot Reload)",
+				"Launch Code Engine Internal (Hot Reload)",
 				"Attach to Main Process",
 				"Attach to Extension Host",
 				"Attach to Shared Process",
@@ -751,7 +751,7 @@
 		{
 			"name": "Search, Renderer, and Main processes",
 			"configurations": [
-				"Launch VS Code Internal",
+				"Launch Code Engine Internal",
 				"Attach to Main Process",
 				"Attach to Search Process"
 			],
@@ -763,7 +763,7 @@
 		{
 			"name": "Renderer, Extension Host, and Main processes",
 			"configurations": [
-				"Launch VS Code Internal",
+				"Launch Code Engine Internal",
 				"Attach to Main Process",
 				"Attach to Extension Host"
 			],
@@ -775,7 +775,7 @@
 		{
 			"name": "Debug Unit Tests",
 			"configurations": [
-				"Attach to VS Code",
+				"Attach to Code Engine",
 				"Run Unit Tests"
 			],
 			"presentation": {
@@ -786,7 +786,7 @@
 		{
 			"name": "Debug Unit Tests (Current File)",
 			"configurations": [
-				"Attach to VS Code",
+				"Attach to Code Engine",
 				"Run Unit Tests For Current File"
 			],
 			"presentation": {
@@ -798,7 +798,7 @@
 			"name": "Renderer and Main processes",
 			"stopAll": true,
 			"configurations": [
-				"Launch VS Code Internal",
+				"Launch Code Engine Internal",
 				"Attach to Main Process"
 			],
 			"preLaunchTask": "Ensure Prelaunch Dependencies"

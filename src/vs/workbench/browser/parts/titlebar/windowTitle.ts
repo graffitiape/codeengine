@@ -204,7 +204,7 @@ export class WindowTitle extends Disposable {
 				// in the "Windows" menu. As such, we set the title
 				// briefly to something different to ensure macOS
 				// recognizes we have a window.
-				// See: https://github.com/microsoft/vscode/issues/191288
+				// See: https://github.com/graffitiape/codeengine/issues/191288
 				window.document.title = `${this.productService.nameLong} ${WindowTitle.TITLE_DIRTY}`;
 			}
 
@@ -296,7 +296,7 @@ export class WindowTitle extends Disposable {
 	 * {rootPath}: e.g. /Users/Development
 	 * {folderName}: e.g. myFolder
 	 * {folderPath}: e.g. /Users/Development/myFolder
-	 * {appName}: e.g. VS Code
+	 * {appName}: e.g. Code Engine
 	 * {remoteName}: e.g. SSH
 	 * {dirty}: indicator
 	 * {focusedView}: e.g. Terminal

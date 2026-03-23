@@ -27,20 +27,20 @@ startPtyHost();
 
 async function startPtyHost() {
 	// Parse environment variables
-	const startupDelay = parseInt(process.env.VSCODE_STARTUP_DELAY ?? '0');
-	const simulatedLatency = parseInt(process.env.VSCODE_LATENCY ?? '0');
+	const startupDelay = parseInt(process.env.CODEENGINE_STARTUP_DELAY ?? '0');
+	const simulatedLatency = parseInt(process.env.CODEENGINE_LATENCY ?? '0');
 	const reconnectConstants: IReconnectConstants = {
-		graceTime: parseInt(process.env.VSCODE_RECONNECT_GRACE_TIME || '0'),
-		shortGraceTime: parseInt(process.env.VSCODE_RECONNECT_SHORT_GRACE_TIME || '0'),
-		scrollback: parseInt(process.env.VSCODE_RECONNECT_SCROLLBACK || '100')
+		graceTime: parseInt(process.env.CODEENGINE_RECONNECT_GRACE_TIME || '0'),
+		shortGraceTime: parseInt(process.env.CODEENGINE_RECONNECT_SHORT_GRACE_TIME || '0'),
+		scrollback: parseInt(process.env.CODEENGINE_RECONNECT_SCROLLBACK || '100')
 	};
 
 	// Sanitize environment
-	delete process.env.VSCODE_RECONNECT_GRACE_TIME;
-	delete process.env.VSCODE_RECONNECT_SHORT_GRACE_TIME;
-	delete process.env.VSCODE_RECONNECT_SCROLLBACK;
-	delete process.env.VSCODE_LATENCY;
-	delete process.env.VSCODE_STARTUP_DELAY;
+	delete process.env.CODEENGINE_RECONNECT_GRACE_TIME;
+	delete process.env.CODEENGINE_RECONNECT_SHORT_GRACE_TIME;
+	delete process.env.CODEENGINE_RECONNECT_SCROLLBACK;
+	delete process.env.CODEENGINE_LATENCY;
+	delete process.env.CODEENGINE_STARTUP_DELAY;
 
 	// Delay startup if needed, this must occur before RPC is setup to avoid the channel from timing
 	// out.

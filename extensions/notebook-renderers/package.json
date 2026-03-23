@@ -20,7 +20,7 @@
 			{
 				"id": "vscode.builtin-renderer",
 				"entrypoint": "./renderer-out/index.js",
-				"displayName": "VS Code Builtin Notebook Output Renderer",
+				"displayName": "Code Engine Builtin Notebook Output Renderer",
 				"requiresMessaging": "never",
 				"mimeTypes": [
 					"image/gif",
@@ -54,6 +54,6 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/microsoft/vscode.git"
+		"url": "https://github.com/graffitiape/codeengine.git"
 	}
 }

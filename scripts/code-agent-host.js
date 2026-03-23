@@ -20,7 +20,7 @@ async function main() {
 			'Usage: ./scripts/code-agent-host.sh [options]\n' +
 			'\n' +
 			'Options:\n' +
-			'  --port <number>                Port to listen on (default: 8081, or VSCODE_AGENT_HOST_PORT env)\n' +
+			'  --port <number>                Port to listen on (default: 8081, or CODEENGINE_AGENT_HOST_PORT env)\n' +
 			'  --connection-token <token>      A secret that must be included with all requests\n' +
 			'  --connection-token-file <path>  Path to a file containing the connection token\n' +
 			'  --without-connection-token      Run without a connection token\n' +
@@ -32,7 +32,7 @@ async function main() {
 		return;
 	}
 
-	const port = args.port || process.env['VSCODE_AGENT_HOST_PORT'] || '8081';
+	const port = args.port || process.env['CODEENGINE_AGENT_HOST_PORT'] || '8081';
 
 	/** @type {string[]} */
 	const serverArgs = ['--port', String(port)];

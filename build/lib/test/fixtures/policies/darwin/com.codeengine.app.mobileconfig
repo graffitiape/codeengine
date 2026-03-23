@@ -6,11 +6,11 @@
 		<array>
 			<dict>
 				<key>PayloadDisplayName</key>
-				<string>Code - OSS</string>
+				<string>Code Engine</string>
 				<key>PayloadIdentifier</key>
-				<string>com.visualstudio.code.oss.47827DD9-4734-49A0-AF80-7E19B11495CC</string>
+				<string>com.codeengine.app.47827DD9-4734-49A0-AF80-7E19B11495CC</string>
 				<key>PayloadType</key>
-				<string>com.visualstudio.code.oss</string>
+				<string>com.codeengine.app</string>
 				<key>PayloadUUID</key>
 				<string>47827DD9-4734-49A0-AF80-7E19B11495CC</string>
 				<key>PayloadVersion</key>
@@ -42,13 +42,13 @@
 			</dict>
 		</array>
 		<key>PayloadDescription</key>
-		<string>This profile manages Code - OSS. For more information see https://code.visualstudio.com/docs/setup/enterprise</string>
+		<string>This profile manages Code Engine. For more information see https://github.com/graffitiape/codeengine</string>
 		<key>PayloadDisplayName</key>
-		<string>Code - OSS</string>
+		<string>Code Engine</string>
 		<key>PayloadIdentifier</key>
-		<string>com.visualstudio.code.oss</string>
+		<string>com.codeengine.app</string>
 		<key>PayloadOrganization</key>
-		<string>Microsoft</string>
+		<string>Graffiti Ape</string>
 		<key>PayloadType</key>
 		<string>Configuration</string>
 		<key>PayloadUUID</key>

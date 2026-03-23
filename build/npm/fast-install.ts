@@ -16,7 +16,7 @@ const result = child_process.spawnSync(npm, ['install'], {
 	cwd: root,
 	stdio: 'inherit',
 	shell: true,
-	env: { ...process.env, VSCODE_FORCE_INSTALL: '1' },
+	env: { ...process.env, CODEENGINE_FORCE_INSTALL: '1' },
 });
 
 process.exit(result.status ?? 1);

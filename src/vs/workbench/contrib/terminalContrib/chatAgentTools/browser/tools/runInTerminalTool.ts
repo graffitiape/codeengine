@@ -994,7 +994,7 @@ export class RunInTerminalTool extends Disposable implements IToolImpl {
 				args.isBackground
 			);
 			if (toolTerminal.shellIntegrationQuality === ShellIntegrationQuality.None) {
-				toolResultMessage = '$(info) Enable [shell integration](https://code.visualstudio.com/docs/terminal/shell-integration) to improve command detection';
+				toolResultMessage = '$(info) Enable [shell integration](https://github.com/graffitiape/codeengine/docs/terminal/shell-integration) to improve command detection';
 			}
 			this._logService.info(`RunInTerminalTool: Using \`${execution.strategy.type}\` execute strategy for command \`${command}\``);
 			store.add(execution);

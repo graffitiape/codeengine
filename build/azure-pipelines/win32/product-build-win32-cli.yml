@@ -1,30 +1,30 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
-  - name: VSCODE_CHECK_ONLY
+  - name: CODEENGINE_CHECK_ONLY
     type: boolean
     default: false
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     type: string
 
 jobs:
-  - job: WindowsCLI_${{ upper(parameters.VSCODE_ARCH) }}
-    displayName: Windows CLI (${{ upper(parameters.VSCODE_ARCH) }})
+  - job: WindowsCLI_${{ upper(parameters.CODEENGINE_ARCH) }}
+    displayName: Windows CLI (${{ upper(parameters.CODEENGINE_ARCH) }})
     pool:
       name: 1es-windows-2022-x64
       os: windows
     timeoutInMinutes: 90
     variables:
-      VSCODE_ARCH: ${{ parameters.VSCODE_ARCH }}
+      CODEENGINE_ARCH: ${{ parameters.CODEENGINE_ARCH }}
     templateContext:
       outputs:
-        - ${{ if not(parameters.VSCODE_CHECK_ONLY) }}:
+        - ${{ if not(parameters.CODEENGINE_CHECK_ONLY) }}:
           - output: pipelineArtifact
-            targetPath: $(Build.ArtifactStagingDirectory)/out/vscode_cli_win32_$(VSCODE_ARCH)_cli.zip
-            artifactName: vscode_cli_win32_$(VSCODE_ARCH)_cli
-            displayName: Publish vscode_cli_win32_$(VSCODE_ARCH)_cli artifact
+            targetPath: $(Build.ArtifactStagingDirectory)/out/vscode_cli_win32_$(CODEENGINE_ARCH)_cli.zip
+            artifactName: vscode_cli_win32_$(CODEENGINE_ARCH)_cli
+            displayName: Publish vscode_cli_win32_$(CODEENGINE_ARCH)_cli artifact
             sbomBuildDropPath: $(Build.ArtifactStagingDirectory)/sign
-            sbomPackageName: "VS Code Windows $(VSCODE_ARCH) CLI"
+            sbomPackageName: "Code Engine Windows $(CODEENGINE_ARCH) CLI"
             sbomPackageVersion: $(Build.SourceVersion)
 
     steps:
@@ -54,41 +54,41 @@ jobs:
       - template: ./steps/product-build-win32-install-rust.yml@self
         parameters:
           targets:
-            - ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+            - ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
               - x86_64-pc-windows-msvc
-            - ${{ if eq(parameters.VSCODE_ARCH, 'arm64') }}:
+            - ${{ if eq(parameters.CODEENGINE_ARCH, 'arm64') }}:
               - aarch64-pc-windows-msvc
 
       - template: ../cli/cli-compile.yml@self
         parameters:
-          VSCODE_QUALITY: ${{ parameters.VSCODE_QUALITY }}
-          ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
-            VSCODE_CLI_TARGET: x86_64-pc-windows-msvc
-          ${{ if eq(parameters.VSCODE_ARCH, 'arm64') }}:
-            VSCODE_CLI_TARGET: aarch64-pc-windows-msvc
-          VSCODE_CLI_ARTIFACT: unsigned_vscode_cli_win32_$(VSCODE_ARCH)_cli
-          VSCODE_CHECK_ONLY: ${{ parameters.VSCODE_CHECK_ONLY }}
-          VSCODE_CLI_ENV:
-            OPENSSL_LIB_DIR: $(Build.ArtifactStagingDirectory)/openssl/$(VSCODE_ARCH)-windows-static/lib
-            OPENSSL_INCLUDE_DIR: $(Build.ArtifactStagingDirectory)/openssl/$(VSCODE_ARCH)-windows-static/include
-            ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+          CODEENGINE_QUALITY: ${{ parameters.CODEENGINE_QUALITY }}
+          ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
+            CODEENGINE_CLI_TARGET: x86_64-pc-windows-msvc
+          ${{ if eq(parameters.CODEENGINE_ARCH, 'arm64') }}:
+            CODEENGINE_CLI_TARGET: aarch64-pc-windows-msvc
+          CODEENGINE_CLI_ARTIFACT: unsigned_vscode_cli_win32_$(CODEENGINE_ARCH)_cli
+          CODEENGINE_CHECK_ONLY: ${{ parameters.CODEENGINE_CHECK_ONLY }}
+          CODEENGINE_CLI_ENV:
+            OPENSSL_LIB_DIR: $(Build.ArtifactStagingDirectory)/openssl/$(CODEENGINE_ARCH)-windows-static/lib
+            OPENSSL_INCLUDE_DIR: $(Build.ArtifactStagingDirectory)/openssl/$(CODEENGINE_ARCH)-windows-static/include
+            ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
               RUSTFLAGS: "-Ctarget-feature=+crt-static -Clink-args=/guard:cf -Clink-args=/CETCOMPAT"
-            ${{ if eq(parameters.VSCODE_ARCH, 'arm64') }}:
+            ${{ if eq(parameters.CODEENGINE_ARCH, 'arm64') }}:
               RUSTFLAGS: "-Ctarget-feature=+crt-static -Clink-args=/guard:cf -Clink-args=/CETCOMPAT:NO"
             CFLAGS: "/guard:cf /Qspectre"
 
-      - ${{ if not(parameters.VSCODE_CHECK_ONLY) }}:
+      - ${{ if not(parameters.CODEENGINE_CHECK_ONLY) }}:
         - template: ../common/publish-artifact.yml@self
           parameters:
-            targetPath: $(Build.ArtifactStagingDirectory)/unsigned_vscode_cli_win32_$(VSCODE_ARCH)_cli.zip
-            artifactName: unsigned_vscode_cli_win32_$(VSCODE_ARCH)_cli
+            targetPath: $(Build.ArtifactStagingDirectory)/unsigned_vscode_cli_win32_$(CODEENGINE_ARCH)_cli.zip
+            artifactName: unsigned_vscode_cli_win32_$(CODEENGINE_ARCH)_cli
             displayName: Publish unsigned CLI
             sbomEnabled: false
 
         - task: ExtractFiles@1
           displayName: Extract unsigned CLI
           inputs:
-            archiveFilePatterns: $(Build.ArtifactStagingDirectory)/unsigned_vscode_cli_win32_$(VSCODE_ARCH)_cli.zip
+            archiveFilePatterns: $(Build.ArtifactStagingDirectory)/unsigned_vscode_cli_win32_$(CODEENGINE_ARCH)_cli.zip
             destinationFolder: $(Build.ArtifactStagingDirectory)/sign
 
         - task: UseDotNet@2
@@ -129,4 +129,4 @@ jobs:
             rootFolderOrFile: $(Build.ArtifactStagingDirectory)/sign
             includeRootFolder: false
             archiveType: zip
-            archiveFile: $(Build.ArtifactStagingDirectory)/out/vscode_cli_win32_$(VSCODE_ARCH)_cli.zip
+            archiveFile: $(Build.ArtifactStagingDirectory)/out/vscode_cli_win32_$(CODEENGINE_ARCH)_cli.zip

@@ -162,12 +162,12 @@ class McpServerItemRenderer implements IListRenderer<IMcpServerItemEntry | IMcpB
 		// Show/hide the "Bridged" badge based on active harness
 		templateData.disposables.add(autorun(reader => {
 			const activeId = this.harnessService.activeHarness.read(reader);
-			templateData.bridgedBadge.style.display = activeId !== CustomizationHarness.VSCode ? '' : 'none';
+			templateData.bridgedBadge.style.display = activeId !== CustomizationHarness.CodeEngine ? '' : 'none';
 		}));
 		templateData.disposables.add(this.hoverService.setupManagedHover(
 			getDefaultHoverDelegate('mouse'),
 			templateData.bridgedBadge,
-			localize('bridgedHover', "This server is managed by VS Code and forwarded to all compatible agent sessions."),
+			localize('bridgedHover', "This server is managed by Code Engine and forwarded to all compatible agent sessions."),
 		));
 
 		if (element.type === 'builtin-item') {
@@ -493,7 +493,7 @@ export class McpListWidget extends Disposable {
 		this.sectionDescription.textContent = localize('mcpServersDescription', "An open standard that lets AI use external tools and services. MCP servers provide tools for file operations, databases, APIs, and more.");
 		this.sectionLink = DOM.append(this.sectionHeader, $('a.section-footer-link')) as HTMLAnchorElement;
 		this.sectionLink.textContent = localize('learnMoreMcp', "Learn more about MCP servers");
-		this.sectionLink.href = 'https://code.visualstudio.com/docs/copilot/chat/mcp-servers';
+		this.sectionLink.href = 'https://github.com/graffitiape/codeengine/docs/copilot/chat/mcp-servers';
 		this._register(DOM.addDisposableListener(this.sectionLink, 'click', (e) => {
 			e.preventDefault();
 			const href = this.sectionLink.href;
@@ -798,7 +798,7 @@ export class McpListWidget extends Disposable {
 				icon: extensionIcon,
 				count: extensionServers.length,
 				isFirst,
-				description: localize('extensionGroupDescription', "MCP servers contributed by installed VS Code extensions."),
+				description: localize('extensionGroupDescription', "MCP servers contributed by installed Code Engine extensions."),
 				collapsed,
 			});
 			if (!collapsed) {
@@ -825,7 +825,7 @@ export class McpListWidget extends Disposable {
 				icon: builtinIcon,
 				count: otherBuiltinServers.length,
 				isFirst,
-				description: localize('builtInGroupDescription', "MCP servers built into VS Code. These are available automatically."),
+				description: localize('builtInGroupDescription', "MCP servers built into Code Engine. These are available automatically."),
 				collapsed,
 			});
 			if (!collapsed) {

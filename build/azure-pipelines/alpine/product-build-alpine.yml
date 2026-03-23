@@ -1,28 +1,28 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
 
 jobs:
-  - job: Alpine_${{ parameters.VSCODE_ARCH }}
-    displayName: Alpine (${{ upper(parameters.VSCODE_ARCH) }})
+  - job: Alpine_${{ parameters.CODEENGINE_ARCH }}
+    displayName: Alpine (${{ upper(parameters.CODEENGINE_ARCH) }})
     timeoutInMinutes: 30
     pool:
       name: 1es-ubuntu-22.04-x64
       os: linux
     variables:
-      NPM_ARCH: ${{ parameters.VSCODE_ARCH }}
-      VSCODE_ARCH: ${{ parameters.VSCODE_ARCH }}
+      NPM_ARCH: ${{ parameters.CODEENGINE_ARCH }}
+      CODEENGINE_ARCH: ${{ parameters.CODEENGINE_ARCH }}
     templateContext:
       outputParentDirectory: $(Build.ArtifactStagingDirectory)/out
       outputs:
-        - ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+        - ${{ if eq(parameters.CODEENGINE_ARCH, 'x64') }}:
           # keep legacy name
           - output: pipelineArtifact
             targetPath: $(Build.ArtifactStagingDirectory)/out/server/vscode-server-linux-alpine.tar.gz
             artifactName: vscode_server_linux_alpine_archive-unsigned
             displayName: Publish x64 server archive
             sbomBuildDropPath: $(SERVER_DIR_PATH)
-            sbomPackageName: "VS Code Alpine x64 Server"
+            sbomPackageName: "Code Engine Alpine x64 Server"
             sbomPackageVersion: $(Build.SourceVersion)
           # keep legacy name
           - output: pipelineArtifact
@@ -30,22 +30,22 @@ jobs:
             artifactName: vscode_web_linux_alpine_archive-unsigned
             displayName: Publish x64 web server archive
             sbomBuildDropPath: $(WEB_DIR_PATH)
-            sbomPackageName: "VS Code Alpine x64 Web"
+            sbomPackageName: "Code Engine Alpine x64 Web"
             sbomPackageVersion: $(Build.SourceVersion)
-        - ${{ if ne(parameters.VSCODE_ARCH, 'x64') }}:
+        - ${{ if ne(parameters.CODEENGINE_ARCH, 'x64') }}:
           - output: pipelineArtifact
-            targetPath: $(Build.ArtifactStagingDirectory)/out/server/vscode-server-alpine-$(VSCODE_ARCH).tar.gz
-            artifactName: vscode_server_alpine_$(VSCODE_ARCH)_archive-unsigned
+            targetPath: $(Build.ArtifactStagingDirectory)/out/server/vscode-server-alpine-$(CODEENGINE_ARCH).tar.gz
+            artifactName: vscode_server_alpine_$(CODEENGINE_ARCH)_archive-unsigned
             displayName: Publish server archive
             sbomBuildDropPath: $(SERVER_DIR_PATH)
-            sbomPackageName: "VS Code Alpine $(VSCODE_ARCH) Server"
+            sbomPackageName: "Code Engine Alpine $(CODEENGINE_ARCH) Server"
             sbomPackageVersion: $(Build.SourceVersion)
           - output: pipelineArtifact
-            targetPath: $(Build.ArtifactStagingDirectory)/out/web/vscode-server-alpine-$(VSCODE_ARCH)-web.tar.gz
-            artifactName: vscode_web_alpine_$(VSCODE_ARCH)_archive-unsigned
+            targetPath: $(Build.ArtifactStagingDirectory)/out/web/vscode-server-alpine-$(CODEENGINE_ARCH)-web.tar.gz
+            artifactName: vscode_web_alpine_$(CODEENGINE_ARCH)_archive-unsigned
             displayName: Publish web server archive
             sbomBuildDropPath: $(WEB_DIR_PATH)
-            sbomPackageName: "VS Code Alpine $(VSCODE_ARCH) Web"
+            sbomPackageName: "Code Engine Alpine $(CODEENGINE_ARCH) Web"
             sbomPackageVersion: $(Build.SourceVersion)
     steps:
       - template: ../common/checkout.yml@self
@@ -68,7 +68,7 @@ jobs:
         condition: and(succeeded(), ne(variables['NPM_REGISTRY'], 'none'))
         displayName: Setup NPM Registry
 
-      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts alpine $VSCODE_ARCH $(node -p process.arch) > .build/packagelockhash
+      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts alpine $CODEENGINE_ARCH $(node -p process.arch) > .build/packagelockhash
         displayName: Prepare node_modules cache key
 
       - task: Cache@2
@@ -103,7 +103,7 @@ jobs:
           azureSubscriptionEndpoint: vscode
           azureContainerRegistry: vscodehub.azurecr.io
           command: "Run an image"
-          imageName: "vscode-linux-build-agent:alpine-$(VSCODE_ARCH)"
+          imageName: "vscode-linux-build-agent:alpine-$(CODEENGINE_ARCH)"
           containerCommand: uname
         displayName: "Pull image"
         condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
@@ -117,9 +117,9 @@ jobs:
           mkdir -p .build/nodejs-musl
           NODE_VERSION=$(grep '^target=' remote/.npmrc | cut -d '"' -f 2)
           BUILD_ID=$(grep '^ms_build_id=' remote/.npmrc | cut -d '"' -f 2)
-          gh release download "v${NODE_VERSION}-${BUILD_ID}" -R microsoft/vscode-node -p "node-v${NODE_VERSION}-linux-${VSCODE_ARCH}-musl.tar.gz" --dir .build/nodejs-musl --clobber
-          tar -xzf ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${VSCODE_ARCH}-musl.tar.gz" -C ".build/nodejs-musl" --strip-components=1
-          rm ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${VSCODE_ARCH}-musl.tar.gz"
+          gh release download "v${NODE_VERSION}-${BUILD_ID}" -R microsoft/vscode-node -p "node-v${NODE_VERSION}-linux-${CODEENGINE_ARCH}-musl.tar.gz" --dir .build/nodejs-musl --clobber
+          tar -xzf ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${CODEENGINE_ARCH}-musl.tar.gz" -C ".build/nodejs-musl" --strip-components=1
+          rm ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${CODEENGINE_ARCH}-musl.tar.gz"
         env:
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
         displayName: Download NodeJS MUSL
@@ -141,9 +141,9 @@ jobs:
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
-          VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME: vscodehub.azurecr.io/vscode-linux-build-agent:alpine-$(VSCODE_ARCH)
-          VSCODE_HOST_MOUNT: "/mnt/vss/_work/1/s"
-          VSCODE_NPMRC_PATH: $(NPMRC_PATH)
+          CODEENGINE_REMOTE_DEPENDENCIES_CONTAINER_NAME: vscodehub.azurecr.io/vscode-linux-build-agent:alpine-$(CODEENGINE_ARCH)
+          CODEENGINE_HOST_MOUNT: "/mnt/vss/_work/1/s"
+          CODEENGINE_NPMRC_PATH: $(NPMRC_PATH)
         displayName: Install dependencies
         condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
 
@@ -171,7 +171,7 @@ jobs:
 
       - script: |
           set -e
-          TARGET=$([ "$VSCODE_ARCH" == "x64" ] && echo "linux-alpine" || echo "alpine-arm64") # TODO@joaomoreno
+          TARGET=$([ "$CODEENGINE_ARCH" == "x64" ] && echo "linux-alpine" || echo "alpine-arm64") # TODO@joaomoreno
           npm run gulp vscode-reh-$TARGET-min-ci
           (cd .. && mv vscode-reh-$TARGET vscode-server-$TARGET) # TODO@joaomoreno
           ARCHIVE_PATH="$(Build.ArtifactStagingDirectory)/out/server/vscode-server-$TARGET.tar.gz"
@@ -186,7 +186,7 @@ jobs:
 
       - script: |
           set -e
-          TARGET=$([ "$VSCODE_ARCH" == "x64" ] && echo "linux-alpine" || echo "alpine-arm64")
+          TARGET=$([ "$CODEENGINE_ARCH" == "x64" ] && echo "linux-alpine" || echo "alpine-arm64")
           npm run gulp vscode-reh-web-$TARGET-min-ci
           (cd .. && mv vscode-reh-web-$TARGET vscode-server-$TARGET-web) # TODO@joaomoreno
           ARCHIVE_PATH="$(Build.ArtifactStagingDirectory)/out/web/vscode-server-$TARGET-web.tar.gz"

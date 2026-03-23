@@ -1,10 +1,10 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
 
 jobs:
-  - job: macOSNodeModules_${{ parameters.VSCODE_ARCH }}
-    displayName: macOS (${{ upper(parameters.VSCODE_ARCH) }})
+  - job: macOSNodeModules_${{ parameters.CODEENGINE_ARCH }}
+    displayName: macOS (${{ upper(parameters.CODEENGINE_ARCH) }})
     pool:
       name: AcesShared
       os: macOS
@@ -12,7 +12,7 @@ jobs:
         - ImageOverride -equals ACES_VM_SharedPool_Sequoia
     timeoutInMinutes: 60
     variables:
-      VSCODE_ARCH: ${{ parameters.VSCODE_ARCH }}
+      CODEENGINE_ARCH: ${{ parameters.CODEENGINE_ARCH }}
     steps:
       - template: ../common/checkout.yml@self
 
@@ -34,7 +34,7 @@ jobs:
         condition: and(succeeded(), ne(variables['NPM_REGISTRY'], 'none'))
         displayName: Setup NPM Registry
 
-      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts darwin $VSCODE_ARCH $(node -p process.arch) > .build/packagelockhash
+      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts darwin $CODEENGINE_ARCH $(node -p process.arch) > .build/packagelockhash
         displayName: Prepare node_modules cache key
 
       - task: Cache@2
@@ -75,7 +75,7 @@ jobs:
             echo "Npm install failed $i, trying again..."
           done
         env:
-          npm_config_arch: $(VSCODE_ARCH)
+          npm_config_arch: $(CODEENGINE_ARCH)
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
           GITHUB_TOKEN: "$(github-distro-mixin-password)"

@@ -162,7 +162,7 @@ suite('AgentPluginRepositoryService', () => {
 		const plugin = createPlugin('microsoft/vscode', 'plugins/myPlugin');
 		const uri = service.getPluginInstallUri(plugin);
 
-		assert.strictEqual(uri.path, '/cache/agentPlugins/github.com/microsoft/vscode/plugins/myPlugin');
+		assert.strictEqual(uri.path, '/cache/agentPlugins/github.com/graffitiape/codeengine/plugins/myPlugin');
 	});
 
 	test('uses indexed repository URI when available', () => {

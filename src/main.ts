@@ -54,7 +54,7 @@ if (args['sandbox'] &&
 }
 
 // Set userData path before app 'ready' event
-const userDataPath = getUserDataPath(args, product.nameShort ?? 'code-oss-dev');
+const userDataPath = getUserDataPath(args, product.nameShort ?? 'code-engine-dev');
 if (process.platform === 'win32') {
 	const userDataUNCHost = getUNCHost(userDataPath);
 	if (userDataUNCHost) {
@@ -87,7 +87,7 @@ perf.mark('code/didStartCrashReporter');
 // Set logs path before app 'ready' event if running portable
 // to ensure that no 'logs' folder is created on disk at a
 // location outside of the portable directory
-// (https://github.com/microsoft/vscode/issues/56651)
+// (https://github.com/graffitiape/codeengine/issues/56651)
 if (portable.isPortable) {
 	app.setAppLogsPath(path.join(userDataPath, 'logs'));
 }
@@ -133,7 +133,7 @@ if (userLocale) {
 // Pass in the locale to Electron so that the
 // Windows Control Overlay is rendered correctly on Windows.
 // For now, don't pass in the locale on macOS due to
-// https://github.com/microsoft/vscode/issues/167543.
+// https://github.com/graffitiape/codeengine/issues/167543.
 // If the locale is `qps-ploc`, the Microsoft
 // Pseudo Language Language Pack is being used.
 // In that case, use `en` as the Electron locale.
@@ -201,8 +201,8 @@ async function onReady() {
  * Main startup routine
  */
 async function startup(codeCachePath: string | undefined, nlsConfig: INLSConfiguration): Promise<void> {
-	process.env['VSCODE_NLS_CONFIG'] = JSON.stringify(nlsConfig);
-	process.env['VSCODE_CODE_CACHE_PATH'] = codeCachePath || '';
+	process.env['CODEENGINE_NLS_CONFIG'] = JSON.stringify(nlsConfig);
+	process.env['CODEENGINE_CODE_CACHE_PATH'] = codeCachePath || '';
 
 	// Bootstrap ESM
 	await bootstrapESM();
@@ -241,7 +241,7 @@ function configureCommandlineSwitchesSync(cliArgs: NativeParsedArgs) {
 
 	const SUPPORTED_MAIN_PROCESS_SWITCHES = [
 
-		// Persistently enable proposed api via argv.json: https://github.com/microsoft/vscode/issues/99775
+		// Persistently enable proposed api via argv.json: https://github.com/graffitiape/codeengine/issues/99775
 		'enable-proposed-api',
 
 		// Log level to use. Default is 'info'. Allowed values are 'error', 'warn', 'info', 'debug', 'trace', 'off'.
@@ -320,7 +320,7 @@ function configureCommandlineSwitchesSync(cliArgs: NativeParsedArgs) {
 	});
 
 	// Following features are enabled from the runtime:
-	// `NetAdapterMaxBufSizeFeature` - Specify the max buffer size for NetToMojoPendingBuffer, refs https://github.com/microsoft/vscode/issues/268800
+	// `NetAdapterMaxBufSizeFeature` - Specify the max buffer size for NetToMojoPendingBuffer, refs https://github.com/graffitiape/codeengine/issues/268800
 	// `DocumentPolicyIncludeJSCallStacksInCrashReports` - https://www.electronjs.org/docs/latest/api/web-frame-main#framecollectjavascriptcallstack-experimental
 	// `EarlyEstablishGpuChannel` - Refs https://issues.chromium.org/issues/40208065
 	// `EstablishGpuChannelAsync` - Refs https://issues.chromium.org/issues/40208065
@@ -335,8 +335,8 @@ function configureCommandlineSwitchesSync(cliArgs: NativeParsedArgs) {
 	app.commandLine.appendSwitch('disable-features', featuresToDisable);
 
 	// Blink features to configure.
-	// `FontMatchingCTMigration` - Siwtch font matching on macOS to Appkit (Refs https://github.com/microsoft/vscode/issues/224496#issuecomment-2270418470).
-	// `StandardizedBrowserZoom` - Disable zoom adjustment for bounding box (https://github.com/microsoft/vscode/issues/232750#issuecomment-2459495394)
+	// `FontMatchingCTMigration` - Siwtch font matching on macOS to Appkit (Refs https://github.com/graffitiape/codeengine/issues/224496#issuecomment-2270418470).
+	// `StandardizedBrowserZoom` - Disable zoom adjustment for bounding box (https://github.com/graffitiape/codeengine/issues/232750#issuecomment-2459495394)
 	const blinkFeaturesToDisable =
 		`FontMatchingCTMigration,StandardizedBrowserZoom,${app.commandLine.getSwitchValue('disable-blink-features')}`;
 	app.commandLine.appendSwitch('disable-blink-features', blinkFeaturesToDisable);
@@ -348,7 +348,7 @@ function configureCommandlineSwitchesSync(cliArgs: NativeParsedArgs) {
 	}
 
 	// Use portal version 4 that supports current_folder option
-	// to address https://github.com/microsoft/vscode/issues/213780
+	// to address https://github.com/graffitiape/codeengine/issues/213780
 	// Runtime sets the default version to 3, refs https://github.com/electron/electron/pull/44426
 	app.commandLine.appendSwitch('xdg-portal-required-version', '4');
 
@@ -411,16 +411,16 @@ function createDefaultArgvConfigSync(argvConfigPath: string): void {
 
 		// Default argv content
 		const defaultArgvConfigContent = [
-			'// This configuration file allows you to pass permanent command line arguments to VS Code.',
+			'// This configuration file allows you to pass permanent command line arguments to Code Engine.',
 			'// Only a subset of arguments is currently supported to reduce the likelihood of breaking',
 			'// the installation.',
 			'//',
 			'// PLEASE DO NOT CHANGE WITHOUT UNDERSTANDING THE IMPACT',
 			'//',
-			'// NOTE: Changing this file requires a restart of VS Code.',
+			'// NOTE: Changing this file requires a restart of Code Engine.',
 			'{',
 			'	// Use software rendering instead of hardware accelerated rendering.',
-			'	// This can help in cases where you see rendering issues in VS Code.',
+			'	// This can help in cases where you see rendering issues in Code Engine.',
 			'	// "disable-hardware-acceleration": true',
 			'}'
 		];
@@ -433,13 +433,13 @@ function createDefaultArgvConfigSync(argvConfigPath: string): void {
 }
 
 function getArgvConfigPath(): string {
-	const vscodePortable = process.env['VSCODE_PORTABLE'];
+	const vscodePortable = process.env['CODEENGINE_PORTABLE'];
 	if (vscodePortable) {
 		return path.join(vscodePortable, 'argv.json');
 	}
 
 	let dataFolderName = product.dataFolderName;
-	if (process.env['VSCODE_DEV']) {
+	if (process.env['CODEENGINE_DEV']) {
 		dataFolderName = `${dataFolderName}-dev`;
 	}
 
@@ -527,10 +527,10 @@ function configureCrashReporter(): void {
 	// Start crash reporter for all processes
 	const productName = (product.crashReporter ? product.crashReporter.productName : undefined) || product.nameShort;
 	const companyName = (product.crashReporter ? product.crashReporter.companyName : undefined) || 'Microsoft';
-	const uploadToServer = Boolean(!process.env['VSCODE_DEV'] && submitURL && !crashReporterDirectory);
+	const uploadToServer = Boolean(!process.env['CODEENGINE_DEV'] && submitURL && !crashReporterDirectory);
 	crashReporter.start({
 		companyName,
-		productName: process.env['VSCODE_DEV'] ? `${productName} Dev` : productName,
+		productName: process.env['CODEENGINE_DEV'] ? `${productName} Dev` : productName,
 		submitURL,
 		uploadToServer,
 		compress: true,
@@ -589,7 +589,7 @@ function parseCLIArgs(): NativeParsedArgs {
 function registerListeners(): void {
 
 	/**
-	 * macOS: when someone drops a file to the not-yet running VSCode, the open-file event fires even before
+	 * macOS: when someone drops a file to the not-yet running CodeEngine, the open-file event fires even before
 	 * the app-ready event. We listen very early for open-file and remember this upon startup as path to open.
 	 */
 	const macOpenFiles: string[] = [];
@@ -628,7 +628,7 @@ function getCodeCachePath(): string | undefined {
 	}
 
 	// running out of sources
-	if (process.env['VSCODE_DEV']) {
+	if (process.env['CODEENGINE_DEV']) {
 		return undefined;
 	}
 

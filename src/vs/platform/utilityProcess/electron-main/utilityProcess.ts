@@ -277,11 +277,11 @@ export class UtilityProcess extends Disposable {
 		const env: NodeJS.ProcessEnv = configuration.env ? { ...configuration.env } : { ...deepClone(process.env) };
 
 		// Apply supported environment variables from config
-		env['VSCODE_ESM_ENTRYPOINT'] = configuration.entryPoint;
+		env['CODEENGINE_ESM_ENTRYPOINT'] = configuration.entryPoint;
 		if (typeof configuration.parentLifecycleBound === 'number') {
-			env['VSCODE_PARENT_PID'] = String(configuration.parentLifecycleBound);
+			env['CODEENGINE_PARENT_PID'] = String(configuration.parentLifecycleBound);
 		}
-		env['VSCODE_CRASH_REPORTER_PROCESS_TYPE'] = configuration.type;
+		env['CODEENGINE_CRASH_REPORTER_PROCESS_TYPE'] = configuration.type;
 		if (isWindows) {
 			if (isUNCAccessRestrictionsDisabled()) {
 				env['NODE_DISABLE_UNC_ACCESS_CHECKS'] = '1';

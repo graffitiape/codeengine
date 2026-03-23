@@ -8,7 +8,7 @@ import * as child_process from 'child_process';
 import * as os from 'os';
 import { isUpToDate, forceInstallMessage } from './installStateHash.ts';
 
-if (!process.env['VSCODE_SKIP_NODE_VERSION_CHECK']) {
+if (!process.env['CODEENGINE_SKIP_NODE_VERSION_CHECK']) {
 	// Get the running Node.js version
 	const nodeVersion = /^(\d+)\.(\d+)\.(\d+)/.exec(process.versions.node);
 	const majorNodeVersion = parseInt(nodeVersion![1]);
@@ -44,14 +44,14 @@ if (process.env.npm_execpath?.includes('yarn')) {
 
 // Fast path: if nothing changed since last successful install, skip everything.
 // This makes `npm i` near-instant when dependencies haven't changed.
-if (!process.env['VSCODE_FORCE_INSTALL'] && isUpToDate()) {
+if (!process.env['CODEENGINE_FORCE_INSTALL'] && isUpToDate()) {
 	console.log(`\x1b[32mAll dependencies up to date.\x1b[0m ${forceInstallMessage}`);
 	process.exit(0);
 }
 
 if (process.platform === 'win32') {
 	if (!hasSupportedVisualStudioVersion()) {
-		console.error('\x1b[1;31m*** Invalid C/C++ Compiler Toolchain. Please check https://github.com/microsoft/vscode/wiki/How-to-Contribute#prerequisites.\x1b[0;0m');
+		console.error('\x1b[1;31m*** Invalid C/C++ Compiler Toolchain. Please check https://github.com/graffitiape/codeengine/wiki/How-to-Contribute#prerequisites.\x1b[0;0m');
 		console.error('\x1b[1;31m*** If you have Visual Studio installed in a custom location, you can specify it via the environment variable:\x1b[0;0m');
 		console.error('\x1b[1;31m*** set vs2022_install=<path> (or vs2019_install for older versions)\x1b[0;0m');
 		throw new Error();

@@ -35,10 +35,10 @@ export class Askpass implements IIPCHandler, ITerminalEnvironmentProvider {
 		this.env = {
 			// GIT_ASKPASS
 			GIT_ASKPASS: askpassScript,
-			// VSCODE_GIT_ASKPASS
-			VSCODE_GIT_ASKPASS_NODE: process.execPath,
-			VSCODE_GIT_ASKPASS_EXTRA_ARGS: '',
-			VSCODE_GIT_ASKPASS_MAIN: askpassPaths.askpassMain
+			// CODEENGINE_GIT_ASKPASS
+			CODEENGINE_GIT_ASKPASS_NODE: process.execPath,
+			CODEENGINE_GIT_ASKPASS_EXTRA_ARGS: '',
+			CODEENGINE_GIT_ASKPASS_MAIN: askpassPaths.askpassMain
 		};
 
 		this.sshEnv = {

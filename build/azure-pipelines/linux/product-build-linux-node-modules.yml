@@ -1,19 +1,19 @@
 parameters:
   - name: NPM_ARCH
     type: string
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
 
 jobs:
-  - job: LinuxNodeModules_${{ parameters.VSCODE_ARCH }}
-    displayName: Linux (${{ upper(parameters.VSCODE_ARCH) }})
+  - job: LinuxNodeModules_${{ parameters.CODEENGINE_ARCH }}
+    displayName: Linux (${{ upper(parameters.CODEENGINE_ARCH) }})
     pool:
       name: 1es-ubuntu-22.04-x64
       os: linux
     timeoutInMinutes: 60
     variables:
       NPM_ARCH: ${{ parameters.NPM_ARCH }}
-      VSCODE_ARCH: ${{ parameters.VSCODE_ARCH }}
+      CODEENGINE_ARCH: ${{ parameters.CODEENGINE_ARCH }}
     steps:
       - template: ../common/checkout.yml@self
 
@@ -54,7 +54,7 @@ jobs:
         condition: and(succeeded(), ne(variables['NPM_REGISTRY'], 'none'))
         displayName: Setup NPM Registry
 
-      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts linux $VSCODE_ARCH $(node -p process.arch) > .build/packagelockhash
+      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts linux $CODEENGINE_ARCH $(node -p process.arch) > .build/packagelockhash
         displayName: Prepare node_modules cache key
 
       - task: Cache@2
@@ -101,14 +101,14 @@ jobs:
       # hence avoid adding it behind NODE_MODULES_RESTORED condition.
       - script: |
           set -e
-          SYSROOT_ARCH=$VSCODE_ARCH
+          SYSROOT_ARCH=$CODEENGINE_ARCH
           if [ "$SYSROOT_ARCH" == "x64" ]; then
             SYSROOT_ARCH="amd64"
           fi
-          export VSCODE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0
-          SYSROOT_ARCH="$SYSROOT_ARCH" VSCODE_SYSROOT_PREFIX="-glibc-2.28-gcc-8.5.0" node -e 'import { getVSCodeSysroot } from "./build/linux/debian/install-sysroot.ts"; (async () => { await getVSCodeSysroot(process.env["SYSROOT_ARCH"]); })()'
+          export CODEENGINE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0
+          SYSROOT_ARCH="$SYSROOT_ARCH" CODEENGINE_SYSROOT_PREFIX="-glibc-2.28-gcc-8.5.0" node -e 'import { getVSCodeSysroot } from "./build/linux/debian/install-sysroot.ts"; (async () => { await getVSCodeSysroot(process.env["SYSROOT_ARCH"]); })()'
         env:
-          VSCODE_ARCH: $(VSCODE_ARCH)
+          CODEENGINE_ARCH: $(CODEENGINE_ARCH)
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
         displayName: Download vscode sysroots
         condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
@@ -132,7 +132,7 @@ jobs:
           done
         env:
           npm_config_arch: $(NPM_ARCH)
-          VSCODE_ARCH: $(VSCODE_ARCH)
+          CODEENGINE_ARCH: $(CODEENGINE_ARCH)
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
           GITHUB_TOKEN: "$(github-distro-mixin-password)"

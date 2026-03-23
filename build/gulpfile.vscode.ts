@@ -139,7 +139,7 @@ const bootstrapEntryPoints = [
 	'out-build/bootstrap-fork.js'
 ];
 
-const bundleVSCodeTask = task.define('bundle-vscode', task.series(
+const bundleCodeEngineTask = task.define('bundle-vscode', task.series(
 	util.rimraf('out-vscode'),
 	// Optimize: bundles source files automatically based on
 	// import statements based on the passed in entry points.
@@ -160,7 +160,7 @@ const bundleVSCodeTask = task.define('bundle-vscode', task.series(
 		}
 	)
 ));
-gulp.task(bundleVSCodeTask);
+gulp.task(bundleCodeEngineTask);
 
 // esbuild-based bundle tasks (drop-in replacement for bundle-vscode / minify-vscode)
 function runEsbuildTranspile(outDir: string, excludeTests: boolean): Promise<void> {
@@ -242,12 +242,12 @@ const sourceMappingURLBase = `https://main.vscode-cdn.net/sourcemaps/${commit}`;
 const isCI = !!process.env['CI'] || !!process.env['BUILD_ARTIFACTSTAGINGDIRECTORY'] || !!process.env['GITHUB_WORKSPACE'];
 const useCdnSourceMapsForPackagingTasks = isCI;
 const stripSourceMapsInPackagingTasks = isCI;
-const minifyVSCodeTask = task.define('minify-vscode', task.series(
-	bundleVSCodeTask,
+const minifyCodeEngineTask = task.define('minify-vscode', task.series(
+	bundleCodeEngineTask,
 	util.rimraf('out-vscode-min'),
 	optimize.minifyTask('out-vscode', `${sourceMappingURLBase}/core`)
 ));
-gulp.task(minifyVSCodeTask);
+gulp.task(minifyCodeEngineTask);
 
 gulp.task(task.define('core-ci-old', task.series(
 	gulp.task('compile-build-with-mangling') as task.Task,
@@ -549,7 +549,7 @@ function packageTask(platform: string, arch: string, sourceFolderName: string, d
 		let result: NodeJS.ReadWriteStream = all
 			.pipe(util.skipDirectories())
 			.pipe(util.fixWin32DirectoryPermissions())
-			.pipe(filter(['**', '!**/.github/**'], { dot: true })) // https://github.com/microsoft/vscode/issues/116523
+			.pipe(filter(['**', '!**/.github/**'], { dot: true })) // https://github.com/graffitiape/codeengine/issues/116523
 			.pipe(electron(electronConfig))
 			.pipe(filter([
 				'**',
@@ -716,7 +716,7 @@ BUILD_TARGETS.forEach(buildTarget => {
 
 	const [vscode, vscodeMin] = ['', 'min'].map(minified => {
 		const sourceFolderName = `out-vscode${dashed(minified)}`;
-		const destinationFolderName = `VSCode${dashed(platform)}${dashed(arch)}`;
+		const destinationFolderName = `CodeEngine${dashed(platform)}${dashed(arch)}`;
 
 		const packageTasks: task.Task[] = [
 			compileNativeExtensionsBuildTask,
@@ -759,7 +759,7 @@ BUILD_TARGETS.forEach(buildTarget => {
 				cleanExtensionsBuildTask,
 				compileNonNativeExtensionsBuildTask,
 				compileExtensionMediaBuildTask,
-				minified ? minifyVSCodeTask : bundleVSCodeTask,
+				minified ? minifyCodeEngineTask : bundleCodeEngineTask,
 				vscodeTaskCI
 			));
 		}

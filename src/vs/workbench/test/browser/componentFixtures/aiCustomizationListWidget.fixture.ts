@@ -13,7 +13,7 @@ import { IFileService } from '../../../../platform/files/common/files.js';
 import { IListService, ListService } from '../../../../platform/list/browser/listService.js';
 import { IWorkspace, IWorkspaceContextService } from '../../../../platform/workspace/common/workspace.js';
 import { IAICustomizationWorkspaceService, IStorageSourceFilter } from '../../../contrib/chat/common/aiCustomizationWorkspaceService.js';
-import { CustomizationHarness, ICustomizationHarnessService, IHarnessDescriptor, createVSCodeHarnessDescriptor } from '../../../contrib/chat/common/customizationHarnessService.js';
+import { CustomizationHarness, ICustomizationHarnessService, IHarnessDescriptor, createCodeEngineHarnessDescriptor } from '../../../contrib/chat/common/customizationHarnessService.js';
 import { IAgentPluginService } from '../../../contrib/chat/common/plugins/agentPluginService.js';
 import { PromptsType } from '../../../contrib/chat/common/promptSyntax/promptTypes.js';
 import { IPromptsService, IResolvedAgentFile, AgentFileType, PromptsStorage, IPromptPath } from '../../../contrib/chat/common/promptSyntax/service/promptsService.js';
@@ -96,9 +96,9 @@ function createMockWorkspaceService(): IAICustomizationWorkspaceService {
 }
 
 function createMockHarnessService(): ICustomizationHarnessService {
-	const descriptor = createVSCodeHarnessDescriptor([PromptsStorage.extension]);
+	const descriptor = createCodeEngineHarnessDescriptor([PromptsStorage.extension]);
 	return new class extends mock<ICustomizationHarnessService>() {
-		override readonly activeHarness = observableValue('activeHarness', CustomizationHarness.VSCode);
+		override readonly activeHarness = observableValue('activeHarness', CustomizationHarness.CodeEngine);
 		override readonly availableHarnesses = observableValue<readonly IHarnessDescriptor[]>('harnesses', [descriptor]);
 		override getStorageSourceFilter() { return defaultFilter; }
 		override getActiveDescriptor() { return descriptor; }

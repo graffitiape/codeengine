@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-/// <reference path="../../src/typings/vscode-globals-product.d.ts" />
+/// <reference path="../../src/typings/codeengine-globals-product.d.ts" />
 
 import { enableHotReload } from '../../src/vs/base/common/hotReload.ts';
 import { getSingletonServiceDescriptors, InstantiationType, registerSingleton } from '../../src/vs/platform/instantiation/common/extensions.ts';
@@ -27,5 +27,5 @@ descriptors.push = function (item: any) {
 	return originalPush.call(this, item);
 };
 
-globalThis._VSCODE_DISABLE_CSS_IMPORT_MAP = true;
-globalThis._VSCODE_USE_RELATIVE_IMPORTS = true;
+globalThis._CODEENGINE_DISABLE_CSS_IMPORT_MAP = true;
+globalThis._CODEENGINE_USE_RELATIVE_IMPORTS = true;

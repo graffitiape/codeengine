@@ -572,15 +572,15 @@ export class AICustomizationManagementEditor extends EditorPane {
 
 		// When the harness selector setting is off, lock to Local harness.
 		// In Sessions (single CLI harness) the dropdown is already hidden and
-		// setActiveHarness(VSCode) is a safe no-op since the CLI harness
+		// setActiveHarness(CodeEngine) is a safe no-op since the CLI harness
 		// remains active — filtering stays correct for that window.
 		if (!this.isHarnessSelectorEnabled) {
-			this.harnessService.setActiveHarness(CustomizationHarness.VSCode);
+			this.harnessService.setActiveHarness(CustomizationHarness.CodeEngine);
 		}
 		this.editorDisposables.add(this.configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration(ChatConfiguration.ChatCustomizationHarnessSelectorEnabled)) {
 				if (!this.isHarnessSelectorEnabled) {
-					this.harnessService.setActiveHarness(CustomizationHarness.VSCode);
+					this.harnessService.setActiveHarness(CustomizationHarness.CodeEngine);
 				}
 			}
 		}));
@@ -755,7 +755,7 @@ export class AICustomizationManagementEditor extends EditorPane {
 			modelsDescription.textContent = localize('modelsDescription', "Browse and manage language models from different providers. Select models for use in chat, code completion, and other AI features.");
 			const modelsLink = DOM.append(this.modelsFooterElement, $('a.section-footer-link')) as HTMLAnchorElement;
 			modelsLink.textContent = localize('learnMoreModels', "Learn more about language models");
-			modelsLink.href = 'https://code.visualstudio.com/docs/copilot/customization/language-models';
+			modelsLink.href = 'https://github.com/graffitiape/codeengine/docs/copilot/customization/language-models';
 			this.editorDisposables.add(DOM.addDisposableListener(modelsLink, 'click', (e) => {
 				e.preventDefault();
 				this.openerService.open(URI.parse(modelsLink.href));

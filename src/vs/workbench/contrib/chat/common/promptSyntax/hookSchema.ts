@@ -159,9 +159,9 @@ function buildHookProperties(target: Target, arraySchema: IJSONSchema): Record<s
 }
 
 /**
- * Hook properties for the VS Code format.
+ * Hook properties for the Code Engine format.
  */
-const vscodeHookProperties: Record<string, IJSONSchema> = buildHookProperties(Target.VSCode, hookArraySchema);
+const vscodeHookProperties: Record<string, IJSONSchema> = buildHookProperties(Target.CodeEngine, hookArraySchema);
 
 /**
  * Hook command schema for the Copilot CLI format.
@@ -251,7 +251,7 @@ export const hookFileSchema: IJSONSchema = {
 		}
 	},
 	else: {
-		// VS Code / PascalCase format
+		// Code Engine / PascalCase format
 		properties: {
 			hooks: {
 				properties: vscodeHookProperties

@@ -17,12 +17,12 @@ import { INodeProcess } from '../../../base/common/platform.js';
 // eslint-disable-next-line local/code-import-patterns
 import { resolve, isAbsolute, join } from 'path';
 
-const cwd = process.env['VSCODE_CWD'] || process.cwd();
+const cwd = process.env['CODEENGINE_CWD'] || process.cwd();
 
 /**
  * Returns the user data path to use with some rules:
  * - respect portable mode
- * - respect VSCODE_APPDATA environment variable
+ * - respect CODEENGINE_APPDATA environment variable
  * - respect --user-data-dir CLI argument
  */
 export function getUserDataPath(cliArgs: NativeParsedArgs, productName: string): string {
@@ -33,8 +33,8 @@ export function getUserDataPath(cliArgs: NativeParsedArgs, productName: string):
 	// sure to resolve it against the passed in
 	// current working directory. We cannot use the
 	// node.js `path.resolve()` logic because it will
-	// not pick up our `VSCODE_CWD` environment variable
-	// (https://github.com/microsoft/vscode/issues/120269)
+	// not pick up our `CODEENGINE_CWD` environment variable
+	// (https://github.com/graffitiape/codeengine/issues/120269)
 	if (!isAbsolute(userDataPath)) {
 		pathsToResolve.unshift(cwd);
 	}
@@ -45,29 +45,29 @@ export function getUserDataPath(cliArgs: NativeParsedArgs, productName: string):
 function doGetUserDataPath(cliArgs: NativeParsedArgs, productName: string): string {
 
 	// 0. Running out of sources has a fixed productName
-	if (process.env['VSCODE_DEV']) {
+	if (process.env['CODEENGINE_DEV']) {
 		if ((process as INodeProcess).isEmbeddedApp) {
-			productName = 'sessions-oss-dev';
+			productName = 'sessions-engine-dev';
 		} else {
-			productName = 'code-oss-dev';
+			productName = 'code-engine-dev';
 		}
 	}
 
 	// 1. Support portable mode
-	const portablePath = process.env['VSCODE_PORTABLE'];
+	const portablePath = process.env['CODEENGINE_PORTABLE'];
 	if (portablePath) {
 		return join(portablePath, 'user-data');
 	}
 
-	// 2. Support global VSCODE_APPDATA environment variable
-	let appDataPath = process.env['VSCODE_APPDATA'];
+	// 2. Support global CODEENGINE_APPDATA environment variable
+	let appDataPath = process.env['CODEENGINE_APPDATA'];
 	if (appDataPath) {
 		return join(appDataPath, productName);
 	}
 
 	// With Electron>=13 --user-data-dir switch will be propagated to
 	// all processes https://github.com/electron/electron/blob/1897b14af36a02e9aa7e4d814159303441548251/shell/browser/electron_browser_client.cc#L546-L553
-	// Check VSCODE_PORTABLE and VSCODE_APPDATA before this case to get correct values.
+	// Check CODEENGINE_PORTABLE and CODEENGINE_APPDATA before this case to get correct values.
 	// 3. Support explicit --user-data-dir
 	const cliPath = cliArgs['user-data-dir'];
 	if (cliPath) {

@@ -5,7 +5,7 @@
 
 declare module 'vscode' {
 
-	// https://github.com/microsoft/vscode/issues/175662
+	// https://github.com/graffitiape/codeengine/issues/175662
 
 	export interface QuickPickItem {
 		/**

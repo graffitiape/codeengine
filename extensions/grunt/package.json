@@ -1,8 +1,8 @@
 {
   "name": "grunt",
   "publisher": "vscode",
-  "description": "Extension to add Grunt capabilities to VS Code.",
-  "displayName": "Grunt support for VS Code",
+  "description": "Extension to add Grunt capabilities to Code Engine.",
+  "displayName": "Grunt support for Code Engine",
   "version": "10.0.0",
   "private": true,
   "icon": "images/grunt.png",
@@ -75,6 +75,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/vscode.git"
+    "url": "https://github.com/graffitiape/codeengine.git"
   }
 }

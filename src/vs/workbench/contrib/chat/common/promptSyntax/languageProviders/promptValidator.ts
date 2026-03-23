@@ -150,7 +150,7 @@ export class PromptValidator {
 		}
 
 		// Validate variable references (tool or toolset names)
-		if (body.variableReferences.length && isVSCodeOrDefaultTarget(target)) {
+		if (body.variableReferences.length && isCodeEngineOrDefaultTarget(target)) {
 			const headerTools = promptAST.header?.tools;
 			const headerToolsMap = headerTools ? this.languageModelToolsService.toToolAndToolSetEnablementMap(headerTools, undefined) : undefined;
 
@@ -221,7 +221,7 @@ export class PromptValidator {
 				if (this.configurationService.getValue<boolean>(PromptsConfig.USE_CUSTOM_AGENT_HOOKS)) {
 					this.validateHooks(attributes, target, report);
 				}
-				if (isVSCodeOrDefaultTarget(target)) {
+				if (isCodeEngineOrDefaultTarget(target)) {
 					this.validateModel(attributes, ChatModeKind.Agent, report);
 					this.validateHandoffs(attributes, report);
 					await this.validateAgentsAttribute(attributes, header, report);
@@ -269,9 +269,9 @@ export class PromptValidator {
 							// ignore for now as we don't have a full list of supported attributes for claude target
 						} else {
 							if (validGithubCopilotAttributeNames.value.has(attribute.key)) {
-								report(toMarker(localize('promptValidator.ignoredAttribute.vscode-agent', "Attribute '{0}' is ignored when running locally in VS Code.", attribute.key), attribute.range, MarkerSeverity.Info));
+								report(toMarker(localize('promptValidator.ignoredAttribute.vscode-agent', "Attribute '{0}' is ignored when running locally in Code Engine.", attribute.key), attribute.range, MarkerSeverity.Info));
 							} else {
-								report(toMarker(localize('promptValidator.unknownAttribute.vscode-agent', "Attribute '{0}' is not supported in VS Code agent files. Supported: {1}.", attribute.key, supportedNames.value), attribute.range, MarkerSeverity.Warning));
+								report(toMarker(localize('promptValidator.unknownAttribute.vscode-agent', "Attribute '{0}' is not supported in Code Engine agent files. Supported: {1}.", attribute.key, supportedNames.value), attribute.range, MarkerSeverity.Warning));
 							}
 						}
 						break;
@@ -485,11 +485,11 @@ export class PromptValidator {
 		if (target === Target.GitHubCopilot || target === Target.Claude) {
 			// no validation for github-copilot target and claude
 		} else {
-			this.validateVSCodeTools(value, report);
+			this.validateCodeEngineTools(value, report);
 		}
 	}
 
-	private validateVSCodeTools(valueItem: ISequenceValue, report: (markers: IMarkerData) => void) {
+	private validateCodeEngineTools(valueItem: ISequenceValue, report: (markers: IMarkerData) => void) {
 		if (valueItem.items.length > 0) {
 			const available = new Set<string>(this.languageModelToolsService.getFullReferenceNames());
 			const deprecatedNames = this.languageModelToolsService.getDeprecatedFullReferenceNames();
@@ -1094,7 +1094,7 @@ export function mapClaudeModels(claudeModelNames: readonly string[]): readonly s
 }
 
 /**
- * Maps Claude tool names to their VS Code tool equivalents.
+ * Maps Claude tool names to their Code Engine tool equivalents.
  */
 export function mapClaudeTools(claudeToolNames: readonly string[]): string[] {
 	const result: string[] = [];
@@ -1186,8 +1186,8 @@ export const claudeRulesAttributes: Record<string, { type: string; description: 
 	},
 };
 
-export function isVSCodeOrDefaultTarget(target: Target): boolean {
-	return target === Target.VSCode || target === Target.Undefined;
+export function isCodeEngineOrDefaultTarget(target: Target): boolean {
+	return target === Target.CodeEngine || target === Target.Undefined;
 }
 
 export function getTarget(promptType: PromptsType, header: PromptHeader | URI): Target {
@@ -1199,7 +1199,7 @@ export function getTarget(promptType: PromptsType, header: PromptHeader | URI): 
 		}
 		if (!(header instanceof URI)) {
 			const target = header.target;
-			if (target === Target.GitHubCopilot || target === Target.VSCode) {
+			if (target === Target.GitHubCopilot || target === Target.CodeEngine) {
 				return target;
 			}
 		}

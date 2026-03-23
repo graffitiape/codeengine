@@ -28,10 +28,10 @@ function log(...args: unknown[]): void {
 }
 
 function main() {
-	const quality = process.env['VSCODE_QUALITY'];
+	const quality = process.env['CODEENGINE_QUALITY'];
 
 	if (!quality) {
-		throw new Error('Missing VSCODE_QUALITY, skipping mixin');
+		throw new Error('Missing CODEENGINE_QUALITY, skipping mixin');
 	}
 
 	log(`Mixing in distro quality...`);

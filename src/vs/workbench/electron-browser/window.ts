@@ -256,8 +256,8 @@ export class NativeWindow extends BaseWindow {
 					label: localize('downloadArmBuild', "Download"),
 					run: () => {
 						const quality = this.productService.quality;
-						const stableURL = 'https://code.visualstudio.com/docs/?dv=osx';
-						const insidersURL = 'https://code.visualstudio.com/docs/?dv=osx&build=insiders';
+						const stableURL = 'https://github.com/graffitiape/codeengine/docs/?dv=osx';
+						const insidersURL = 'https://github.com/graffitiape/codeengine/docs/?dv=osx&build=insiders';
 						this.openerService.open(quality === 'stable' ? stableURL : insidersURL);
 					}
 				}],
@@ -730,10 +730,10 @@ export class NativeWindow extends BaseWindow {
 		if (this.environmentService.isBuilt && !this.environmentService.extensionDevelopmentLocationURI?.length) {
 			let installLocationUri: URI;
 			if (isMacintosh) {
-				// appRoot = /Applications/Visual Studio Code - Insiders.app/Contents/Resources/app
+				// appRoot = /Applications/Code Engine - Insiders.app/Contents/Resources/app
 				installLocationUri = dirname(dirname(dirname(URI.file(this.nativeEnvironmentService.appRoot))));
 			} else {
-				// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\resources\app
+				// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft Code Engine Insiders\resources\app
 				// appRoot = /usr/share/code-insiders/resources/app
 				installLocationUri = dirname(dirname(URI.file(this.nativeEnvironmentService.appRoot)));
 			}

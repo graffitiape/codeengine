@@ -81,7 +81,7 @@ if (typeof nodeProcess === 'object') {
 	_isCI = !!nodeProcess.env['CI'] || !!nodeProcess.env['BUILD_ARTIFACTSTAGINGDIRECTORY'] || !!nodeProcess.env['GITHUB_WORKSPACE'];
 	_locale = LANGUAGE_DEFAULT;
 	_language = LANGUAGE_DEFAULT;
-	const rawNlsConfig = nodeProcess.env['VSCODE_NLS_CONFIG'];
+	const rawNlsConfig = nodeProcess.env['CODEENGINE_NLS_CONFIG'];
 	if (rawNlsConfig) {
 		try {
 			const nlsConfig: nls.INLSConfiguration = JSON.parse(rawNlsConfig);

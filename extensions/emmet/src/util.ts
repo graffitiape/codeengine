@@ -54,7 +54,7 @@ export function updateEmmetExtensionsPath(forceRefresh: boolean = false) {
 
 /**
  * Migrate old configuration(string) for extensionsPath to new type(string[])
- * https://github.com/microsoft/vscode/issues/117517
+ * https://github.com/graffitiape/codeengine/issues/117517
  */
 export function migrateEmmetExtensionsPath() {
 	// Get the detail info of emmet.extensionsPath setting
@@ -117,7 +117,7 @@ export function validate(allowStylesheet: boolean = true): boolean {
 }
 
 export function getMappingForIncludedLanguages(): Record<string, string> {
-	// Explicitly map languages that have built-in grammar in VS Code to their parent language
+	// Explicitly map languages that have built-in grammar in Code Engine to their parent language
 	// to get emmet completion support
 	// For other languages, users will have to use `emmet.includeLanguages` or
 	// language specific extensions can provide emmet completion support

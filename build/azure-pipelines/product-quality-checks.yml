@@ -74,10 +74,10 @@ jobs:
 
       - script: |
           set -e
-          export VSCODE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0
-          SYSROOT_ARCH="amd64" VSCODE_SYSROOT_PREFIX="-glibc-2.28-gcc-8.5.0" node -e 'import { getVSCodeSysroot } from "./build/linux/debian/install-sysroot.ts"; (async () => { await getVSCodeSysroot(process.env["SYSROOT_ARCH"]); })()'
+          export CODEENGINE_SYSROOT_DIR=$(Build.SourcesDirectory)/.build/sysroots/glibc-2.28-gcc-8.5.0
+          SYSROOT_ARCH="amd64" CODEENGINE_SYSROOT_PREFIX="-glibc-2.28-gcc-8.5.0" node -e 'import { getVSCodeSysroot } from "./build/linux/debian/install-sysroot.ts"; (async () => { await getVSCodeSysroot(process.env["SYSROOT_ARCH"]); })()'
         env:
-          VSCODE_ARCH: x64
+          CODEENGINE_ARCH: x64
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
         displayName: Download vscode sysroots
 
@@ -97,7 +97,7 @@ jobs:
           done
         env:
           npm_config_arch: x64
-          VSCODE_ARCH: x64
+          CODEENGINE_ARCH: x64
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
@@ -125,12 +125,12 @@ jobs:
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
           BUILD_SOURCEBRANCH: "$(Build.SourceBranch)"
         continueOnError: true
-        condition: and(succeeded(), eq(lower(variables['VSCODE_PUBLISH']), 'true'))
+        condition: and(succeeded(), eq(lower(variables['CODEENGINE_PUBLISH']), 'true'))
 
       - script: node build/azure-pipelines/common/checkCopilotChatCompatibility.ts --warn-only
         displayName: Check Copilot Chat compatibility
         continueOnError: true
-        condition: and(succeeded(), eq(lower(variables['VSCODE_PUBLISH']), 'true'))
+        condition: and(succeeded(), eq(lower(variables['CODEENGINE_PUBLISH']), 'true'))
 
       - script: npm exec -- npm-run-all2 -lp core-ci hygiene eslint valid-layers-check define-class-fields-check vscode-dts-compile-check tsec-compile-check test-build-scripts
         env:
@@ -141,7 +141,7 @@ jobs:
         env:
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
         displayName: Download component details of built-in extensions
-        condition: and(succeeded(), eq(lower(variables['VSCODE_PUBLISH']), 'true'))
+        condition: and(succeeded(), eq(lower(variables['CODEENGINE_PUBLISH']), 'true'))
 
       - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
         displayName: "Component Detection"
@@ -149,7 +149,7 @@ jobs:
           sourceScanPath: $(Build.SourcesDirectory)
           alertWarningLevel: Medium
         continueOnError: true
-        condition: and(succeeded(), eq(lower(variables['VSCODE_PUBLISH']), 'true'))
+        condition: and(succeeded(), eq(lower(variables['CODEENGINE_PUBLISH']), 'true'))
 
       - task: AzureCLI@2
         displayName: Fetch secrets
@@ -162,7 +162,7 @@ jobs:
             Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID]$env:tenantId"
             Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID]$env:servicePrincipalId"
             Write-Host "##vso[task.setvariable variable=AZURE_ID_TOKEN;issecret=true]$env:idToken"
-        condition: and(succeeded(), eq(lower(variables['VSCODE_PUBLISH']), 'true'))
+        condition: and(succeeded(), eq(lower(variables['CODEENGINE_PUBLISH']), 'true'))
 
       - script: |
           set -e
@@ -172,4 +172,4 @@ jobs:
           AZURE_ID_TOKEN="$(AZURE_ID_TOKEN)" \
             node build/azure-pipelines/upload-sourcemaps.ts
         displayName: Upload sourcemaps to Azure
-        condition: and(succeeded(), eq(lower(variables['VSCODE_PUBLISH']), 'true'))
+        condition: and(succeeded(), eq(lower(variables['CODEENGINE_PUBLISH']), 'true'))

@@ -81,7 +81,7 @@ async function main(): Promise<void> {
 		account: process.env.AZURE_STORAGE_ACCOUNT,
 		credential,
 		container: '$web',
-		prefix: `${process.env.VSCODE_QUALITY}/${commit}/`,
+		prefix: `${process.env.CODEENGINE_QUALITY}/${commit}/`,
 		contentSettings: {
 			contentEncoding: compressed ? 'gzip' : undefined,
 			cacheControl: 'max-age=31536000, public'

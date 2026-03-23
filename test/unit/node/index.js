@@ -60,7 +60,7 @@ const excludeGlobs = [
 	'**/{browser,electron-browser,electron-main,electron-utility}/**/*.test.js',
 	'**/vs/platform/environment/test/node/nativeModules.test.js', // native modules are compiled against Electron and this test would fail with node.js
 	'**/vs/base/parts/storage/test/node/storage.test.js', // same as above, due to direct dependency to sqlite native module
-	'**/vs/workbench/contrib/testing/test/**', // flaky (https://github.com/microsoft/vscode/issues/137853)
+	'**/vs/workbench/contrib/testing/test/**', // flaky (https://github.com/graffitiape/codeengine/issues/137853)
 	'**/vs/sessions/test/web.test.js', // web-only E2E test that imports CSS — cannot run in Node
 ];
 
@@ -80,19 +80,19 @@ if (currentNodeVersion?.major < requiredNodeVersion?.major) {
 
 function main() {
 
-	// VSCODE_GLOBALS: package/product.json
+	// CODEENGINE_GLOBALS: package/product.json
 	const _require = module.createRequire(import.meta.url);
-	globalThis._VSCODE_PRODUCT_JSON = _require(`${REPO_ROOT}/product.json`);
-	globalThis._VSCODE_PACKAGE_JSON = _require(`${REPO_ROOT}/package.json`);
+	globalThis._CODEENGINE_PRODUCT_JSON = _require(`${REPO_ROOT}/product.json`);
+	globalThis._CODEENGINE_PACKAGE_JSON = _require(`${REPO_ROOT}/package.json`);
 
-	// VSCODE_GLOBALS: file root
-	globalThis._VSCODE_FILE_ROOT = baseUrl.href;
+	// CODEENGINE_GLOBALS: file root
+	globalThis._CODEENGINE_FILE_ROOT = baseUrl.href;
 
 	if (args.build) {
 		// when running from `out-build`, ensure to load the default
 		// messages file, because all `nls.localize` calls have their
 		// english values removed and replaced by an index.
-		globalThis._VSCODE_NLS_MESSAGES = _require(`${REPO_ROOT}/${out}/nls.messages.json`);
+		globalThis._CODEENGINE_NLS_MESSAGES = _require(`${REPO_ROOT}/${out}/nls.messages.json`);
 	}
 
 	// Test file operations that are common across platforms. Used for test infra, namely snapshot tests

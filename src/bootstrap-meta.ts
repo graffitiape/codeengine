@@ -32,7 +32,7 @@ if ((process as INodeProcess).isEmbeddedApp) {
 }
 
 let productOverridesObj = {};
-if (process.env['VSCODE_DEV']) {
+if (process.env['CODEENGINE_DEV']) {
 	try {
 		productOverridesObj = require('../product.overrides.json');
 		productObj = Object.assign(productObj, productOverridesObj);

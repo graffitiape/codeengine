@@ -57,7 +57,7 @@ type BuildTarget = 'desktop' | 'server' | 'server-web' | 'web';
 
 const SRC_DIR = 'src';
 const OUT_DIR = 'out';
-const OUT_VSCODE_DIR = 'out-vscode';
+const OUT_CODEENGINE_DIR = 'out-vscode';
 
 // UTF-8 BOM - added to test files with 'utf8' in the path (matches gulp build behavior)
 const UTF8_BOM = Buffer.from([0xef, 0xbb, 0xbf]);
@@ -1194,7 +1194,7 @@ async function main(): Promise<void> {
 				break;
 
 			case 'bundle':
-				await bundle(options.out ?? OUT_VSCODE_DIR, options.minify, options.nls, options.manglePrivates, options.target as BuildTarget, options.sourceMapBaseUrl);
+				await bundle(options.out ?? OUT_CODEENGINE_DIR, options.minify, options.nls, options.manglePrivates, options.target as BuildTarget, options.sourceMapBaseUrl);
 				break;
 
 			default:

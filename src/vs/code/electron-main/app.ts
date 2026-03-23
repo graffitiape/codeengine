@@ -14,7 +14,7 @@ import { Event } from '../../base/common/event.js';
 import { parse } from '../../base/common/jsonc.js';
 import { getPathLabel } from '../../base/common/labels.js';
 import { Disposable, DisposableStore, MutableDisposable } from '../../base/common/lifecycle.js';
-import { Schemas, VSCODE_AUTHORITY } from '../../base/common/network.js';
+import { Schemas, CODEENGINE_AUTHORITY } from '../../base/common/network.js';
 import { join, posix } from '../../base/common/path.js';
 import { INodeProcess, IProcessEnvironment, isLinux, isLinuxSnap, isMacintosh, isWindows, OS } from '../../base/common/platform.js';
 import { assertType } from '../../base/common/types.js';
@@ -140,7 +140,7 @@ import { NativeWebContentExtractorService } from '../../platform/webContentExtra
 import ErrorTelemetry from '../../platform/telemetry/electron-main/errorTelemetry.js';
 
 /**
- * The main VS Code application. There will only ever be one instance,
+ * The main Code Engine application. There will only ever be one instance,
  * even if the user starts many instances (e.g. from the command line).
  */
 export class CodeApplication extends Disposable {
@@ -181,7 +181,7 @@ export class CodeApplication extends Disposable {
 		// !!! DO NOT CHANGE without consulting the documentation !!!
 		//
 
-		const isUrlFromWindow = (requestingUrl?: string | undefined) => requestingUrl?.startsWith(`${Schemas.vscodeFileResource}://${VSCODE_AUTHORITY}`);
+		const isUrlFromWindow = (requestingUrl?: string | undefined) => requestingUrl?.startsWith(`${Schemas.vscodeFileResource}://${CODEENGINE_AUTHORITY}`);
 		const isUrlFromWebview = (requestingUrl: string | undefined) => requestingUrl?.startsWith(`${Schemas.vscodeWebview}://`);
 
 		const alwaysAllowedPermissions = new Set(['pointerLock', 'notifications']);
@@ -191,7 +191,7 @@ export class CodeApplication extends Disposable {
 			'clipboard-read',
 			'clipboard-sanitized-write',
 			// TODO(deepak1556): Should be removed once migration is complete
-			// https://github.com/microsoft/vscode/issues/239228
+			// https://github.com/graffitiape/codeengine/issues/239228
 			'deprecated-sync-clipboard-read',
 		]);
 
@@ -200,7 +200,7 @@ export class CodeApplication extends Disposable {
 			'media',
 			'local-fonts',
 			// TODO(deepak1556): Should be removed once migration is complete
-			// https://github.com/microsoft/vscode/issues/239228
+			// https://github.com/graffitiape/codeengine/issues/239228
 			'deprecated-sync-clipboard-read',
 		]);
 
@@ -312,7 +312,7 @@ export class CodeApplication extends Disposable {
 		});
 
 		// Configure SVG header content type properly
-		// https://github.com/microsoft/vscode/issues/97564
+		// https://github.com/graffitiape/codeengine/issues/97564
 		session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
 			const responseHeaders = details.responseHeaders as Record<string, (string) | (string[])>;
 			const contentTypes = (responseHeaders['content-type'] || responseHeaders['Content-Type']);
@@ -372,7 +372,7 @@ export class CodeApplication extends Disposable {
 			// Make sure to partition Chrome's code cache folder
 			// in the same way as our code cache path to help
 			// invalidate caches that we know are invalid
-			// (https://github.com/microsoft/vscode/issues/120655)
+			// (https://github.com/graffitiape/codeengine/issues/120655)
 			defaultSession.setCodeCachePath(join(this.environmentMainService.codeCachePath, 'chrome'));
 		}
 
@@ -425,7 +425,7 @@ export class CodeApplication extends Disposable {
 		app.on('web-contents-created', (event, contents) => {
 
 			// Auxiliary Window: delegate to `AuxiliaryWindow` class
-			if (contents?.opener?.url.startsWith(`${Schemas.vscodeFileResource}://${VSCODE_AUTHORITY}/`)) {
+			if (contents?.opener?.url.startsWith(`${Schemas.vscodeFileResource}://${CODEENGINE_AUTHORITY}/`)) {
 				this.logService.trace('[aux window]  app.on("web-contents-created"): Registering auxiliary window');
 
 				this.auxiliaryWindowsMainService?.registerWindow(contents);
@@ -548,7 +548,7 @@ export class CodeApplication extends Disposable {
 	}
 
 	async startup(): Promise<void> {
-		this.logService.debug('Starting VS Code');
+		this.logService.debug('Starting Code Engine');
 		this.logService.debug(`from: ${this.environmentMainService.appRoot}`);
 		this.logService.debug('args:', this.environmentMainService.args);
 
@@ -563,10 +563,10 @@ export class CodeApplication extends Disposable {
 
 		// Fix native tabs on macOS 10.13
 		// macOS enables a compatibility patch for any bundle ID beginning with
-		// "com.microsoft.", which breaks native tabs for VS Code when using this
+		// "com.microsoft.", which breaks native tabs for Code Engine when using this
 		// identifier (from the official build).
 		// Explicitly opt out of the patch here before creating any windows.
-		// See: https://github.com/microsoft/vscode/issues/35361#issuecomment-399794085
+		// See: https://github.com/graffitiape/codeengine/issues/35361#issuecomment-399794085
 		try {
 			if (isMacintosh && this.configurationService.getValue('window.nativeTabs') === true && !systemPreferences.getUserDefault('NSUseImprovedLayoutPass', 'boolean')) {
 				systemPreferences.setUserDefault('NSUseImprovedLayoutPass', 'boolean', true);
@@ -828,7 +828,7 @@ export class CodeApplication extends Disposable {
 		}
 
 		if (checkboxChecked) {
-			// Due to https://github.com/microsoft/vscode/issues/195436, we can only
+			// Due to https://github.com/graffitiape/codeengine/issues/195436, we can only
 			// update settings from within a window. But we do not know if a window
 			// is about to open or can already handle the request, so we have to send
 			// to any current window and any newly opening window.
@@ -878,7 +878,7 @@ export class CodeApplication extends Disposable {
 			const params = new URLSearchParams(uri.query);
 			if (params.get('windowId') === '_blank') {
 				// Make sure to unset any `windowId=_blank` here
-				// https://github.com/microsoft/vscode/issues/191902
+				// https://github.com/graffitiape/codeengine/issues/191902
 				params.delete('windowId');
 				query = params.toString();
 			}
@@ -922,7 +922,7 @@ export class CodeApplication extends Disposable {
 			return false;
 		}
 
-		// Support 'workspace' URLs (https://github.com/microsoft/vscode/issues/124263)
+		// Support 'workspace' URLs (https://github.com/graffitiape/codeengine/issues/124263)
 		if (uri.scheme === this.productService.urlProtocol && uri.path === 'workspace') {
 			uri = uri.with({
 				authority: Schemas.file,
@@ -1536,7 +1536,7 @@ export class CodeApplication extends Disposable {
 		});
 
 		// GPU crash telemetry for skia graphite out of order recording failures
-		// Refs https://github.com/microsoft/vscode/issues/284162
+		// Refs https://github.com/graffitiape/codeengine/issues/284162
 		if (isMacintosh) {
 			instantiationService.invokeFunction(accessor => {
 				const telemetryService = accessor.get(ITelemetryService);
@@ -1721,7 +1721,7 @@ export class CodeApplication extends Disposable {
 	private eventuallyAfterWindowOpen(): void {
 
 		// Validate Device ID is up to date (delay this as it has shown significant perf impact)
-		// Refs: https://github.com/microsoft/vscode/issues/234064
+		// Refs: https://github.com/graffitiape/codeengine/issues/234064
 		validateDevDeviceId(this.stateService, this.logService);
 	}
 }

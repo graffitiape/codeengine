@@ -89,7 +89,7 @@
 			}
 		},
 		{
-			"label": "VS Code - Build",
+			"label": "Code Engine - Build",
 			"dependsOn": [
 				"Core - Transpile",
 				"Core - Typecheck",
@@ -138,7 +138,7 @@
 			"problemMatcher": "$tsc"
 		},
 		{
-			"label": "Kill VS Code - Build",
+			"label": "Kill Code Engine - Build",
 			"dependsOn": [
 				"Kill Core - Transpile",
 				"Kill Core - Typecheck",
@@ -148,21 +148,21 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "Restart VS Code - Build",
+			"label": "Restart Code Engine - Build",
 			"dependsOn": [
-				"Kill VS Code - Build",
-				"VS Code - Build"
+				"Kill Code Engine - Build",
+				"Code Engine - Build"
 			],
 			"group": "build",
 			"dependsOrder": "sequence",
 			"problemMatcher": []
 		},
 		{
-			"label": "Kill VS Code - Build, Npm, VS Code - Build",
+			"label": "Kill Code Engine - Build, Npm, Code Engine - Build",
 			"dependsOn": [
-				"Kill VS Code - Build",
+				"Kill Code Engine - Build",
 				"npm: install",
-				"VS Code - Build"
+				"Code Engine - Build"
 			],
 			"group": "build",
 			"dependsOrder": "sequence",
@@ -253,7 +253,7 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "Run and Compile Code - OSS",
+			"label": "Run and Compile Code Engine",
 			"type": "shell",
 			"command": "npm run transpile-client && ./scripts/code.sh",
 			"windows": {

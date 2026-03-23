@@ -17,12 +17,12 @@ IF "%~1" == "" (
 
 set REMOTE_VSCODE=%AUTHORITY%%EXT_PATH%
 
-if "%VSCODE_REMOTE_SERVER_PATH%"=="" (
+if "%CODEENGINE_REMOTE_SERVER_PATH%"=="" (
 	chcp 65001
 
 	echo Using remote server out of sources for integration web tests
 ) else (
-	echo Using '%VSCODE_REMOTE_SERVER_PATH%' as server path for web integration tests
+	echo Using '%CODEENGINE_REMOTE_SERVER_PATH%' as server path for web integration tests
 )
 
 if not exist ".\test\integration\browser\out\index.js" (

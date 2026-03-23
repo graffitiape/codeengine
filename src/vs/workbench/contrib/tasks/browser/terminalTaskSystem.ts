@@ -42,7 +42,7 @@ import { GroupKind } from '../common/taskConfiguration.js';
 import { IResolveSet, IResolvedVariables, ITaskExecuteResult, ITaskResolver, ITaskSummary, ITaskSystem, ITaskSystemInfo, ITaskSystemInfoResolver, ITaskTerminateResponse, TaskError, TaskErrors, TaskExecuteKind, Triggers, VerifiedTask } from '../common/taskSystem.js';
 import { CommandOptions, CommandString, ContributedTask, CustomTask, DependsOrder, ICommandConfiguration, IConfigurationProperties, IExtensionTaskSource, IPresentationOptions, IShellConfiguration, IShellQuotingOptions, ITaskEvent, InMemoryTask, PanelKind, RerunForActiveTerminalCommandId, RevealKind, RevealProblemKind, RuntimeType, ShellQuoting, TASK_TERMINAL_ACTIVE, Task, TaskEvent, TaskEventKind, TaskScope, TaskSourceKind, rerunTaskIcon } from '../common/tasks.js';
 import { ITerminalGroupService, ITerminalInstance, ITerminalService } from '../../terminal/browser/terminal.js';
-import { VSCodeOscProperty, VSCodeOscPt, VSCodeSequence } from '../../terminal/browser/terminalEscapeSequences.js';
+import { CodeEngineOscProperty, CodeEngineOscPt, CodeEngineSequence } from '../../terminal/browser/terminalEscapeSequences.js';
 import { TerminalProcessExtHostProxy } from '../../terminal/browser/terminalProcessExtHostProxy.js';
 import { ITerminalProfileResolverService, TERMINAL_VIEW_ID } from '../../terminal/common/terminal.js';
 import { IConfigurationResolverService } from '../../../services/configurationResolver/common/configurationResolver.js';
@@ -53,7 +53,7 @@ import { IPathService } from '../../../services/path/common/pathService.js';
 import { IContextKey, IContextKeyService } from '../../../../platform/contextkey/common/contextkey.js';
 import { TaskProblemMonitor } from './taskProblemMonitor.js';
 import { generateUuid } from '../../../../base/common/uuid.js';
-import { serializeVSCodeOscMessage } from '../../../../platform/terminal/common/xterm/shellIntegrationAddon.js';
+import { serializeCodeEngineOscMessage } from '../../../../platform/terminal/common/xterm/shellIntegrationAddon.js';
 
 interface ITerminalData {
 	terminal: ITerminalInstance;
@@ -180,23 +180,23 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 
 	taskShellIntegrationStartSequence(cwd: string | URI | undefined): string {
 		return (
-			VSCodeSequence(VSCodeOscPt.Property, `${VSCodeOscProperty.HasRichCommandDetection}=True`) +
-			VSCodeSequence(VSCodeOscPt.PromptStart) +
-			VSCodeSequence(VSCodeOscPt.Property, `${VSCodeOscProperty.Task}=True`) +
+			CodeEngineSequence(CodeEngineOscPt.Property, `${CodeEngineOscProperty.HasRichCommandDetection}=True`) +
+			CodeEngineSequence(CodeEngineOscPt.PromptStart) +
+			CodeEngineSequence(CodeEngineOscPt.Property, `${CodeEngineOscProperty.Task}=True`) +
 			(cwd
-				? VSCodeSequence(VSCodeOscPt.Property, `${VSCodeOscProperty.Cwd}=${typeof cwd === 'string' ? cwd : cwd.fsPath}`)
+				? CodeEngineSequence(CodeEngineOscPt.Property, `${CodeEngineOscProperty.Cwd}=${typeof cwd === 'string' ? cwd : cwd.fsPath}`)
 				: ''
 			) +
-			VSCodeSequence(VSCodeOscPt.CommandStart)
+			CodeEngineSequence(CodeEngineOscPt.CommandStart)
 		);
 	}
 	getTaskShellIntegrationOutputSequence(commandLineInfo: { commandLine: string; nonce: string } | undefined): string {
 		return (
 			(commandLineInfo
-				? VSCodeSequence(VSCodeOscPt.CommandLine, `${serializeVSCodeOscMessage(commandLineInfo.commandLine)};${commandLineInfo.nonce}`)
+				? CodeEngineSequence(CodeEngineOscPt.CommandLine, `${serializeCodeEngineOscMessage(commandLineInfo.commandLine)};${commandLineInfo.nonce}`)
 				: ''
 			) +
-			VSCodeSequence(VSCodeOscPt.CommandExecuted)
+			CodeEngineSequence(CodeEngineOscPt.CommandExecuted)
 		);
 	}
 
@@ -944,7 +944,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 			let onData: IDisposable | undefined;
 			if (problemMatchers.length) {
 				// this._fireTaskEvent(TaskEvent.general(TaskEventKind.ProblemMatcherStarted, task, terminal.instanceId));
-				// prevent https://github.com/microsoft/vscode/issues/174511 from happening
+				// prevent https://github.com/graffitiape/codeengine/issues/174511 from happening
 				onData = terminal.onLineData((line) => {
 					watchingProblemMatcher.processLine(line);
 					if (!delayer) {
@@ -1280,7 +1280,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 				if (!shellSpecified) {
 					// Under Mac remove -l to not start it as a login shell.
 					if (platform === Platform.Platform.Mac) {
-						// Background on -l on osx https://github.com/microsoft/vscode/issues/107563
+						// Background on -l on osx https://github.com/graffitiape/codeengine/issues/107563
 						// TODO: Handle by pulling the default terminal profile?
 						// const osxShellArgs = this._configurationService.inspect(TerminalSettingId.ShellArgsMacOs);
 						// if ((osxShellArgs.user === undefined) && (osxShellArgs.userLocal === undefined) && (osxShellArgs.userLocalValue === undefined)
@@ -1996,7 +1996,7 @@ function getWaitOnExitValue(presentationOptions: IPresentationOptions, configura
 
 function taskShellIntegrationWaitOnExitSequence(message: string): (exitCode: number) => string {
 	return (exitCode) => {
-		return `${VSCodeSequence(VSCodeOscPt.CommandFinished, exitCode.toString())}${message}`;
+		return `${CodeEngineSequence(CodeEngineOscPt.CommandFinished, exitCode.toString())}${message}`;
 	};
 }
 

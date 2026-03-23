@@ -118,7 +118,7 @@ export function isValidPromptType(type: string): type is PromptsType {
 }
 
 export enum Target {
-	VSCode = 'vscode',
+	CodeEngine = 'vscode',
 	GitHubCopilot = 'github-copilot',
 	Claude = 'claude',
 	Undefined = 'undefined',

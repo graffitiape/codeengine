@@ -1,6 +1,6 @@
-# GitHub Authentication for Visual Studio Code
+# GitHub Authentication for Code Engine
 
-**Notice:** This extension is bundled with Visual Studio Code. It can be disabled but not uninstalled.
+**Notice:** This extension is bundled with Code Engine. It can be disabled but not uninstalled.
 
 ## Features
 

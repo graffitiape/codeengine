@@ -877,7 +877,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 				lineDataEventAddon.setOperatingSystem(this._processManager.os);
 			}
 			xterm.raw.options.windowsPty = processTraits.windowsPty;
-			// Enable reflow cursor to avoid prompt loss: https://github.com/microsoft/vscode/issues/274372
+			// Enable reflow cursor to avoid prompt loss: https://github.com/graffitiape/codeengine/issues/274372
 			xterm.raw.options.reflowCursorLine = processTraits?.windowsPty?.backend === 'conpty' && !!this._terminalConfigurationService.config.windowsUseConptyDll;
 		}));
 		this._register(this._processManager.onRestoreCommands(e => this.xterm?.shellIntegration.deserialize(e)));
@@ -1150,7 +1150,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 			}
 
 			// Prevent default when shift+tab is being sent to the terminal to avoid it bubbling up
-			// and changing focus https://github.com/microsoft/vscode/issues/188329
+			// and changing focus https://github.com/graffitiape/codeengine/issues/188329
 			if (event.key === 'Tab' && event.shiftKey) {
 				event.preventDefault();
 				return true;
@@ -1225,7 +1225,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 
 	private _setShellIntegrationContextKey(): void {
 		if (this.xterm) {
-			this._terminalShellIntegrationEnabledContextKey.set(this.xterm.shellIntegration.status === ShellIntegrationStatus.VSCode);
+			this._terminalShellIntegrationEnabledContextKey.set(this.xterm.shellIntegration.status === ShellIntegrationStatus.CodeEngine);
 		}
 	}
 
@@ -1286,13 +1286,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		try {
 			this.xterm?.dispose();
 		} catch (err: unknown) {
-			// See https://github.com/microsoft/vscode/issues/153486
+			// See https://github.com/graffitiape/codeengine/issues/153486
 			this._logService.error('Exception occurred during xterm disposal', err);
 		}
 
 		// HACK: Workaround for Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=559561,
 		// as 'blur' event in xterm.raw.textarea is not triggered on xterm.dispose()
-		// See https://github.com/microsoft/vscode/issues/138358
+		// See https://github.com/graffitiape/codeengine/issues/138358
 		if (isFirefox) {
 			this.resetFocusContextKey();
 			this._terminalHasTextContextKey.reset();
@@ -1750,7 +1750,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 				commandId: TerminalCommandId.ShellIntegrationLearnMore,
 				label: nls.localize('shellIntegration.learnMore', "Learn more about shell integration"),
 				run: () => {
-					this._openerService.open('https://code.visualstudio.com/docs/editor/integrated-terminal#_shell-integration');
+					this._openerService.open('https://github.com/graffitiape/codeengine/docs/editor/integrated-terminal#_shell-integration');
 				}
 			}, {
 				commandId: 'workbench.action.openSettings',
@@ -2679,7 +2679,7 @@ export class TerminalLabelComputer extends Disposable {
 			shellCommand: commandDetection?.executingCommand && commandDetection.executingCommandConfidence === 'high' && promptInputModel
 				? promptInputModel.value + nonTaskSpinner
 				: undefined,
-			// Shell prompt input does not require high confidence as it's largely for VS Code developers
+			// Shell prompt input does not require high confidence as it's largely for Code Engine developers
 			shellPromptInput: commandDetection?.executingCommand && promptInputModel
 				? promptInputModel.getCombinedString(true) + nonTaskSpinner
 				: promptInputModel?.getCombinedString(true),

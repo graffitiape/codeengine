@@ -4,7 +4,7 @@
 # Licensed under the MIT License. See License.txt in the project root for license information.
 
 # when run in remote terminal, use the remote cli
-if [ -n "$VSCODE_IPC_HOOK_CLI" ]; then
+if [ -n "$CODEENGINE_IPC_HOOK_CLI" ]; then
 	REMOTE_CLI="$(which -a '@@APPNAME@@' | grep /remote-cli/)"
 	if [ -n "$REMOTE_CLI" ]; then
 		"$REMOTE_CLI" "$@"
@@ -46,18 +46,18 @@ fi
 
 if [ ! -L "$0" ]; then
 	# if path is not a symlink, find relatively
-	VSCODE_PATH="$(dirname "$0")/.."
+	CODEENGINE_PATH="$(dirname "$0")/.."
 else
 	if command -v readlink >/dev/null; then
 		# if readlink exists, follow the symlink and find relatively
-		VSCODE_PATH="$(dirname "$(readlink -f "$0")")/.."
+		CODEENGINE_PATH="$(dirname "$(readlink -f "$0")")/.."
 	else
 		# else use the standard install location
-		VSCODE_PATH="/usr/share/@@APPNAME@@"
+		CODEENGINE_PATH="/usr/share/@@APPNAME@@"
 	fi
 fi
 
-ELECTRON="$VSCODE_PATH/@@APPNAME@@"
-CLI="$VSCODE_PATH/resources/app/out/cli.js"
+ELECTRON="$CODEENGINE_PATH/@@APPNAME@@"
+CLI="$CODEENGINE_PATH/resources/app/out/cli.js"
 ELECTRON_RUN_AS_NODE=1 "$ELECTRON" "$CLI" "$@"
 exit $?

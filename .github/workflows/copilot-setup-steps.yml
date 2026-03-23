@@ -98,7 +98,7 @@ jobs:
           done
         env:
           npm_config_arch: x64
-          VSCODE_ARCH: x64
+          CODEENGINE_ARCH: x64
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

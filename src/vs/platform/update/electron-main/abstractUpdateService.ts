@@ -67,7 +67,7 @@ export function getUpdateRequestHeaders(productVersion: string): Record<string, 
 export type UpdateErrorClassification = {
 	owner: 'joaomoreno';
 	messageHash: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'The hash of the error message.' };
-	comment: 'This is used to know how often VS Code updates have failed.';
+	comment: 'This is used to know how often Code Engine updates have failed.';
 };
 
 export abstract class AbstractUpdateService implements IUpdateService {
@@ -127,7 +127,7 @@ export abstract class AbstractUpdateService implements IUpdateService {
 	/**
 	 * This must be called before any other call. This is a performance
 	 * optimization, to avoid using extra CPU cycles before first window open.
-	 * https://github.com/microsoft/vscode/issues/89784
+	 * https://github.com/graffitiape/codeengine/issues/89784
 	 */
 	protected async initialize(): Promise<void> {
 		if (!this.environmentMainService.isBuilt) {

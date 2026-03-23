@@ -14,13 +14,13 @@
   "contributes": {
     "themes": [
       {
-        "id": "VS Code Light",
+        "id": "Code Engine Light",
         "label": "%vsCodeLightThemeLabel%",
         "uiTheme": "vs",
         "path": "./themes/2026-light.json"
       },
       {
-        "id": "VS Code Dark",
+        "id": "Code Engine Dark",
         "label": "%vsCodeDarkThemeLabel%",
         "uiTheme": "vs-dark",
         "path": "./themes/2026-dark.json"
@@ -84,6 +84,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/vscode.git"
+    "url": "https://github.com/graffitiape/codeengine.git"
   }
 }

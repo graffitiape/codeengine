@@ -18,7 +18,7 @@ import { RefType, ForcePushMode, GitErrorCodes, Status } from './api/git.constan
 import * as byline from 'byline';
 import { StringDecoder } from 'string_decoder';
 
-// https://github.com/microsoft/vscode/issues/65693
+// https://github.com/graffitiape/codeengine/issues/65693
 const MAX_CLI_LENGTH = 30000;
 
 export interface IGit {
@@ -363,7 +363,7 @@ function getGitErrorCode(stderr: string): string | undefined {
 	return undefined;
 }
 
-// https://github.com/microsoft/vscode/issues/89373
+// https://github.com/graffitiape/codeengine/issues/89373
 // https://github.com/git-for-windows/git/issues/2478
 function sanitizePath(path: string): string {
 	return path.replace(/^([a-z]):\\/i, (_, letter) => `${letter.toUpperCase()}:\\`);
@@ -687,7 +687,7 @@ export class Git {
 		}
 
 		options.env = assign({}, process.env, this.env, options.env || {}, {
-			VSCODE_GIT_COMMAND: args[0],
+			CODEENGINE_GIT_COMMAND: args[0],
 			LANGUAGE: 'en',
 			LC_ALL: 'en_US.UTF-8',
 			LANG: 'en_US.UTF-8',
@@ -2386,7 +2386,7 @@ export class Repository {
 		}
 
 		if (options.silent) {
-			spawnOptions.env!['VSCODE_GIT_FETCH_SILENT'] = 'true';
+			spawnOptions.env!['CODEENGINE_GIT_FETCH_SILENT'] = 'true';
 		}
 
 		try {
@@ -3085,7 +3085,7 @@ export class Repository {
 		}
 
 		for (const remote of remotes) {
-			// https://github.com/microsoft/vscode/issues/45271
+			// https://github.com/graffitiape/codeengine/issues/45271
 			remote.isReadOnly = remote.pushUrl === undefined || remote.pushUrl === 'no_push';
 		}
 

@@ -698,7 +698,7 @@ suite('CodeReviewService', () => {
 		}
 	});
 
-	test('comments normalize VS Code API style ranges', async () => {
+	test('comments normalize Code Engine API style ranges', async () => {
 		commandService.result = {
 			type: 'success',
 			comments: [

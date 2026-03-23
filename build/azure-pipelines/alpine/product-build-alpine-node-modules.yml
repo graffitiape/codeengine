@@ -1,17 +1,17 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
 
 jobs:
-  - job: LinuxAlpine_${{ parameters.VSCODE_ARCH }}
-    displayName: Linux Alpine (${{ upper(parameters.VSCODE_ARCH) }})
+  - job: LinuxAlpine_${{ parameters.CODEENGINE_ARCH }}
+    displayName: Linux Alpine (${{ upper(parameters.CODEENGINE_ARCH) }})
     pool:
       name: 1es-ubuntu-22.04-x64
       os: linux
     timeoutInMinutes: 60
     variables:
-      NPM_ARCH: ${{ parameters.VSCODE_ARCH }}
-      VSCODE_ARCH: ${{ parameters.VSCODE_ARCH }}
+      NPM_ARCH: ${{ parameters.CODEENGINE_ARCH }}
+      CODEENGINE_ARCH: ${{ parameters.CODEENGINE_ARCH }}
     steps:
       - template: ../common/checkout.yml@self
 
@@ -33,7 +33,7 @@ jobs:
         condition: and(succeeded(), ne(variables['NPM_REGISTRY'], 'none'))
         displayName: Setup NPM Registry
 
-      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts alpine $VSCODE_ARCH $(node -p process.arch) > .build/packagelockhash
+      - script: mkdir -p .build && node build/azure-pipelines/common/computeNodeModulesCacheKey.ts alpine $CODEENGINE_ARCH $(node -p process.arch) > .build/packagelockhash
         displayName: Prepare node_modules cache key
 
       - task: Cache@2
@@ -64,7 +64,7 @@ jobs:
           azureSubscriptionEndpoint: vscode
           azureContainerRegistry: vscodehub.azurecr.io
           command: "Run an image"
-          imageName: "vscode-linux-build-agent:alpine-$(VSCODE_ARCH)"
+          imageName: "vscode-linux-build-agent:alpine-$(CODEENGINE_ARCH)"
           containerCommand: uname
         displayName: "Pull image"
         condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
@@ -78,9 +78,9 @@ jobs:
           mkdir -p .build/nodejs-musl
           NODE_VERSION=$(grep '^target=' remote/.npmrc | cut -d '"' -f 2)
           BUILD_ID=$(grep '^ms_build_id=' remote/.npmrc | cut -d '"' -f 2)
-          gh release download "v${NODE_VERSION}-${BUILD_ID}" -R microsoft/vscode-node -p "node-v${NODE_VERSION}-linux-${VSCODE_ARCH}-musl.tar.gz" --dir .build/nodejs-musl --clobber
-          tar -xzf ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${VSCODE_ARCH}-musl.tar.gz" -C ".build/nodejs-musl" --strip-components=1
-          rm ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${VSCODE_ARCH}-musl.tar.gz"
+          gh release download "v${NODE_VERSION}-${BUILD_ID}" -R microsoft/vscode-node -p "node-v${NODE_VERSION}-linux-${CODEENGINE_ARCH}-musl.tar.gz" --dir .build/nodejs-musl --clobber
+          tar -xzf ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${CODEENGINE_ARCH}-musl.tar.gz" -C ".build/nodejs-musl" --strip-components=1
+          rm ".build/nodejs-musl/node-v${NODE_VERSION}-linux-${CODEENGINE_ARCH}-musl.tar.gz"
         env:
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
         displayName: Download NodeJS MUSL
@@ -102,9 +102,9 @@ jobs:
           ELECTRON_SKIP_BINARY_DOWNLOAD: 1
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
           GITHUB_TOKEN: "$(github-distro-mixin-password)"
-          VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME: vscodehub.azurecr.io/vscode-linux-build-agent:alpine-$(VSCODE_ARCH)
-          VSCODE_HOST_MOUNT: "/mnt/vss/_work/1/s"
-          VSCODE_NPMRC_PATH: $(NPMRC_PATH)
+          CODEENGINE_REMOTE_DEPENDENCIES_CONTAINER_NAME: vscodehub.azurecr.io/vscode-linux-build-agent:alpine-$(CODEENGINE_ARCH)
+          CODEENGINE_HOST_MOUNT: "/mnt/vss/_work/1/s"
+          CODEENGINE_NPMRC_PATH: $(NPMRC_PATH)
         displayName: Install dependencies
         condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
 

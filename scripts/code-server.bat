@@ -9,10 +9,10 @@ pushd %ROOT_DIR%
 
 :: Configuration
 set NODE_ENV=development
-set VSCODE_DEV=1
+set CODEENGINE_DEV=1
 
 :: Get electron, compile, built-in extensions
-if "%VSCODE_SKIP_PRELAUNCH%"=="" (
+if "%CODEENGINE_SKIP_PRELAUNCH%"=="" (
 	node build/lib/preLaunch.ts
 )
 

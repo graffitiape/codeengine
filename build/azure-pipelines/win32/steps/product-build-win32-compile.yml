@@ -1,17 +1,17 @@
 parameters:
-  - name: VSCODE_ARCH
+  - name: CODEENGINE_ARCH
     type: string
-  - name: VSCODE_CIBUILD
+  - name: CODEENGINE_CIBUILD
     type: boolean
-  - name: VSCODE_QUALITY
+  - name: CODEENGINE_QUALITY
     type: string
-  - name: VSCODE_RUN_ELECTRON_TESTS
+  - name: CODEENGINE_RUN_ELECTRON_TESTS
     type: boolean
     default: false
-  - name: VSCODE_RUN_BROWSER_TESTS
+  - name: CODEENGINE_RUN_BROWSER_TESTS
     type: boolean
     default: false
-  - name: VSCODE_RUN_REMOTE_TESTS
+  - name: CODEENGINE_RUN_REMOTE_TESTS
     type: boolean
     default: false
 
@@ -43,7 +43,7 @@ steps:
 
   - pwsh: |
       mkdir .build -ea 0
-      node build/azure-pipelines/common/computeNodeModulesCacheKey.ts win32 $(VSCODE_ARCH) $(node -p process.arch) > .build/packagelockhash
+      node build/azure-pipelines/common/computeNodeModulesCacheKey.ts win32 $(CODEENGINE_ARCH) $(node -p process.arch) > .build/packagelockhash
     displayName: Prepare node_modules cache key
 
   - task: Cache@2
@@ -80,7 +80,7 @@ steps:
       $ErrorActionPreference = "Stop"
       exec { npm ci }
     env:
-      npm_config_arch: $(VSCODE_ARCH)
+      npm_config_arch: $(CODEENGINE_ARCH)
       npm_config_foreground_scripts: "true"
       ELECTRON_SKIP_BINARY_DOWNLOAD: 1
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
@@ -102,8 +102,8 @@ steps:
     condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
     displayName: Create node_modules archive
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
-    - pwsh: npx deemon --detach --wait -- node build/azure-pipelines/common/waitForArtifacts.ts unsigned_vscode_cli_win32_$(VSCODE_ARCH)_cli
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
+    - pwsh: npx deemon --detach --wait -- node build/azure-pipelines/common/waitForArtifacts.ts unsigned_vscode_cli_win32_$(CODEENGINE_ARCH)_cli
       env:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       displayName: Wait for CLI artifact (background)
@@ -121,33 +121,33 @@ steps:
   - script: node build/azure-pipelines/common/extract-telemetry.ts
     displayName: Generate lists of telemetry events
 
-  - ${{ if or(eq(parameters.VSCODE_RUN_ELECTRON_TESTS, true), eq(parameters.VSCODE_RUN_BROWSER_TESTS, true), eq(parameters.VSCODE_RUN_REMOTE_TESTS, true)) }}:
+  - ${{ if or(eq(parameters.CODEENGINE_RUN_ELECTRON_TESTS, true), eq(parameters.CODEENGINE_RUN_BROWSER_TESTS, true), eq(parameters.CODEENGINE_RUN_REMOTE_TESTS, true)) }}:
     - powershell: |
         . build/azure-pipelines/win32/exec.ps1
         $ErrorActionPreference = "Stop"
         exec { npm run compile --prefix test/smoke }
         exec { npm run compile --prefix test/integration/browser }
       displayName: Compile test suites (non-OSS)
-      condition: and(succeeded(), eq(variables['VSCODE_STEP_ON_IT'], 'false'))
+      condition: and(succeeded(), eq(variables['CODEENGINE_STEP_ON_IT'], 'false'))
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
     - powershell: |
         npm run copy-policy-dto --prefix build
         node build\lib\policies\policyGenerator.ts build\lib\policies\policyData.jsonc win32
       displayName: Generate Group Policy definitions
       retryCountOnTaskFailure: 3
 
-  - ${{ if and(ne(parameters.VSCODE_CIBUILD, true), ne(parameters.VSCODE_QUALITY, 'exploration')) }}:
+  - ${{ if and(ne(parameters.CODEENGINE_CIBUILD, true), ne(parameters.CODEENGINE_QUALITY, 'exploration')) }}:
     - powershell: node build/win32/explorer-dll-fetcher.ts .build/win32/appx
       displayName: Download Explorer dll
 
   - powershell: |
       . build/azure-pipelines/win32/exec.ps1
       $ErrorActionPreference = "Stop"
-      exec { npm run gulp "vscode-win32-$(VSCODE_ARCH)-min-ci" }
-      exec { npm run gulp "vscode-win32-$(VSCODE_ARCH)-inno-updater" }
+      exec { npm run gulp "vscode-win32-$(CODEENGINE_ARCH)-min-ci" }
+      exec { npm run gulp "vscode-win32-$(CODEENGINE_ARCH)-inno-updater" }
       echo "##vso[task.setvariable variable=BUILT_CLIENT]true"
-      echo "##vso[task.setvariable variable=CodeSigningFolderPath]$(Agent.BuildDirectory)/VSCode-win32-$(VSCODE_ARCH)"
+      echo "##vso[task.setvariable variable=CodeSigningFolderPath]$(Agent.BuildDirectory)/VSCode-win32-$(CODEENGINE_ARCH)"
     env:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Build client
@@ -156,26 +156,26 @@ steps:
   # strings in the raw manifest file at resources/win32/appx/AppxManifest.xml and places it under
   # <build-out-dir>/appx/manifest, we need a separate step to prepare the appx package with the
   # final contents. In our case only the manifest file is bundled into the appx package.
-  - ${{ if and(ne(parameters.VSCODE_CIBUILD, true), ne(parameters.VSCODE_QUALITY, 'exploration')) }}:
+  - ${{ if and(ne(parameters.CODEENGINE_CIBUILD, true), ne(parameters.CODEENGINE_QUALITY, 'exploration')) }}:
     - powershell: |
         . build/azure-pipelines/win32/exec.ps1
         $ErrorActionPreference = "Stop"
         # Add Windows SDK to path
         $sdk = "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64"
         $env:PATH = "$sdk;$env:PATH"
-        $AppxName = if ('$(VSCODE_QUALITY)' -eq 'stable') { 'code' } else { 'code_insider' }
-        makeappx pack /d "$(Agent.BuildDirectory)/VSCode-win32-$(VSCODE_ARCH)/appx/manifest" /p "$(Agent.BuildDirectory)/VSCode-win32-$(VSCODE_ARCH)/appx/${AppxName}_$(VSCODE_ARCH).appx" /nv
+        $AppxName = if ('$(CODEENGINE_QUALITY)' -eq 'stable') { 'code' } else { 'code_insider' }
+        makeappx pack /d "$(Agent.BuildDirectory)/VSCode-win32-$(CODEENGINE_ARCH)/appx/manifest" /p "$(Agent.BuildDirectory)/VSCode-win32-$(CODEENGINE_ARCH)/appx/${AppxName}_$(CODEENGINE_ARCH).appx" /nv
         # Remove the raw manifest folder
-        Remove-Item -Path "$(Agent.BuildDirectory)/VSCode-win32-$(VSCODE_ARCH)/appx/manifest" -Recurse -Force
+        Remove-Item -Path "$(Agent.BuildDirectory)/VSCode-win32-$(CODEENGINE_ARCH)/appx/manifest" -Recurse -Force
       displayName: Prepare appx package
 
   - powershell: |
       . build/azure-pipelines/win32/exec.ps1
       $ErrorActionPreference = "Stop"
-      exec { npm run gulp "vscode-reh-win32-$(VSCODE_ARCH)-min-ci" }
-      mv ..\vscode-reh-win32-$(VSCODE_ARCH) ..\vscode-server-win32-$(VSCODE_ARCH) # TODO@joaomoreno
+      exec { npm run gulp "vscode-reh-win32-$(CODEENGINE_ARCH)-min-ci" }
+      mv ..\vscode-reh-win32-$(CODEENGINE_ARCH) ..\vscode-server-win32-$(CODEENGINE_ARCH) # TODO@joaomoreno
       echo "##vso[task.setvariable variable=BUILT_SERVER]true"
-      echo "##vso[task.setvariable variable=CodeSigningFolderPath]$(CodeSigningFolderPath),$(Agent.BuildDirectory)/vscode-server-win32-$(VSCODE_ARCH)"
+      echo "##vso[task.setvariable variable=CodeSigningFolderPath]$(CodeSigningFolderPath),$(Agent.BuildDirectory)/vscode-server-win32-$(CODEENGINE_ARCH)"
     env:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Build server
@@ -183,38 +183,38 @@ steps:
   - powershell: |
       . build/azure-pipelines/win32/exec.ps1
       $ErrorActionPreference = "Stop"
-      exec { npm run gulp "vscode-reh-web-win32-$(VSCODE_ARCH)-min-ci" }
-      mv ..\vscode-reh-web-win32-$(VSCODE_ARCH) ..\vscode-server-win32-$(VSCODE_ARCH)-web # TODO@joaomoreno
+      exec { npm run gulp "vscode-reh-web-win32-$(CODEENGINE_ARCH)-min-ci" }
+      mv ..\vscode-reh-web-win32-$(CODEENGINE_ARCH) ..\vscode-server-win32-$(CODEENGINE_ARCH)-web # TODO@joaomoreno
       echo "##vso[task.setvariable variable=BUILT_WEB]true"
-      echo "##vso[task.setvariable variable=CodeSigningFolderPath]$(CodeSigningFolderPath),$(Agent.BuildDirectory)/vscode-server-win32-$(VSCODE_ARCH)-web"
+      echo "##vso[task.setvariable variable=CodeSigningFolderPath]$(CodeSigningFolderPath),$(Agent.BuildDirectory)/vscode-server-win32-$(CODEENGINE_ARCH)-web"
     env:
       GITHUB_TOKEN: "$(github-distro-mixin-password)"
     displayName: Build server (web)
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
-    - pwsh: npx deemon --attach -- node build/azure-pipelines/common/waitForArtifacts.ts unsigned_vscode_cli_win32_$(VSCODE_ARCH)_cli
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
+    - pwsh: npx deemon --attach -- node build/azure-pipelines/common/waitForArtifacts.ts unsigned_vscode_cli_win32_$(CODEENGINE_ARCH)_cli
       env:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       displayName: Wait for CLI artifact
 
     - task: DownloadPipelineArtifact@2
       inputs:
-        artifact: unsigned_vscode_cli_win32_$(VSCODE_ARCH)_cli
+        artifact: unsigned_vscode_cli_win32_$(CODEENGINE_ARCH)_cli
         patterns: "**"
         path: $(Build.ArtifactStagingDirectory)/cli
-      displayName: Download VS Code CLI
+      displayName: Download Code Engine CLI
 
     - powershell: |
         . build/azure-pipelines/win32/exec.ps1
         $ErrorActionPreference = "Stop"
         $ArtifactName = (gci -Path "$(Build.ArtifactStagingDirectory)/cli" | Select-Object -last 1).FullName
         Expand-Archive -Path $ArtifactName -DestinationPath "$(Build.ArtifactStagingDirectory)/cli"
-        $ProductJsonPath = (Get-ChildItem -Path "$(Agent.BuildDirectory)\VSCode-win32-$(VSCODE_ARCH)" -Name "product.json" -Recurse | Select-Object -First 1)
-        $AppProductJson = Get-Content -Raw -Path "$(Agent.BuildDirectory)\VSCode-win32-$(VSCODE_ARCH)\$ProductJsonPath" | ConvertFrom-Json
+        $ProductJsonPath = (Get-ChildItem -Path "$(Agent.BuildDirectory)\VSCode-win32-$(CODEENGINE_ARCH)" -Name "product.json" -Recurse | Select-Object -First 1)
+        $AppProductJson = Get-Content -Raw -Path "$(Agent.BuildDirectory)\VSCode-win32-$(CODEENGINE_ARCH)\$ProductJsonPath" | ConvertFrom-Json
         $CliAppName = $AppProductJson.tunnelApplicationName
         $AppName = $AppProductJson.applicationName
-        Move-Item -Path "$(Build.ArtifactStagingDirectory)/cli/$AppName.exe" -Destination "$(Agent.BuildDirectory)/VSCode-win32-$(VSCODE_ARCH)/bin/$CliAppName.exe"
-      displayName: Move VS Code CLI
+        Move-Item -Path "$(Build.ArtifactStagingDirectory)/cli/$AppName.exe" -Destination "$(Agent.BuildDirectory)/VSCode-win32-$(CODEENGINE_ARCH)/bin/$CliAppName.exe"
+      displayName: Move Code Engine CLI
 
     - task: UseDotNet@2
       inputs:
@@ -248,15 +248,15 @@ steps:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       displayName: ✍️ Codesign
 
-  - ${{ if or(eq(parameters.VSCODE_RUN_ELECTRON_TESTS, true), eq(parameters.VSCODE_RUN_BROWSER_TESTS, true), eq(parameters.VSCODE_RUN_REMOTE_TESTS, true)) }}:
+  - ${{ if or(eq(parameters.CODEENGINE_RUN_ELECTRON_TESTS, true), eq(parameters.CODEENGINE_RUN_BROWSER_TESTS, true), eq(parameters.CODEENGINE_RUN_REMOTE_TESTS, true)) }}:
     - template: product-build-win32-test.yml@self
       parameters:
-        VSCODE_ARCH: ${{ parameters.VSCODE_ARCH }}
-        VSCODE_RUN_ELECTRON_TESTS: ${{ parameters.VSCODE_RUN_ELECTRON_TESTS }}
-        VSCODE_RUN_BROWSER_TESTS: ${{ parameters.VSCODE_RUN_BROWSER_TESTS }}
-        VSCODE_RUN_REMOTE_TESTS: ${{ parameters.VSCODE_RUN_REMOTE_TESTS }}
+        CODEENGINE_ARCH: ${{ parameters.CODEENGINE_ARCH }}
+        CODEENGINE_RUN_ELECTRON_TESTS: ${{ parameters.CODEENGINE_RUN_ELECTRON_TESTS }}
+        CODEENGINE_RUN_BROWSER_TESTS: ${{ parameters.CODEENGINE_RUN_BROWSER_TESTS }}
+        CODEENGINE_RUN_REMOTE_TESTS: ${{ parameters.CODEENGINE_RUN_REMOTE_TESTS }}
 
-  - ${{ if ne(parameters.VSCODE_CIBUILD, true) }}:
+  - ${{ if ne(parameters.CODEENGINE_CIBUILD, true) }}:
     - powershell: |
         . build/azure-pipelines/win32/exec.ps1
         $ErrorActionPreference = "Stop"
@@ -267,24 +267,24 @@ steps:
     - powershell: |
         $ErrorActionPreference = "Stop"
 
-        $PackageJsonPath = (Get-ChildItem -Path "..\VSCode-win32-$(VSCODE_ARCH)" -Name "package.json" -Recurse | Select-Object -First 1)
-        $PackageJson = Get-Content -Raw -Path ..\VSCode-win32-$(VSCODE_ARCH)\$PackageJsonPath | ConvertFrom-Json
+        $PackageJsonPath = (Get-ChildItem -Path "..\VSCode-win32-$(CODEENGINE_ARCH)" -Name "package.json" -Recurse | Select-Object -First 1)
+        $PackageJson = Get-Content -Raw -Path ..\VSCode-win32-$(CODEENGINE_ARCH)\$PackageJsonPath | ConvertFrom-Json
         $Version = $PackageJson.version
 
         mkdir $(Build.ArtifactStagingDirectory)\out\system-setup -Force
-        mv .build\win32-$(VSCODE_ARCH)\system-setup\VSCodeSetup.exe $(Build.ArtifactStagingDirectory)\out\system-setup\VSCodeSetup-$(VSCODE_ARCH)-$Version.exe
+        mv .build\win32-$(CODEENGINE_ARCH)\system-setup\VSCodeSetup.exe $(Build.ArtifactStagingDirectory)\out\system-setup\VSCodeSetup-$(CODEENGINE_ARCH)-$Version.exe
 
         mkdir $(Build.ArtifactStagingDirectory)\out\user-setup -Force
-        mv .build\win32-$(VSCODE_ARCH)\user-setup\VSCodeSetup.exe $(Build.ArtifactStagingDirectory)\out\user-setup\VSCodeUserSetup-$(VSCODE_ARCH)-$Version.exe
+        mv .build\win32-$(CODEENGINE_ARCH)\user-setup\VSCodeSetup.exe $(Build.ArtifactStagingDirectory)\out\user-setup\VSCodeUserSetup-$(CODEENGINE_ARCH)-$Version.exe
 
         mkdir $(Build.ArtifactStagingDirectory)\out\archive -Force
-        mv .build\win32-$(VSCODE_ARCH)\VSCode-win32-$(VSCODE_ARCH).zip $(Build.ArtifactStagingDirectory)\out\archive\VSCode-win32-$(VSCODE_ARCH)-$Version.zip
+        mv .build\win32-$(CODEENGINE_ARCH)\VSCode-win32-$(CODEENGINE_ARCH).zip $(Build.ArtifactStagingDirectory)\out\archive\VSCode-win32-$(CODEENGINE_ARCH)-$Version.zip
 
         mkdir $(Build.ArtifactStagingDirectory)\out\server -Force
-        mv .build\win32-$(VSCODE_ARCH)\vscode-server-win32-$(VSCODE_ARCH).zip $(Build.ArtifactStagingDirectory)\out\server\vscode-server-win32-$(VSCODE_ARCH).zip
+        mv .build\win32-$(CODEENGINE_ARCH)\vscode-server-win32-$(CODEENGINE_ARCH).zip $(Build.ArtifactStagingDirectory)\out\server\vscode-server-win32-$(CODEENGINE_ARCH).zip
 
         mkdir $(Build.ArtifactStagingDirectory)\out\web -Force
-        mv .build\win32-$(VSCODE_ARCH)\vscode-server-win32-$(VSCODE_ARCH)-web.zip $(Build.ArtifactStagingDirectory)\out\web\vscode-server-win32-$(VSCODE_ARCH)-web.zip
+        mv .build\win32-$(CODEENGINE_ARCH)\vscode-server-win32-$(CODEENGINE_ARCH)-web.zip $(Build.ArtifactStagingDirectory)\out\web\vscode-server-win32-$(CODEENGINE_ARCH)-web.zip
 
-        echo "##vso[task.setvariable variable=VSCODE_VERSION]$Version"
+        echo "##vso[task.setvariable variable=CODEENGINE_VERSION]$Version"
       displayName: Move artifacts to out directory

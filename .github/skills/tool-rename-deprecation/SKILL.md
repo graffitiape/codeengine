@@ -125,8 +125,8 @@ While legacy names ensure backward compatibility, update first-party references 
 
 ## Reference PRs
 
-- [#277047](https://github.com/microsoft/vscode/pull/277047) — **Design PR**: Introduced `legacyToolReferenceFullNames` and `legacyFullNames`, built the resolution infrastructure, and performed the first batch of tool renames. Use as a template for how to properly rename with legacy names.
-- [#278506](https://github.com/microsoft/vscode/pull/278506) — **Consumer-side fix**: After the renames in #277047, the `eligibleForAutoApproval` setting wasn't checking legacy names — users who had restricted the old name lost that restriction. Shows why all consumers of tool reference names must account for legacy names.
+- [#277047](https://github.com/graffitiape/codeengine/pull/277047) — **Design PR**: Introduced `legacyToolReferenceFullNames` and `legacyFullNames`, built the resolution infrastructure, and performed the first batch of tool renames. Use as a template for how to properly rename with legacy names.
+- [#278506](https://github.com/graffitiape/codeengine/pull/278506) — **Consumer-side fix**: After the renames in #277047, the `eligibleForAutoApproval` setting wasn't checking legacy names — users who had restricted the old name lost that restriction. Shows why all consumers of tool reference names must account for legacy names.
 - [vscode-copilot-chat#3810](https://github.com/microsoft/vscode-copilot-chat/pull/3810) — **Example of a miss**: Renamed `openSimpleBrowser` → `openIntegratedBrowser` but also changed the `name` field (stable id) from `copilot_openSimpleBrowser` → `copilot_openIntegratedBrowser`. The `toolReferenceName` backward compat only worked by coincidence (the old name happened to already be in the legacy array from a prior change — it was not intentionally added as part of this rename).
 
 ## Regression Check
@@ -146,4 +146,4 @@ Run this check on any PR that touches tool registration (TypeScript `IToolData`,
 - **Assuming the old name is already in the legacy array** — always verify by reading the actual `legacyToolReferenceFullNames` contents, not just checking that the field exists. A legacy array might list names from an even older rename but not the current one being changed.
 - **Removing an old name from the legacy array** — breaks existing saved prompts and user configurations.
 - **Forgetting to add the legacy name entirely** — prompt files and tool configs silently stop resolving.
-- **Only updating prompt resolution but not other consumers** — auto-approval settings, tool enablement maps, and individual tool checks (like `RunInTerminalTool`) all need to respect legacy names (see [#278506](https://github.com/microsoft/vscode/pull/278506)).
+- **Only updating prompt resolution but not other consumers** — auto-approval settings, tool enablement maps, and individual tool checks (like `RunInTerminalTool`) all need to respect legacy names (see [#278506](https://github.com/graffitiape/codeengine/pull/278506)).

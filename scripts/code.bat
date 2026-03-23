@@ -6,7 +6,7 @@ title VSCode Dev
 pushd %~dp0\..
 
 :: Get electron, compile, built-in extensions
-if "%VSCODE_SKIP_PRELAUNCH%"=="" (
+if "%CODEENGINE_SKIP_PRELAUNCH%"=="" (
 	node build/lib/preLaunch.ts
 )
 
@@ -21,8 +21,8 @@ if "%~1"=="--builtin" goto builtin
 
 :: Configuration
 set NODE_ENV=development
-set VSCODE_DEV=1
-set VSCODE_CLI=1
+set CODEENGINE_DEV=1
+set CODEENGINE_CLI=1
 set ELECTRON_ENABLE_LOGGING=1
 set ELECTRON_ENABLE_STACK_DUMPING=1
 

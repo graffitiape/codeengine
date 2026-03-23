@@ -78,7 +78,7 @@ async function detectAvailableWindowsProfiles(
 	variableResolver?: (text: string[]) => Promise<string[]>
 ): Promise<ITerminalProfile[]> {
 	// Determine the correct System32 path. We want to point to Sysnative
-	// when the 32-bit version of VS Code is running on a 64-bit machine.
+	// when the 32-bit version of Code Engine is running on a 64-bit machine.
 	// The reason for this is because PowerShell's important PSReadline
 	// module doesn't work if this is not the case. See #27915.
 	const is32ProcessOn64Windows = process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432');
@@ -348,7 +348,7 @@ async function getWslProfiles(wslPath: string, defaultProfileName: string | unde
 	const profiles: ITerminalProfile[] = [];
 	const distroOutput = await new Promise<string>((resolve, reject) => {
 		// wsl.exe output is encoded in utf16le (ie. A -> 0x4100) by default, force it in case the
-		// user changed https://github.com/microsoft/vscode/issues/276253
+		// user changed https://github.com/graffitiape/codeengine/issues/276253
 		cp.exec('wsl.exe -l -q', { encoding: 'utf16le', env: { ...process.env, WSL_UTF8: '0' }, timeout: 1000 }, (err, stdout) => {
 			if (err) {
 				return reject('Problem occurred when getting wsl distros');

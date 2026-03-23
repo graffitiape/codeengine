@@ -23,7 +23,7 @@ const defaultEnvironment = {};
 
 function deepStrictEqualIgnoreStableVar(actual: IShellIntegrationConfigInjection | IShellIntegrationInjectionFailure | undefined, expected: IShellIntegrationConfigInjection) {
 	if (actual?.type === 'injection' && actual.envMixin) {
-		delete actual.envMixin['VSCODE_STABLE'];
+		delete actual.envMixin['CODEENGINE_STABLE'];
 	}
 	deepStrictEqual(actual, expected);
 }
@@ -53,8 +53,8 @@ suite('platform - terminalEnvironment', async () => {
 						expectedPs1
 					],
 					envMixin: {
-						VSCODE_A11Y_MODE: '0',
-						VSCODE_INJECTION: '1'
+						CODEENGINE_A11Y_MODE: '0',
+						CODEENGINE_INJECTION: '1'
 					}
 				});
 				test('when undefined, []', async () => {
@@ -86,8 +86,8 @@ suite('platform - terminalEnvironment', async () => {
 						expectedPs1
 					],
 					envMixin: {
-						VSCODE_A11Y_MODE: '0',
-						VSCODE_INJECTION: '1'
+						CODEENGINE_A11Y_MODE: '0',
+						CODEENGINE_INJECTION: '1'
 					}
 				});
 				test('when array contains no logo and login', async () => {
@@ -134,7 +134,7 @@ suite('platform - terminalEnvironment', async () => {
 						strictEqual(Object.keys(result.envMixin!).length, 3);
 						ok(result.envMixin!['ZDOTDIR']?.match(expectedDir));
 						strictEqual(result.envMixin!['USER_ZDOTDIR'], globalZdotdir);
-						ok(result.envMixin!['VSCODE_INJECTION']?.match('1'));
+						ok(result.envMixin!['CODEENGINE_INJECTION']?.match('1'));
 						strictEqual(result.filesToCopy?.length, 4);
 						ok(result.filesToCopy[0].dest.match(expectedDests[0]));
 						ok(result.filesToCopy[1].dest.match(expectedDests[1]));
@@ -193,7 +193,7 @@ suite('platform - terminalEnvironment', async () => {
 								`${repoRoot}/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh`
 							],
 							envMixin: {
-								VSCODE_INJECTION: '1'
+								CODEENGINE_INJECTION: '1'
 							}
 						});
 						deepStrictEqualIgnoreStableVar(await getShellIntegrationInjection({ executable: 'bash', args: [] }, enabledProcessOptions, defaultEnvironment, logService, productService, true), enabledExpectedResult);
@@ -208,8 +208,8 @@ suite('platform - terminalEnvironment', async () => {
 								`${repoRoot}/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh`
 							],
 							envMixin: {
-								VSCODE_INJECTION: '1',
-								VSCODE_SHELL_LOGIN: '1'
+								CODEENGINE_INJECTION: '1',
+								CODEENGINE_SHELL_LOGIN: '1'
 							}
 						});
 						test('when array', async () => {

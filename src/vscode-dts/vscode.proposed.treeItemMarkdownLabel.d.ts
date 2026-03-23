@@ -5,7 +5,7 @@
 
 declare module 'vscode' {
 
-	// @kycutler https://github.com/microsoft/vscode/issues/271523
+	// @kycutler https://github.com/graffitiape/codeengine/issues/271523
 
 	export interface TreeItemLabel2 {
 		highlights?: [number, number][];

@@ -197,7 +197,7 @@ where
 	T: Serialize + ?Sized,
 {
 	let dec = serde_json::to_string(value).expect("expected to serialize");
-	if std::env::var("VSCODE_CLI_DISABLE_KEYCHAIN_ENCRYPT").is_ok() {
+	if std::env::var("CODEENGINE_CLI_DISABLE_KEYCHAIN_ENCRYPT").is_ok() {
 		return dec;
 	}
 	encrypt(&dec)
@@ -208,7 +208,7 @@ fn unseal<T>(value: &str) -> Option<T>
 where
 	T: DeserializeOwned,
 {
-	// small back-compat for old unencrypted values, or if VSCODE_CLI_DISABLE_KEYCHAIN_ENCRYPT set
+	// small back-compat for old unencrypted values, or if CODEENGINE_CLI_DISABLE_KEYCHAIN_ENCRYPT set
 	if let Ok(v) = serde_json::from_str::<T>(value) {
 		return Some(v);
 	}
@@ -296,7 +296,7 @@ macro_rules! get_next_entry {
 		match $self.entries.get($i) {
 			Some(e) => e,
 			None => {
-				let e = keyring::Entry::new("vscode-cli", &format!("vscode-cli-{}", $i)).unwrap();
+				let e = keyring::Entry::new("codeengine-cli", &format!("vscode-cli-{}", $i)).unwrap();
 				$self.entries.push(e);
 				$self.entries.last().unwrap()
 			}
@@ -408,7 +408,7 @@ impl Auth {
 			0o600,
 		));
 
-		let native_storage_result = if std::env::var("VSCODE_CLI_USE_FILE_KEYCHAIN").is_ok()
+		let native_storage_result = if std::env::var("CODEENGINE_CLI_USE_FILE_KEYCHAIN").is_ok()
 			|| self.file_storage_path.exists()
 		{
 			Err(wrap("", "user prefers file storage").into())
@@ -820,23 +820,23 @@ lazy_static::lazy_static! {
 	static ref HOSTNAME: Vec<u8> = gethostname().to_string_lossy().bytes().collect();
 }
 
-#[cfg(feature = "vscode-encrypt")]
+#[cfg(feature = "codeengine-encrypt")]
 fn encrypt(value: &str) -> String {
 	vscode_encrypt::encrypt(&HOSTNAME, value.as_bytes()).expect("expected to encrypt")
 }
 
-#[cfg(feature = "vscode-encrypt")]
+#[cfg(feature = "codeengine-encrypt")]
 fn decrypt(value: &str) -> Option<String> {
 	let b = vscode_encrypt::decrypt(&HOSTNAME, value).ok()?;
 	String::from_utf8(b).ok()
 }
 
-#[cfg(not(feature = "vscode-encrypt"))]
+#[cfg(not(feature = "codeengine-encrypt"))]
 fn encrypt(value: &str) -> String {
 	value.to_owned()
 }
 
-#[cfg(not(feature = "vscode-encrypt"))]
+#[cfg(not(feature = "codeengine-encrypt"))]
 fn decrypt(value: &str) -> Option<String> {
 	Some(value.to_owned())
 }

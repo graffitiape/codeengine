@@ -18,11 +18,11 @@ import { DeferredPromise } from '../../base/common/async.js';
 import { FileAccess } from '../../base/common/network.js';
 
 /*
- * Implements a standalone CLI app that opens VS Code from a remote terminal.
+ * Implements a standalone CLI app that opens Code Engine from a remote terminal.
  *  - In integrated terminals for remote windows this connects to the remote server though a pipe.
- *    The pipe is passed in env VSCODE_IPC_HOOK_CLI.
- *  - In external terminals for WSL this calls VS Code on the Windows side.
- *    The VS Code desktop executable path is passed in env VSCODE_CLIENT_COMMAND.
+ *    The pipe is passed in env CODEENGINE_IPC_HOOK_CLI.
+ *  - In external terminals for WSL this calls Code Engine on the Windows side.
+ *    The Code Engine desktop executable path is passed in env CODEENGINE_CLIENT_COMMAND.
  */
 
 
@@ -83,15 +83,15 @@ const isSupportedForPipe = (optionId: keyof RemoteParsedArgs) => {
 	}
 };
 
-const cliPipe = process.env['VSCODE_IPC_HOOK_CLI'] as string;
-const cliCommand = process.env['VSCODE_CLIENT_COMMAND'] as string;
-const cliCommandCwd = process.env['VSCODE_CLIENT_COMMAND_CWD'] as string;
-const cliRemoteAuthority = process.env['VSCODE_CLI_AUTHORITY'] as string;
-const cliStdInFilePath = process.env['VSCODE_STDIN_FILE_PATH'] as string;
+const cliPipe = process.env['CODEENGINE_IPC_HOOK_CLI'] as string;
+const cliCommand = process.env['CODEENGINE_CLIENT_COMMAND'] as string;
+const cliCommandCwd = process.env['CODEENGINE_CLIENT_COMMAND_CWD'] as string;
+const cliRemoteAuthority = process.env['CODEENGINE_CLI_AUTHORITY'] as string;
+const cliStdInFilePath = process.env['CODEENGINE_STDIN_FILE_PATH'] as string;
 
 export async function main(desc: ProductDescription, args: string[]): Promise<void> {
 	if (!cliPipe && !cliCommand) {
-		console.log('Command is only available in WSL or inside a Visual Studio Code terminal.');
+		console.log('Command is only available in WSL or inside a Code Engine terminal.');
 		return;
 	}
 
@@ -473,7 +473,7 @@ function asExtensionIdOrVSIX(inputs: string[] | undefined) {
 }
 
 function fatal(message: string, err: unknown): void {
-	console.error('Unable to connect to VS Code server: ' + message);
+	console.error('Unable to connect to Code Engine server: ' + message);
 	console.error(err);
 	process.exit(1);
 }

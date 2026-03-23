@@ -16,8 +16,8 @@ const options: import('mocha').MochaOptions = {
 // so we need to set the suite name based on the environment as the suite name is used
 // for the test results file name
 let suite = '';
-if (process.env.VSCODE_BROWSER) {
-	suite = `${process.env.VSCODE_BROWSER} Browser Integration Markdown Tests`;
+if (process.env.CODEENGINE_BROWSER) {
+	suite = `${process.env.CODEENGINE_BROWSER} Browser Integration Markdown Tests`;
 } else if (process.env.REMOTE_VSCODE) {
 	suite = 'Remote Integration Markdown Tests';
 } else {
